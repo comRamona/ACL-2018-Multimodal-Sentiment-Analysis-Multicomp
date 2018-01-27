@@ -102,7 +102,9 @@ Then add the cloned folder to your `$PYTHONPATH` environment variable. For examp
 export PYTHONPATH="/path/to/cloned/directory/CMU-MultimodalDataSDK:$PYTHONPATH"
 ```
 
-ramona: do python setup.py develop
+Ramona: instead of the above do 
+```python setup.py develop
+```
 
 Then it's all set.
 
