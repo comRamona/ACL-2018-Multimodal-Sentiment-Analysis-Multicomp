@@ -6,10 +6,10 @@ from setuptools.command.install import install
 
 setup(
     name="mmdata",
-    author="Ramona Comanescu",
-    description=("MLP COursework University of Edinburgh "
+    author="G25",
+    description=("MLP Coursework University of Edinburgh "
                  "School of Informatics"),
-    url="https://github.com/comRamona/Honours-LDA",
+    url="https://github.com/comRamona/MLP_Multimodal",
     packages=['mmdata']
 )
 
