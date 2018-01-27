@@ -86,10 +86,10 @@ class P2FA_Helper():
         """
         self.validate_csv()
         phonemes_feat_dict = self.load_phonemes()
-        print "Loaded phonemes"
+        print("Loaded phonemes")
         # phonemes_feat_dict = None
         words_feat_dict = self.load_words()
-        print "Loaded Words"
+        print("Loaded Words")
         # words_feat_dict = None
         self.feat_dict = [phonemes_feat_dict, words_feat_dict]
         if self.embed_model_path:
@@ -111,7 +111,7 @@ class P2FA_Helper():
         #print "Loaded phonemes"
         phonemes_feat_dict = None
         words_feat_dict = self.load_spanish_words()
-        print "Loaded spanish Words"
+        print("Loaded spanish Words")
         # words_feat_dict = None
         self.feat_dict = [phonemes_feat_dict, words_feat_dict]
         embed_feat_dict = self.load_spanish_wv()
@@ -299,7 +299,7 @@ class P2FA_Helper():
         is_binary = True if self.embed_model_type == "binary" else False
         model = KeyedVectors.load_word2vec_format(self.embed_model_path, 
                                                   binary = is_binary )
-        print "Word2Vec model Loaded"
+        print("Word2Vec model Loaded")
         self.embed_model = model
         self.embed_length = model.vector_size
         if not self.word_dict:
