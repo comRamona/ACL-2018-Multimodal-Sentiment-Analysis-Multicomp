@@ -302,7 +302,7 @@ In the supersampling method, a small piece of the reference modality is replicat
 # Commands
 ```
 python setup.py develop
-pip install tensowrflow
+pip install tensorflow
 conda install keras
 
 python network_trainer.py --batch_size 128 --epochs 100 --experiment_prefix VGG_EMNIST --tensorboard_use True --batch_norm_use True --strided_dim_reduction True --seed 16122017
