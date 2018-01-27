@@ -103,6 +103,8 @@ Then add the cloned folder to your `$PYTHONPATH` environment variable. For examp
 export PYTHONPATH="/path/to/cloned/directory/CMU-MultimodalDataSDK:$PYTHONPATH"
 ```
 
+ramona: do python setup.py develop
+
 Then it's all set.
 
 ### 3.2 Fetching Datasets ###
@@ -298,7 +300,7 @@ In the supersampling method, a small piece of the reference modality is replicat
 
 
 # Commands
-
+```
 python setup.py develop
 pip install tensowrflow
 conda install keras
