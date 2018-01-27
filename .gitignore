@@ -7,7 +7,7 @@ __pycache__/*.pkl
 __pycache__/.*
 mmdata/__pycache__/
 utils/__pycachle__/
-utils//*pkl
+utils/*pkl
 mmdata/data
 mmdata/*.pyc
 mmdata/*.pkl
