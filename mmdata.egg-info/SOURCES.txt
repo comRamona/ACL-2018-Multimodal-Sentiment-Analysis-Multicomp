@@ -1,0 +1,11 @@
+README.md
+setup.py
+mmdata/__init__.py
+mmdata/dataloader.py
+mmdata/dataset.py
+mmdata/p2fa_helper.py
+mmdata/utils.py
+mmdata.egg-info/PKG-INFO
+mmdata.egg-info/SOURCES.txt
+mmdata.egg-info/dependency_links.txt
+mmdata.egg-info/top_level.txt
