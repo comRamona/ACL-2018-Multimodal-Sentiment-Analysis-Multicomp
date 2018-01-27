@@ -2,7 +2,7 @@ import argparse
 import numpy as np
 import tensorflow as tf
 import tqdm
-from data_providers import EMNISTDataProvider
+from data_providers import ExampleMOSITextProvider
 from network_builder import ClassifierNetworkGraph
 from utils.parser_utils import ParserClass
 from utils.storage import build_experiment_folder, save_statistics
@@ -23,9 +23,9 @@ experiment_name = "experiment_{}_batch_size_{}_bn_{}_mp_{}".format(experiment_pr
 
 rng = np.random.RandomState(seed=seed)  # set seed
 
-train_data = EMNISTDataProvider(which_set="train", batch_size=batch_size, rng=rng)
-val_data = EMNISTDataProvider(which_set="valid", batch_size=batch_size, rng=rng)
-test_data = EMNISTDataProvider(which_set="test", batch_size=batch_size, rng=rng)
+train_data = ExampleMOSITextProvider(which_set="train", batch_size=batch_size, rng=rng, conv=True)
+val_data = ExampleMOSITextProvider(which_set="valid", batch_size=batch_size, rng=rng, conv=True)
+test_data = ExampleMOSITextProvider(which_set="test", batch_size=batch_size, rng=rng, conv=True)
 #  setup our data providers
 
 print("Running {}".format(experiment_name))

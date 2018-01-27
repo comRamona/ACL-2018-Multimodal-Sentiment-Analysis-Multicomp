@@ -98,11 +98,11 @@ class MOSI(Dataloader):
     """Dataloader for CMU-MOSI dataset"""
     def __init__(self):
         super(MOSI, self).__init__('http://sorena.multicomp.cs.cmu.edu/downloads/MOSI')
-        print("This API will be deprecated in the future versions. Please check the Github page for the current API")
+        #print("This API will be deprecated in the future versions. Please check the Github page for the current API")
 
 
 class MOSEI(Dataloader):
     """Dataloader for CMU-MOSEI dataset"""
     def __init__(self):
         super(MOSEI, self).__init__('http://sorena.multicomp.cs.cmu.edu/downloads/MOSEI')
-        print("This API will be deprecated in the future versions. Please check the Github page for the current API")
+        #print("This API will be deprecated in the future versions. Please check the Github page for the current API")
