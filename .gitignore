@@ -6,6 +6,7 @@ __pycache__/
 __pycache__/*.pkl
 __pycache__/.*
 mmdata/__pycache__/
+mmdata.egg_info
 utils/__pycachle__/
 utils/*pkl
 mmdata/data
