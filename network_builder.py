@@ -1,16 +1,19 @@
 import tensorflow as tf
 
-from network_architectures import VGGClassifier
+from network_architectures import VGGClassifier, FCCLayerClassifier
 
 
 class ClassifierNetworkGraph:
     def __init__(self, input_x, target_placeholder, dropout_rate,
                  batch_size=100, num_channels=1, n_classes=100, is_training=True, augment_rotate_flag=True,
-                 tensorboard_use=False, use_batch_normalization=False, strided_dim_reduction=True):
+                 tensorboard_use=False, use_batch_normalization=False, strided_dim_reduction=True,
+                 network_name='VGG_classifier'):
 
         """
-        Initializes a Classifier Network Graph that can build models, train, compute losses and save summary statistics and images
-        :param input_x: A placeholder that will feed the input images, usually of size [batch_size, height, width, channels]
+        Initializes a Classifier Network Graph that can build models, train, compute losses and save summary statistics
+        and images
+        :param input_x: A placeholder that will feed the input images, usually of size [batch_size, height, width,
+        channels]
         :param target_placeholder: A target placeholder of size [batch_size,]. The classes should be in index form
                i.e. not one hot encoding, that will be done automatically by tf
         :param dropout_rate: A placeholder of size [None] that holds a single float that defines the amount of dropout
@@ -25,10 +28,16 @@ class ClassifierNetworkGraph:
         :param strided_dim_reduction: Whether to use strided dim reduction instead of max pooling
         """
         self.batch_size = batch_size
-        self.c = VGGClassifier(self.batch_size, name="classifier_neural_network",
-                               batch_norm_use=use_batch_normalization, num_channels=num_channels,
-                               num_classes=n_classes, layer_stage_sizes=[64, 128, 256],
-                               strided_dim_reduction=strided_dim_reduction)
+        if network_name == "VGG_classifier":
+            self.c = VGGClassifier(self.batch_size, name="classifier_neural_network",
+                                   batch_norm_use=use_batch_normalization, num_channels=num_channels,
+                                   num_classes=n_classes, layer_stage_sizes=[64, 128, 256],
+                                   strided_dim_reduction=strided_dim_reduction)
+        elif network_name == "FCCClassifier":
+            self.c = FCCLayerClassifier(self.batch_size, name="classifier_neural_network",
+                                   batch_norm_use=use_batch_normalization, num_channels=num_channels,
+                                   num_classes=n_classes, layer_stage_sizes=[64, 128, 256],
+                                   strided_dim_reduction=strided_dim_reduction)
 
         self.input_x = input_x
         self.dropout_rate = dropout_rate
@@ -66,7 +75,8 @@ class ClassifierNetworkGraph:
 
             # save summaries for the losses, accuracy and image summaries for input images, augmented images
             # and the layer features
-            self.save_features(name="VGG_features", features=layer_features)
+            if len(self.input_x.get_shape().as_list()) == 4:
+                self.save_features(name="VGG_features", features=layer_features)
             tf.summary.image('image', [tf.concat(tf.unstack(self.input_x, axis=0), axis=0)])
             tf.summary.image('augmented_image', [tf.concat(tf.unstack(image_inputs, axis=0), axis=0)])
             tf.summary.scalar('crossentropy_losses', crossentropy_loss)
@@ -89,7 +99,7 @@ class ClassifierNetworkGraph:
             x_channels = int(channels / y_channels)
 
             activations_features = tf.reshape(features[i], shape=(shape_in[0], shape_in[1], shape_in[2],
-                                                                        y_channels, x_channels))
+                                                                  y_channels, x_channels))
 
             activations_features = tf.unstack(activations_features, axis=4)
             activations_features = tf.concat(activations_features, axis=2)
@@ -105,10 +115,15 @@ class ClassifierNetworkGraph:
         :return: A rotated or a non rotated image depending on the result of the flip
         """
         no_rotation_flip = tf.unstack(
-            tf.random_uniform([1], minval=1, maxval=100, dtype=tf.int32, seed=None, name=None))  # get a random number between 1 and 100
-        flip_boolean = tf.less_equal(no_rotation_flip[0], 50) #  if that number is less than or equal to 50 then set to true
-        random_variable = tf.unstack(tf.random_uniform([1], minval=1, maxval=3, dtype=tf.int32, seed=None, name=None)) #get a random variable between 1 and 3 for how many degrees the rotation will be i.e. k=1 means 1*90, k=2 2*90 etc.
-        image = tf.cond(flip_boolean, lambda: tf.image.rot90(image, k=random_variable[0]), lambda: image) # if flip_boolean is true the rotate if not then do not rotate
+            tf.random_uniform([1], minval=1, maxval=100, dtype=tf.int32, seed=None,
+                              name=None))  # get a random number between 1 and 100
+        flip_boolean = tf.less_equal(no_rotation_flip[0], 50)
+        # if that number is less than or equal to 50 then set to true
+        random_variable = tf.unstack(tf.random_uniform([1], minval=1, maxval=3, dtype=tf.int32, seed=None, name=None))
+        # get a random variable between 1 and 3 for how many degrees the rotation will be i.e. k=1 means 1*90,
+        # k=2 2*90 etc.
+        image = tf.cond(flip_boolean, lambda: tf.image.rot90(image, k=random_variable[0]),
+                        lambda: image)  # if flip_boolean is true the rotate if not then do not rotate
         return image
 
     def rotate_batch(self, batch_images):
@@ -118,6 +133,8 @@ class ClassifierNetworkGraph:
         :return: A rotated batch of images (some images will not be rotated if their rotation flip ends up False)
         """
         shapes = map(int, list(batch_images.get_shape()))
+        if len(list(batch_images.get_shape())) < 4:
+            return batch_images
         batch_size, x, y, c = shapes
         with tf.name_scope('augment'):
             batch_images_unpacked = tf.unstack(batch_images)

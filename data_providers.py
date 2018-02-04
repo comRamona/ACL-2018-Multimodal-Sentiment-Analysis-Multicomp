@@ -6,16 +6,10 @@ data points.
 """
 
 import os
-import random
-import numpy as np
-import pandas as pd
-from mmdata import MOSI
-import logging
 
-logger = logging.getLogger()
-random.seed(1)
-logging.basicConfig(format='%(levelname)s : %(message)s', level=logging.INFO)
-logging.root.level = logging.INFO
+import numpy as np
+DEFAULT_SEED = 22012018
+
 
 class DataProvider(object):
     """Generic data provider."""
@@ -136,83 +130,6 @@ class DataProvider(object):
         inputs_batch = self.inputs[batch_slice]
         targets_batch = self.targets[batch_slice]
         self._curr_batch += 1
-        return inputs_batch, targets_batch
-
-
-class ExampleMOSITextProvider(DataProvider):
-    """Data provider for MNIST handwritten digit images."""
-
-    def __init__(self, which_set='train', batch_size=100, max_num_batches=-1,
-                 shuffle_order=True, rng=None, conv=True):
-        """Create a new MNIST data provider object.
-
-        Args:
-            which_set: One of 'train', 'valid' or 'eval'. Determines which
-                portion of the MNIST data this object should provide.
-            batch_size (int): Number of data points to include in each batch.
-            max_num_batches (int): Maximum number of batches to iterate over
-                in an epoch. If `max_num_batches * batch_size > num_data` then
-                only as many batches as the data can be split into will be
-                used. If set to -1 all of the data will be used.
-            shuffle_order (bool): Whether to randomly permute the order of
-                the data before each epoch.
-            rng (RandomState): A seeded random number generator.
-        """
-        # check a valid which_set was provided
-        assert which_set in ['train', 'valid', 'test'], (
-            'Expected which_set to be either train, valid or eval. '
-            'Got {0}'.format(which_set)
-        )
-        self.which_set = which_set
-        self.num_classes =2 
-
-        mosi = MOSI()
-        embeddings = mosi.embeddings()
-        sentiments = mosi.sentiments()
-        if which_set == "train":
-            input_ids = mosi.train()
-        elif which_set == "valid":
-            input_ids = mosi.valid()
-        else:
-            input_ids = mosi.test()
-        maxlen = 15 # Each utterance will be truncated/padded to 15 words
-        inputs = []
-        targets = []
-
-        logger.info("Preparing data...")
-        for vid, vdata in embeddings['embeddings'].items(): # note that even Dataset with one feature will require explicit indexing of features
-            for sid, sdata in vdata.items():
-                if sdata == []:
-                    continue
-                example = []
-                for i, time_step in enumerate(sdata):
-                    # data is truncated for 15 words
-                    if i == 15:
-                        break
-                    example.append(time_step[2]) # here first 2 dims (timestamps) will not be used
-
-                for i in range(maxlen - len(sdata)):
-                    example.append(np.zeros(sdata[0][2].shape)) # padding each example to maxlen
-                example = np.asarray(example)
-                label = 1 if sentiments[vid][sid] >= 0 else 0 # binarize the labels
-
-                # here we just use everything except training set as the test set
-                if vid in input_ids:
-                    inputs.append(example)
-                    targets.append(label)
-
-        # Prepare the final inputs as numpy arrays
-        inputs = np.asarray(inputs)
-        targets = np.asarray(targets)
-        if conv:
-            inputs = np.expand_dims(inputs, axis=3)
-        # pass the loaded data to the parent class __init__
-        super(ExampleMOSITextProvider, self).__init__(
-            inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
-
-    def next(self):
-        """Returns next data batch or raises `StopIteration` if at end."""
-        inputs_batch, targets_batch = super(ExampleMOSITextProvider, self).next()
         return inputs_batch, targets_batch
 
 class MNISTDataProvider(DataProvider):
@@ -357,6 +274,336 @@ class EMNISTDataProvider(DataProvider):
         one_of_k_targets = np.zeros((int_targets.shape[0], self.num_classes))
         one_of_k_targets[range(int_targets.shape[0]), int_targets] = 1
         return one_of_k_targets
+
+class CIFAR10DataProvider(DataProvider):
+    """Data provider for CIFAR-10 object images."""
+
+    def __init__(self, which_set='train', batch_size=100, max_num_batches=-1,
+                 shuffle_order=True, rng=None, flatten=False, one_hot=False):
+        """Create a new EMNIST data provider object.
+
+        Args:
+            which_set: One of 'train', 'valid' or 'eval'. Determines which
+                portion of the EMNIST data this object should provide.
+            batch_size (int): Number of data points to include in each batch.
+            max_num_batches (int): Maximum number of batches to iterate over
+                in an epoch. If `max_num_batches * batch_size > num_data` then
+                only as many batches as the data can be split into will be
+                used. If set to -1 all of the data will be used.
+            shuffle_order (bool): Whether to randomly permute the order of
+                the data before each epoch.
+            rng (RandomState): A seeded random number generator.
+        """
+        # check a valid which_set was provided
+        assert which_set in ['train', 'valid', 'test'], (
+            'Expected which_set to be either train, valid or eval. '
+            'Got {0}'.format(which_set)
+        )
+        self.one_hot = one_hot
+        self.which_set = which_set
+        self.num_classes = 10
+        # construct path to data using os.path.join to ensure the correct path
+        # separator for the current platform / OS is used
+        # MLP_DATA_DIR environment variable should point to the data directory
+        data_path = os.path.join(
+            os.environ['MLP_DATA_DIR'], 'cifar10-{0}.npz'.format(which_set))
+        assert os.path.isfile(data_path), (
+            'Data file does not exist at expected path: ' + data_path
+        )
+        # load data from compressed numpy file
+        loaded = np.load(data_path)
+
+        inputs, targets = loaded['inputs'], loaded['targets']
+        inputs = inputs.astype(np.float32)
+        if flatten:
+            inputs = np.reshape(inputs, newshape=(-1, 32*32*3))
+        else:
+            inputs = np.reshape(inputs, newshape=(-1, 3, 32, 32))
+            inputs = np.transpose(inputs, axes=(0, 2, 3, 1))
+
+        inputs = inputs / 255.0
+        # label map gives strings corresponding to integer label targets
+
+
+        # pass the loaded data to the parent class __init__
+        super(CIFAR10DataProvider, self).__init__(
+            inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
+
+    def next(self):
+        """Returns next data batch or raises `StopIteration` if at end."""
+        inputs_batch, targets_batch = super(CIFAR10DataProvider, self).next()
+        if self.one_hot:
+            return inputs_batch, self.to_one_of_k(targets_batch)
+        else:
+            return inputs_batch, targets_batch
+
+    def to_one_of_k(self, int_targets):
+        """Converts integer coded class target to 1 of K coded targets.
+
+        Args:
+            int_targets (ndarray): Array of integer coded class targets (i.e.
+                where an integer from 0 to `num_classes` - 1 is used to
+                indicate which is the correct class). This should be of shape
+                (num_data,).
+
+        Returns:
+            Array of 1 of K coded targets i.e. an array of shape
+            (num_data, num_classes) where for each row all elements are equal
+            to zero except for the column corresponding to the correct class
+            which is equal to one.
+        """
+        one_of_k_targets = np.zeros((int_targets.shape[0], self.num_classes))
+        one_of_k_targets[range(int_targets.shape[0]), int_targets] = 1
+        return one_of_k_targets
+
+
+
+class CIFAR100DataProvider(DataProvider):
+    """Data provider for CIFAR-100 object images."""
+
+    def __init__(self, which_set='train', batch_size=100, max_num_batches=-1,
+                 shuffle_order=True, rng=None, flatten=False, one_hot=False):
+        """Create a new EMNIST data provider object.
+
+        Args:
+            which_set: One of 'train', 'valid' or 'eval'. Determines which
+                portion of the EMNIST data this object should provide.
+            batch_size (int): Number of data points to include in each batch.
+            max_num_batches (int): Maximum number of batches to iterate over
+                in an epoch. If `max_num_batches * batch_size > num_data` then
+                only as many batches as the data can be split into will be
+                used. If set to -1 all of the data will be used.
+            shuffle_order (bool): Whether to randomly permute the order of
+                the data before each epoch.
+            rng (RandomState): A seeded random number generator.
+        """
+        # check a valid which_set was provided
+        assert which_set in ['train', 'valid', 'test'], (
+            'Expected which_set to be either train, valid or eval. '
+            'Got {0}'.format(which_set)
+        )
+        self.one_hot = one_hot
+        self.which_set = which_set
+        self.num_classes = 100
+        # construct path to data using os.path.join to ensure the correct path
+        # separator for the current platform / OS is used
+        # MLP_DATA_DIR environment variable should point to the data directory
+        data_path = os.path.join(
+            os.environ['MLP_DATA_DIR'], 'cifar100-{0}.npz'.format(which_set))
+        assert os.path.isfile(data_path), (
+            'Data file does not exist at expected path: ' + data_path
+        )
+        # load data from compressed numpy file
+        loaded = np.load(data_path)
+
+        inputs, targets = loaded['inputs'], loaded['targets']
+        inputs = inputs.astype(np.float32)
+        if flatten:
+            inputs = np.reshape(inputs, newshape=(-1, 32*32*3))
+        else:
+            inputs = np.reshape(inputs, newshape=(-1, 3, 32, 32))
+            inputs = np.transpose(inputs, axes=(0, 2, 3, 1))
+        inputs = inputs / 255.0
+
+        # pass the loaded data to the parent class __init__
+        super(CIFAR100DataProvider, self).__init__(
+            inputs, targets, batch_size, max_num_batches, shuffle_order, rng)
+
+    def next(self):
+        """Returns next data batch or raises `StopIteration` if at end."""
+        inputs_batch, targets_batch = super(CIFAR100DataProvider, self).next()
+        if self.one_hot:
+            return inputs_batch, self.to_one_of_k(targets_batch)
+        else:
+            return inputs_batch, targets_batch
+
+    def to_one_of_k(self, int_targets):
+        """Converts integer coded class target to 1 of K coded targets.
+
+        Args:
+            int_targets (ndarray): Array of integer coded class targets (i.e.
+                where an integer from 0 to `num_classes` - 1 is used to
+                indicate which is the correct class). This should be of shape
+                (num_data,).
+
+        Returns:
+            Array of 1 of K coded targets i.e. an array of shape
+            (num_data, num_classes) where for each row all elements are equal
+            to zero except for the column corresponding to the correct class
+            which is equal to one.
+        """
+        one_of_k_targets = np.zeros((int_targets.shape[0], self.num_classes))
+        one_of_k_targets[range(int_targets.shape[0]), int_targets] = 1
+        return one_of_k_targets
+
+
+class MSD10GenreDataProvider(DataProvider):
+    """Data provider for Million Song Dataset 10-genre classification task."""
+
+    def __init__(self, which_set='train', batch_size=100, max_num_batches=-1,
+                 shuffle_order=True, rng=None, one_hot=False, flatten=True):
+        """Create a new EMNIST data provider object.
+
+        Args:
+            which_set: One of 'train', 'valid' or 'eval'. Determines which
+                portion of the EMNIST data this object should provide.
+            batch_size (int): Number of data points to include in each batch.
+            max_num_batches (int): Maximum number of batches to iterate over
+                in an epoch. If `max_num_batches * batch_size > num_data` then
+                only as many batches as the data can be split into will be
+                used. If set to -1 all of the data will be used.
+            shuffle_order (bool): Whether to randomly permute the order of
+                the data before each epoch.
+            rng (RandomState): A seeded random number generator.
+        """
+        # check a valid which_set was provided
+        assert which_set in ['train', 'valid', 'test'], (
+            'Expected which_set to be either train, valid or eval. '
+            'Got {0}'.format(which_set)
+        )
+        self.one_hot = one_hot
+        self.which_set = which_set
+        self.num_classes = 10
+        # construct path to data using os.path.join to ensure the correct path
+        # separator for the current platform / OS is used
+        # MLP_DATA_DIR environment variable should point to the data directory
+        if which_set is not "test":
+            data_path = os.path.join(
+                os.environ['MLP_DATA_DIR'], 'msd10-{0}.npz'.format(which_set))
+            assert os.path.isfile(data_path), (
+                'Data file does not exist at expected path: ' + data_path
+            )
+            # load data from compressed numpy file
+            loaded = np.load(data_path)
+
+            inputs, target = loaded['inputs'], loaded['targets']
+        else:
+            input_data_path = os.path.join(
+                os.environ['MLP_DATA_DIR'], 'msd-10-genre-test-inputs.npz')
+            assert os.path.isfile(input_data_path), (
+                'Data file does not exist at expected path: ' + input_data_path
+            )
+            target_data_path = os.path.join(
+                os.environ['MLP_DATA_DIR'], 'msd-10-genre-test-targets.npz')
+            assert os.path.isfile(input_data_path), (
+                'Data file does not exist at expected path: ' + input_data_path
+            )
+            # load data from compressed numpy file
+            inputs = np.load(input_data_path)['inputs']
+            target = np.load(target_data_path)['targets']
+        if flatten:
+            inputs = inputs.reshape((-1, 120*25))
+            #inputs, targets = loaded['inputs'], loaded['targets']
+
+
+        # label map gives strings corresponding to integer label targets
+
+        # pass the loaded data to the parent class __init__
+        super(MSD10GenreDataProvider, self).__init__(
+            inputs, target, batch_size, max_num_batches, shuffle_order, rng)
+
+    def next(self):
+        """Returns next data batch or raises `StopIteration` if at end."""
+        inputs_batch, targets_batch = super(MSD10GenreDataProvider, self).next()
+        if self.one_hot:
+            return inputs_batch, self.to_one_of_k(targets_batch)
+        else:
+            return inputs_batch, targets_batch
+
+    def to_one_of_k(self, int_targets):
+        """Converts integer coded class target to 1 of K coded targets.
+
+        Args:
+            int_targets (ndarray): Array of integer coded class targets (i.e.
+                where an integer from 0 to `num_classes` - 1 is used to
+                indicate which is the correct class). This should be of shape
+                (num_data,).
+
+        Returns:
+            Array of 1 of K coded targets i.e. an array of shape
+            (num_data, num_classes) where for each row all elements are equal
+            to zero except for the column corresponding to the correct class
+            which is equal to one.
+        """
+        one_of_k_targets = np.zeros((int_targets.shape[0], self.num_classes))
+        one_of_k_targets[range(int_targets.shape[0]), int_targets] = 1
+        return one_of_k_targets
+
+class MSD25GenreDataProvider(DataProvider):
+    """Data provider for Million Song Dataset 25-genre classification task."""
+
+    def __init__(self, which_set='train', batch_size=100, max_num_batches=-1,
+                 shuffle_order=True, rng=None, one_hot=False, flatten=True):
+        """Create a new EMNIST data provider object.
+
+        Args:
+            which_set: One of 'train', 'valid' or 'eval'. Determines which
+                portion of the EMNIST data this object should provide.
+            batch_size (int): Number of data points to include in each batch.
+            max_num_batches (int): Maximum number of batches to iterate over
+                in an epoch. If `max_num_batches * batch_size > num_data` then
+                only as many batches as the data can be split into will be
+                used. If set to -1 all of the data will be used.
+            shuffle_order (bool): Whether to randomly permute the order of
+                the data before each epoch.
+            rng (RandomState): A seeded random number generator.
+        """
+        # check a valid which_set was provided
+        assert which_set in ['train', 'valid', 'test'], (
+            'Expected which_set to be either train or valid. '
+            'Got {0}'.format(which_set)
+        )
+        self.one_hot = one_hot
+        self.which_set = which_set
+        self.num_classes = 25
+        # construct path to data using os.path.join to ensure the correct path
+        # separator for the current platform / OS is used
+        # MLP_DATA_DIR environment variable should point to the data directory
+
+        data_path = os.path.join(
+            os.environ['MLP_DATA_DIR'], 'msd10-{0}.npz'.format(which_set))
+        assert os.path.isfile(data_path), (
+            'Data file does not exist at expected path: ' + data_path
+        )
+        # load data from compressed numpy file
+        loaded = np.load(data_path)
+
+        inputs, target = loaded['inputs'], loaded['targets']
+
+        if flatten:
+            inputs = inputs.reshape((-1, 120*25))
+            #inputs, target
+        # pass the loaded data to the parent class __init__
+        super(MSD25GenreDataProvider, self).__init__(
+            inputs, target, batch_size, max_num_batches, shuffle_order, rng)
+
+    def next(self):
+        """Returns next data batch or raises `StopIteration` if at end."""
+        inputs_batch, targets_batch = super(MSD25GenreDataProvider, self).next()
+        if self.one_hot:
+            return inputs_batch, self.to_one_of_k(targets_batch)
+        else:
+            return inputs_batch, targets_batch
+
+    def to_one_of_k(self, int_targets):
+        """Converts integer coded class target to 1 of K coded targets.
+
+        Args:
+            int_targets (ndarray): Array of integer coded class targets (i.e.
+                where an integer from 0 to `num_classes` - 1 is used to
+                indicate which is the correct class). This should be of shape
+                (num_data,).
+
+        Returns:
+            Array of 1 of K coded targets i.e. an array of shape
+            (num_data, num_classes) where for each row all elements are equal
+            to zero except for the column corresponding to the correct class
+            which is equal to one.
+        """
+        one_of_k_targets = np.zeros((int_targets.shape[0], self.num_classes))
+        one_of_k_targets[range(int_targets.shape[0]), int_targets] = 1
+        return one_of_k_targets
+
 
 
 class MetOfficeDataProvider(DataProvider):

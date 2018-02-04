@@ -3,23 +3,11 @@
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
-__pycache__/*.pkl
-__pycache__/.*
-mmdata/__pycache__/
-mmdata.egg_info
-utils/__pycachle__/
-utils/*pkl
-mmdata/data
-mmdata/*.pyc
-mmdata/*.pkl
 *.py[cod]
-*.pkl
-**/*.pkl
-.pkl
-__pycache__/*
+
 # C extensions
 *.so
-*.pyc 
+
 # Distribution / packaging
 .Python
 env/
@@ -37,8 +25,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-*.pkl
-.pkl
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -72,5 +58,3 @@ docs/_build/
 
 # PyBuilder
 target/
-
-notebooks/.ipynb_checkpoints/
