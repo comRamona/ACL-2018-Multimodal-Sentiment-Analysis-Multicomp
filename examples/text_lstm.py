@@ -87,7 +87,8 @@ x_val = np.asarray(x_val)
 y_train = np.asarray(y_train)
 y_val = np.asarray(y_val)
 print("Data preprocessing finished! Begin compiling and training model.")
-
+print(x_train.shape)
+print(x_val.shape)
 model = Sequential()
 
 units = 64
@@ -122,7 +123,7 @@ filepath = "{}/best_validation_{}".format(saved_models_filepath, experiment_name
 checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 early_stopping = EarlyStopping(monitor='val_acc',
                               min_delta=0,
-                              patience=5,
+                              patience=3,
                               verbose=1, mode='auto')
 tensor_board = TensorBoard(log_dir=logs_filepath, histogram_freq=0, batch_size=batch_size, write_graph=True, 
     write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)
@@ -131,7 +132,8 @@ print('Train...')
 model.fit(x_train, y_train,
           batch_size=batch_size,
           epochs=epochs,
-          validation_data=[x_val, y_val])
+          validation_data=[x_val, y_val],
+          callbacks=callbacks_list)
 
 
 # mosei = MOSI()

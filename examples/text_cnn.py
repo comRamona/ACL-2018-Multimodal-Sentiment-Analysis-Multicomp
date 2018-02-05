@@ -90,25 +90,16 @@ print("Data preprocessing finished! Begin compiling and training model.")
 
 model = Sequential()
 
-units = 64
-
-if n_layers == 1:
-    model.add(LSTM(64, input_shape=(max_len, 300)))
-    model.add(Dropout(dropout_rate))
-
-else:
-    model.add(LSTM(units, return_sequences=True,
-               input_shape=(max_len, 300)))  # returns a sequence of vectors of dimension 32
-    if n_layers > 2:
-        for i in range(n_layers - 2):
-            model.add(Dropout(dropout_rate))
-            model.add(LSTM(units, return_sequences=True))
-    model.add(Dropout(dropout_rate))
-    model.add(LSTM(units))
- 
-model.add(Dropout(dropout_rate))   
-model.add(Dense(100, activation="relu"))
-model.add(Dropout(dropout_rate))
+k = 3
+m = 2
+model.add(Conv1D(128, k, shape = (max_len, 300), activation='relu'))
+model.add(MaxPooling1D(m))
+model.add(Conv1D(128, k, activation='relu'))
+model.add( MaxPooling1D(m))
+model.add(Conv1D(128, k, activation='relu'))
+model.add(MaxPooling1D(m))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 
 
