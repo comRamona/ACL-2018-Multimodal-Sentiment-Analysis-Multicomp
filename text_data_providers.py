@@ -15,7 +15,7 @@ class MOSITextProvider(DataProvider):
     """Data provider for MNIST handwritten digit images."""
 
     def __init__(self, which_set='train', batch_size=100, max_num_batches=-1,
-                 shuffle_order=True, rng=None, conv=True):
+                 shuffle_order=True, rng=None, conv=True, max_len=15):
         """Create a new MNIST data provider object.
         Args:
             which_set: One of 'train', 'valid' or 'eval'. Determines which
@@ -46,7 +46,6 @@ class MOSITextProvider(DataProvider):
             input_ids = mosi.valid()
         else:
             input_ids = mosi.test()
-        maxlen = 15 # Each utterance will be truncated/padded to 15 words
         inputs = []
         targets = []
 
@@ -57,12 +56,12 @@ class MOSITextProvider(DataProvider):
                     continue
                 example = []
                 for i, time_step in enumerate(sdata):
-                    # data is truncated for 15 words
-                    if i == 15:
+                    # data is truncated for max_len words
+                    if i == max_len:
                         break
                     example.append(time_step[2]) # here first 2 dims (timestamps) will not be used
 
-                for i in range(maxlen - len(sdata)):
+                for i in range(max_len - len(sdata)):
                     example.append(np.zeros(sdata[0][2].shape)) # padding each example to maxlen
                 example = np.asarray(example)
                 label = 1 if sentiments[vid][sid] >= 0 else 0 # binarize the labels
