@@ -31,7 +31,6 @@ class Dataloader(object):
                 dowloaded = download(self.dataset, feature, self.location)
                 if not downloaded:
                     return None
-                feature_v
         return feature_values
 
     def facet(self):
