@@ -12,8 +12,27 @@ from __future__ import print_function
 import numpy as np
 import pandas as pd
 from collections import defaultdict
+
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Embedding, LSTM, BatchNormalization
+from keras.layers import Dense
+from keras.layers import LSTM
+from keras.layers import Merge
+from keras.layers import Dropout
+from keras.layers.embeddings import Embedding
+from keras.preprocessing import sequence
+from keras.callbacks import EarlyStopping, ModelCheckpoint
+from theano.tensor.shared_randomstreams import RandomStreams
+from keras.models import Model
+from keras.layers import Input
+from keras.layers import Reshape
+from keras import optimizers
+from keras.regularizers import l2
+from keras.regularizers import l1
+from keras.layers.normalization import BatchNormalization
+from keras.constraints import nonneg
+from sklearn.metrics import mean_absolute_error
+from keras.optimizers import SGD
+
 from mmdata import Dataloader, Dataset
 from sklearn.svm import SVR,SVC
 from sklearn.metrics import accuracy_score
@@ -35,7 +54,6 @@ def pad(data, max_len):
     data = np.array([feature[2] for feature in data])
     n_rows = data.shape[0]
     dim = data.shape[1]
-#    print(data.shape)
     if max_len >= n_rows:
         diff = max_len - n_rows
         padding = np.zeros((diff, dim))
@@ -127,31 +145,61 @@ if __name__ == "__main__":
     x_test = test_set_audio
 
 
-    # create and train SVM for binary - Classification
-    clf = SVC(kernel="linear")
-    trained_model = clf.fit(x_train, y_train_bin)
-    predictions = clf.predict(x_valid)
+    end_to_end = True
+    f_Covarep_num = x_train.shape[1]
+    Covarep_model = Sequential()
+    Covarep_model.add(BatchNormalization(input_shape=(f_Covarep_num,), name = 'covarep_layer_0'))
+    Covarep_model.add(Dropout(0.2, name = 'covarep_layer_1'))
+    Covarep_model.add(Dense(32, activation='relu', W_regularizer=l2(0.0), name = 'covarep_layer_2', trainable=end_to_end))
+    Covarep_model.add(Dense(32, activation='relu', W_regularizer=l2(0.0), name = 'covarep_layer_3', trainable=end_to_end))
+    Covarep_model.add(Dense(32, activation='relu', W_regularizer=l2(0.0), name = 'covarep_layer_4', trainable=end_to_end))
+
+    train_patience = 5
+    callbacks = [
+        EarlyStopping(monitor='val_loss', patience=train_patience, verbose=0),
+        ModelCheckpoint(monitor='val_loss', save_best_only=True, verbose=0),
+    ]
+    momentum = 0.9
+    lr = 0.01
+    train_epoch = 1000
+    sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
+    adam = optimizers.Adamax(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08) #decay=0.999)
+    optimizer = {'sgd': sgd, 'adam':adam}
+    Covarep_model.compile(loss=args.loss, optimizer=optimizer[args.optimizer])
+    Covarep_model.fit([x_train], y_train_bin, validation_split=val_split, nb_epoch=train_epoch, batch_size=128, callbacks=callbacks)
+    predictions = Covarep_model.predict([x_valid], verbose=0)
     acc = accuracy_score(y_valid_bin, predictions)
     print("Binary")
     print(classification_report(y_valid_bin, predictions, target_names=target_names))
     print("accuracy: "+str(acc))
 
-    # create and train SVM for 5-class - Classification
-    clf = OneVsRestClassifier(SVC(kernel="poly"))
-    trained_model = clf.fit(x_train, y_train_mc)
-    predictions = clf.predict(x_valid)
-    acc = accuracy_score(y_valid_mc, predictions)
-    print("5-class")
-    print(classification_report(y_valid_mc, predictions, target_names=target_names, digits=5))
-    print("accuracy: "+str(acc))
 
-    # create and train and SVM for continous - Regression
-    clf = SVR(C=1.0, epsilon=0.2)
-    trained_model = clf.fit(x_train, y_train_reg) 
-    predictions = clf.predict(x_valid)
-    mae = mean_absolute_error(y_valid_reg, predictions)  
-    pr = scipy.stats.pearsonr(y_valid_reg,predictions)
-    print("Regression")
-    print("mae: " + str(mae))
+
+#    # create and train SVM for binary - Classification
+#    clf = SVC(kernel="poly")
+#    trained_model = clf.fit(x_train, y_train_bin)
+#    predictions = clf.predict(x_valid)
+#    acc = accuracy_score(y_valid_bin, predictions)
+#    print("Binary")
+#    print(classification_report(y_valid_bin, predictions, target_names=target_names))
+#    print("accuracy: "+str(acc))
+
+#    # create and train SVM for 5-class - Classification
+#    clf = OneVsRestClassifier(SVC(kernel="poly"))
+#    trained_model = clf.fit(x_train, y_train_mc)
+#    predictions = clf.predict(x_valid)
+#    acc = accuracy_score(y_valid_mc, predictions)
+#    print("5-class")
+#    print(classification_report(y_valid_mc, predictions, target_names=target_names, digits=5))
+#    print("accuracy: "+str(acc))
+
+#    # create and train and SVM for continous - Regression
+#    clf = SVR(C=1.0, epsilon=0.2)
+#    trained_model = clf.fit(x_train, y_train_reg) 
+#    predictions = clf.predict(x_valid)
+#    mae = mean_absolute_error(y_valid_reg, predictions)  
+#    pr = scipy.stats.pearsonr(y_valid_reg,predictions)
+#    print("Regression")
+#    print("mae: " + str(mae))
     print("pr: " + str(pr))
 
