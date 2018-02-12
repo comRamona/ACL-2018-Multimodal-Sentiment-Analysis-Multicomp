@@ -36,6 +36,8 @@ from keras.optimizers import SGD
 from mmdata import Dataloader, Dataset
 from sklearn.svm import SVR,SVC
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import classification_report
 from sklearn.metrics import mean_absolute_error
@@ -162,19 +164,29 @@ if __name__ == "__main__":
     ]
     momentum = 0.9
     lr = 0.01
-    train_epoch = 1000
+    train_epoch = 5
     loss = "mae"
     opt = "adam"
     sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
     adam = optimizers.Adamax(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08) #decay=0.999)
     optimizer = {'sgd': sgd, 'adam':adam}
     Covarep_model.compile(loss=loss, optimizer=optimizer[opt])
-    Covarep_model.fit(x_train, y_train_bin, validation_data=(x_valid,y_valid_bin), nb_epoch=train_epoch, batch_size=128, callbacks=callbacks)
+    Covarep_model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), nb_epoch=train_epoch, batch_size=128, callbacks=callbacks)
     predictions = Covarep_model.predict(x_test, verbose=0)
-    acc = accuracy_score(y_test_bin, predictions)
-    print("Binary")
-    print(classification_report(y_test_bin, predictions, target_names=target_names))
-    print("accuracy: "+str(acc))
+    predictions = predictions.reshape((len(y_test_reg),))
+    y_test = y_test_reg.reshape((len(y_test_reg),))
+    mae = np.mean(np.absolute(predictions-y_test))
+    print("mae: "+str(mae))
+    print("corr: "+str(round(np.corrcoef(predictions,y_test)[0][1],5)))
+    print("mult_acc: "+str(round(sum(np.round(predictions)==np.round(y_test))/float(len(y_test)),5)))
+    true_label = (y_test >= 0)
+    predicted_label = (predictions >= 0)
+    print("Confusion Matrix :")
+    print(confusion_matrix(true_label, predicted_label))
+    print("Classification Report :")
+    print(classification_report(true_label, predicted_label, digits=5))
+    print("Accuracy ", accuracy_score(true_label, predicted_label))
+
 
 
 
@@ -204,5 +216,5 @@ if __name__ == "__main__":
 #    pr = scipy.stats.pearsonr(y_valid_reg,predictions)
 #    print("Regression")
 #    print("mae: " + str(mae))
-    print("pr: " + str(pr))
+#    print("pr: " + str(pr))
 
