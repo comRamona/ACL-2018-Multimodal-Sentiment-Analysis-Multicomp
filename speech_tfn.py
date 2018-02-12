@@ -153,6 +153,8 @@ if __name__ == "__main__":
     Covarep_model.add(Dense(32, activation='relu', W_regularizer=l2(0.0), name = 'covarep_layer_2', trainable=end_to_end))
     Covarep_model.add(Dense(32, activation='relu', W_regularizer=l2(0.0), name = 'covarep_layer_3', trainable=end_to_end))
     Covarep_model.add(Dense(32, activation='relu', W_regularizer=l2(0.0), name = 'covarep_layer_4', trainable=end_to_end))
+    Covarep_model.add(Dense(1, name = 'covarep_layer_5'))
+
 
     train_patience = 5
     callbacks = [
@@ -162,11 +164,11 @@ if __name__ == "__main__":
     lr = 0.01
     train_epoch = 1000
     loss = "mae"
-    optimizer = "adam"
+    opt = "adam"
     sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
     adam = optimizers.Adamax(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08) #decay=0.999)
     optimizer = {'sgd': sgd, 'adam':adam}
-    Covarep_model.compile(loss=loss, optimizer=optimizer[optimizer])
+    Covarep_model.compile(loss=loss, optimizer=optimizer[opt])
     Covarep_model.fit(x_train, y_train_bin, validation_data=(x_valid,y_valid_bin), nb_epoch=train_epoch, batch_size=128, callbacks=callbacks)
     predictions = Covarep_model.predict(x_test, verbose=0)
     acc = accuracy_score(y_test_bin, predictions)
