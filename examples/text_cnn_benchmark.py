@@ -93,11 +93,9 @@ model = Sequential()
 
 k = 3
 m = 2
-model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, 300), activation='relu'))
-model.add(MaxPooling1D(m))
-for i in range(n_layers - 1):
-  model.add(Conv1D(128,k, activation='relu'))
-  model.add(MaxPooling1D(m))
+model.add(Conv1D(filters=128, kernel_size=3, input_shape = (max_len, 300), activation='relu'))
+model.add(MaxPooling1D(2))
+
 #model.add(MaxPooling1D(m))
 model.add(Flatten())
 model.add(Dense(128, activation='relu'))

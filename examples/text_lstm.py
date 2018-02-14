@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 import argparse
 from collections import defaultdict
-from mmdata import MOSEI
+from mmdata import MOSI
 from utils.parser_utils import KerasParserClass
 from utils.storage import build_experiment_folder, save_statistics
 
@@ -34,7 +34,7 @@ import tensorflow as tf
 tf.set_random_seed(seed)
 # The below is necessary for starting Numpy generated random numbers
 # in a well-defined initial state.
-
+max_len = 15
 
 # The below is necessary for starting core Python generated random numbers
 # in a well-defined state.
@@ -46,11 +46,11 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
 
 print("Preparing train and test data...")
 # Download the data if not present
-mosei = MOSEI()
+mosei = MOSI()
 embeddings = mosei.embeddings()
 sentiments = mosei.sentiments()
-train_ids = list(map(lambda s: s.decode(), mosei.train()))
-valid_ids = list(map(lambda s: s.decode(), mosei.valid()))
+train_ids = mosei.train()
+valid_ids = mosei.valid()
 #test_ids = mosei.test()
 
 x_train = []
@@ -123,7 +123,7 @@ filepath = "{}/best_validation_{}".format(saved_models_filepath, experiment_name
 checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 early_stopping = EarlyStopping(monitor='val_acc',
                               min_delta=0,
-                              patience=3,
+                              patience=10,
                               verbose=1, mode='auto')
 tensor_board = TensorBoard(log_dir=logs_filepath, histogram_freq=0, batch_size=batch_size, write_graph=True, 
     write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)

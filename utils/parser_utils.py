@@ -60,7 +60,7 @@ class KerasParserClass(object):
         parser.add_argument('--dropout_rate', nargs="?", type=float, default=0.35, help="Dropout value")
         parser.add_argument('--batch_norm_use', nargs="?", type=str, default="False", help='Whether to use batch norm')
         parser.add_argument('--n_layers', nargs="?", type=int, default="1", help='Number hidden layers')
-        parser.add_argument('--max_len', nargs="?", type=int, default="1", help='Max number of words')
+        parser.add_argument('--max_len', nargs="?", type=int, default="15", help='Max number of words')
         parser.add_argument('--seed', nargs="?", type=int, default=1122017, help='Random seed to use')
 
         self.args = parser.parse_args()
