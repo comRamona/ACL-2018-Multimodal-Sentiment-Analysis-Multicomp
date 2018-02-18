@@ -85,6 +85,7 @@ def pad(data, max_len):
     else:
         return data[-max_len:]
 
+max_len = 20
 mosi = MOSI()
 embeddings = mosi.embeddings()
 facet = mosi.facet()
@@ -114,17 +115,19 @@ for vid in test_ids:
 
 # partition the training, valid and tesembeddingsall sequences will be padded/truncated to 15 steps
 # data will have shape (dataset_size, max_len, feature_dim)
-max_len = 20
+
 train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
 valid_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]], axis=0)
 test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
 
-max_len = 20
 train_set_visual = np.stack([pad(facet['facet'][vid][sid], max_len) for (vid, sid) in train_set_ids], axis=0)
 valid_set_visual = np.stack([pad(facet['facet'][vid][sid], max_len) for (vid, sid) in valid_set_ids], axis=0)
 test_set_visual = np.stack([pad(facet['facet'][vid][sid], max_len) for (vid, sid) in test_set_ids], axis=0)
 
-max_len = 15
+train_set_text = np.stack([pad(embeddings['embeddings'][vid][sid], max_len) for (vid, sid) in train_set_ids], axis=0)
+valid_set_text = np.stack([pad(embeddings['embeddings'][vid][sid], max_len) for (vid, sid) in valid_set_ids], axis=0)
+test_set_text = np.stack([pad(embeddings['embeddings'][vid][sid], max_len) for (vid, sid) in test_set_ids], axis=0)
+
 train_set_text = np.stack([pad(embeddings['embeddings'][vid][sid], max_len) for (vid, sid) in train_set_ids], axis=0)
 valid_set_text = np.stack([pad(embeddings['embeddings'][vid][sid], max_len) for (vid, sid) in valid_set_ids], axis=0)
 test_set_text = np.stack([pad(embeddings['embeddings'][vid][sid], max_len) for (vid, sid) in test_set_ids], axis=0)
@@ -133,9 +136,9 @@ y_train = np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]) > 0
 y_valid = np.array([sentiments[vid][sid] for (vid, sid) in valid_set_ids]) > 0
 y_test = np.array([sentiments[vid][sid] for (vid, sid) in test_set_ids]) > 0
 
-# train_set_audio = train_set_audio[:,:,1:35]
-# valid_set_audio = valid_set_audio[:,:,1:35]
-# test_set_audio = test_set_audio[:,:,1:35]
+train_set_audio = train_set_audio[:,:,1:35]
+valid_set_audio = valid_set_audio[:,:,1:35]
+test_set_audio = test_set_audio[:,:,1:35]
 
 visual_max = np.max(np.max(np.abs(train_set_visual), axis=0), axis=0)
 visual_max[visual_max==0] = 1 # if the maximum is 0 we don't normalize this dimension
@@ -178,66 +181,59 @@ model1 = Model(model1_in, model1_out)
 model1.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model1.summary()
 checkpoint1 = ModelCheckpoint('weights1.h5', monitor='val_acc',
-save_best_only=True, verbose=2, mode="max")
-early_stopping1 = EarlyStopping(monitor="val_acc", patience=20, mode="max")
+save_best_only=True, verbose=2)
+early_stopping1 = EarlyStopping(monitor="val_loss", patience=30)
 model1.fit(train_set_audio, y=y_train, batch_size=50, epochs=100,
              verbose=1, validation_data=[valid_set_audio, y_valid], shuffle=True, callbacks=[early_stopping1, checkpoint1])
 model1.load_weights("weights1.h5")
-score, acc = model1.evaluate(test_set_audio, y_test)
-print("Audio Test accuracy: ", acc)
 
 # TEXT
 model2_in = Input(name="Input2",shape=(train_set_text.shape[1], train_set_text.shape[2]))
-model2_blstm = Bidirectional(LSTM(64))(model2_in)
-model2_d1 = Dropout(dropout_rate)(model2_blstm)
-model2_d2 = Dense(200, activation="relu", W_regularizer=l2(0.0001))(model2_d1)
-model2_d3 = Dropout(dropout_rate)(model2_d2)
-model2_d4 = Dense(200, activation="relu", W_regularizer=l2(0.0001))(model2_d3)
-model2_d5 = Dropout(dropout_rate)(model2_d4)
-model2_d6 = Dense(200, activation="relu", W_regularizer=l2(0.0001))(model2_d5)
-model2_out = Dense(1, name='layer_2')(model2_d6)
+model2_cnn = Conv1D(filters=64, kernel_size=k, activation='relu')(model2_in)
+model2_mp = MaxPooling1D(m)(model2_cnn)
+model2_fl = Flatten()(model2_mp)
+model2_dense = Dense(128, activation="relu", W_regularizer=l2(0.0001))(model2_fl)
+model2_out = Dense(1, name='layer_2')(model2_dense)
 model2 = Model(model2_in, model2_out)
 model2.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model2.summary()
 checkpoint2 = ModelCheckpoint('weights2.h5', monitor='val_acc',
 save_best_only=True, verbose=2)
-early_stopping2 = EarlyStopping(monitor="val_acc", patience=20,mode="max")
+early_stopping2 = EarlyStopping(monitor="val_loss", patience=15)
 model2.fit(train_set_text, y=y_train, batch_size=50, epochs=100,
              verbose=1, validation_data=[valid_set_text, y_valid], shuffle=True, callbacks=[early_stopping2, checkpoint2])
 model2.load_weights("weights2.h5")
-score, acc = model2.evaluate(test_set_text, y_test)
-print("Text Test accuracy: ", acc)
 
+# VISUAL
+model3_in = Input(name="Input3",shape=(train_set_visual.shape[1], train_set_visual.shape[2]))
+model3_cnn = Conv1D(filters=64, kernel_size=k, activation='relu')(model3_in)
+model3_mp = MaxPooling1D(m)(model3_cnn)
+model3_fl = Flatten()(model3_mp)
+model3_dense = Dense(128, activation="relu", W_regularizer=l2(0.0001))(model3_fl)
+model3_out = Dense(1, name='layer_3')(model3_dense)
+model3 = Model(model3_in, model3_out)
+model3.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model3.summary()
+checkpoint3 = ModelCheckpoint('weights3.h5', monitor='val_acc',
+save_best_only=True, verbose=2)
+early_stopping3 = EarlyStopping(monitor="val_loss", patience=15)
+model3.fit(train_set_visual, y=y_train, batch_size=50, epochs=100,
+             verbose=1, validation_data=[valid_set_visual, y_valid], shuffle=True, callbacks=[early_stopping3, checkpoint3])
+model3.load_weights("weights3.h5")
 
+concatenated = concatenate([model1_out, model2_out, model3_out])
+out = Dense(1, activation='sigmoid', name='output_layer')(concatenated)
 
-concatenated = concatenate([model1_out, model2_out])
-from keras.constraints import non_neg
-out = Dense(1, activation='sigmoid', name='output_layer', kernel_constraint=non_neg(), bias_regularizer=l2(1))(concatenated)
-merged_model = Model([model1_in, model2_in], out)
+merged_model = Model([model1_in, model2_in, model3_in], out)
 merged_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 merged_model.summary()
 checkpoint = ModelCheckpoint('weights.h5', monitor='val_acc',
-save_best_only=True, verbose=2,mode="max")
-early_stopping = EarlyStopping(monitor="val_acc", patience=20,mode="max")
-merged_model.fit([train_set_audio, train_set_text], y=y_train, batch_size=50, epochs=100,
-             verbose=1, validation_data=[[valid_set_audio, valid_set_text],y_valid], shuffle=True, 
+save_best_only=True, verbose=2)
+early_stopping = EarlyStopping(monitor="val_loss", patience=15)
+merged_model.fit([train_set_audio, train_set_text, train_set_visual], y=y_train, batch_size=50, epochs=100,
+             verbose=1, validation_data=[[valid_set_audio, valid_set_text, valid_set_visual],y_valid], shuffle=True, 
 callbacks=[early_stopping, checkpoint])
 
 merged_model.load_weights("weights.h5")
-score, acc = merged_model.evaluate([test_set_audio, test_set_text], y_test)
+score, acc = merged_model.evaluate([test_set_audio, test_set_text, test_set_visual], y_test)
 print("Test accuracy: ", acc)
-
-model_json = merged_model.to_json()
-with open("merged_model.json", "w") as json_file:
-    json_file.write(model_json)
-merged_model.save_weights("model.h5")
-print("Saved model to disk")
-
-from keras.models import model_from_json
-json_file = open('merged_model.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
-# load weights into new model
-loaded_model.load_weights("model.h5")
-print("Loaded model from disk")
