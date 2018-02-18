@@ -5,7 +5,7 @@ import os
 os.environ['PYTHONHASHSEED'] = '0'
 import tensorflow as tf
 tf.set_random_seed(seed)
-import pdb
+#import pdb
 import pandas as pd
 from collections import defaultdict
 from mmdata import MOSI
@@ -70,7 +70,7 @@ model1.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'
 model1.summary()
 checkpoint1 = ModelCheckpoint('t_weights1.h5', monitor='val_acc',
 save_best_only=True, verbose=2, mode="max")
-early_stopping1 = EarlyStopping(monitor="val_loss", patience=30, mode="max")
+early_stopping1 = EarlyStopping(monitor="val_loss", patience=15, mode="max")
 model1.fit(train_set_audio, y=y_train, batch_size=32, epochs=100,
              verbose=1, validation_data=[valid_set_audio, y_valid], shuffle=True, callbacks=[early_stopping1, checkpoint1])
 model1.load_weights("t_weights1.h5")

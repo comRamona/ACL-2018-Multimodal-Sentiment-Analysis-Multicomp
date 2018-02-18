@@ -5,7 +5,7 @@ import os
 os.environ['PYTHONHASHSEED'] = '0'
 import tensorflow as tf
 tf.set_random_seed(seed)
-import pdb
+#import pdb
 import pandas as pd
 from collections import defaultdict
 from mmdata import MOSI
@@ -72,7 +72,7 @@ model1_out = Dense(1, name='layer_1')(model1_dense)
 model1 = Model(model1_in, model1_out)
 model1.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model1.summary()
-checkpoint1 = ModelCheckpoint('weights1.h5', monitor='val_acc',
+checkpoint1 = ModelCheckpoint('b_weights1.h5', monitor='val_acc',
 save_best_only=True, verbose=2, mode="max")
 early_stopping1 = EarlyStopping(monitor="val_acc", patience=20, mode="max")
 model1.fit(train_set_audio, y=y_train, batch_size=50, epochs=100,
@@ -99,7 +99,7 @@ save_best_only=True, verbose=2)
 early_stopping2 = EarlyStopping(monitor="val_acc", patience=20,mode="max")
 model2.fit(train_set_text, y=y_train, batch_size=50, epochs=100,
              verbose=1, validation_data=[valid_set_text, y_valid], shuffle=True, callbacks=[early_stopping2, checkpoint2])
-model2.load_weights(b_"weights2.h5")
+model2.load_weights("b_weights2.h5")
 score, acc = model2.evaluate(test_set_text, y_test)
 print("Text Test accuracy: ", acc)
 
