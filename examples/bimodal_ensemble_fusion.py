@@ -46,13 +46,7 @@ from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, BatchNormalization
 from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
-
-seed = 16122017
-np.random.seed(seed)
-import os
-os.environ['PYTHONHASHSEED'] = '0'
-import tensorflow as tf
-tf.set_random_seed(seed)
+from keras.constraints import non_neg
 
 parser = argparse.ArgumentParser(description='Welcome to LSTM experiments script')  # generates an argument parser
 parser_extractor = KerasParserClass(parser=parser)  # creates a parser class to process the parsed input
@@ -114,7 +108,6 @@ print("Text Test accuracy: ", acc)
 
 
 concatenated = concatenate([model1_out, model2_out])
-from keras.constraints import non_neg
 out = Dense(1, activation='sigmoid', name='output_layer', kernel_constraint=non_neg(), bias_regularizer=l2(1))(concatenated)
 merged_model = Model([model1_in, model2_in], out)
 merged_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
