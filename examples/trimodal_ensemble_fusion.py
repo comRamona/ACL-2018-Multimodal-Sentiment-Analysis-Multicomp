@@ -1,12 +1,21 @@
+######### SEEDS
+
 import numpy as np
-seed = 16122017
-np.random.seed(seed)
+import tensorflow as tf
+import random as rn
 import os
 os.environ['PYTHONHASHSEED'] = '0'
-import tensorflow as tf
+seed = 16122017
+np.random.seed(seed)
+rn.seed(seed)
+session_conf = tf.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+from keras import backend as K
 tf.set_random_seed(seed)
-#import pdb
-import pandas as pd
+
+sess = tf.Session(graph=tf.get_default_graph(), config=session_conf)
+K.set_session(sess)
+################################################################
+
 from collections import defaultdict
 from mmdata import MOSI
 import argparse
