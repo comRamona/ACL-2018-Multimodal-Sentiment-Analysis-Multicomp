@@ -154,4 +154,3 @@ if __name__ == "__main__":
     print("Regression")
     print("mae: " + str(mae))
     print("pr: " + str(pr))
-

@@ -1,7 +1,7 @@
 import os
-from mmdata.dataset import Dataset
-from _pickle import load
-from mmdata.utils import download
+from dataset import Dataset
+from cPickle import load
+from utils import download
 
 class Dataloader(object):
     """Loader object for datasets"""
@@ -16,7 +16,6 @@ class Dataloader(object):
         """The unified API for getting specified features"""
         feature_path = os.path.join(self.location, feature + '.pkl')
         feature_present = os.path.exists(feature_path)
-        downloaded = None
         if not feature_present:
             downloaded = download(self.dataset, feature, self.location)
             if not downloaded:
@@ -25,9 +24,9 @@ class Dataloader(object):
         # TODO: check MD5 values and etc. to ensure the downloaded dataset's intact
         with open(feature_path, 'rb') as fp:
             try:
-                feature_values = load(fp, encoding="latin1")
+                feature_values = load(fp)
             except:
-                print("The previously downloaded dataset is compromised, downloading a new copy...")
+                print "The previously downloaded dataset is compromised, downloading a new copy..."
                 dowloaded = download(self.dataset, feature, self.location)
                 if not downloaded:
                     return None
@@ -97,11 +96,11 @@ class MOSI(Dataloader):
     """Dataloader for CMU-MOSI dataset"""
     def __init__(self):
         super(MOSI, self).__init__('http://sorena.multicomp.cs.cmu.edu/downloads/MOSI')
-        #print("This API will be deprecated in the future versions. Please check the Github page for the current API")
+        print "This API will be deprecated in the future versions. Please check the Github page for the current API"
 
 
 class MOSEI(Dataloader):
     """Dataloader for CMU-MOSEI dataset"""
     def __init__(self):
         super(MOSEI, self).__init__('http://sorena.multicomp.cs.cmu.edu/downloads/MOSEI')
-        #print("This API will be deprecated in the future versions. Please check the Github page for the current API")
+        print "This API will be deprecated in the future versions. Please check the Github page for the current API"
