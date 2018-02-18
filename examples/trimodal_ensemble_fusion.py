@@ -134,7 +134,7 @@ early_stopping3 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
 model3.fit(train_set_visual, y=y_train, batch_size=32, epochs=100,
              verbose=1, validation_data=[valid_set_visual, y_valid], shuffle=True, callbacks=[early_stopping3, checkpoint3])
 model3.load_weights(weights.format(filepath,3))
-preds = model3.predict(test_set_video)
+preds = model3.predict(test_set_visual)
 acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
 print("Video Test accuracy: ", acc)
 

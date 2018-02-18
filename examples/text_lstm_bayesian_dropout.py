@@ -112,21 +112,31 @@ score, acc = model.evaluate(x_test, y_test)
 print("Test accuracy with no dropout:",acc)
 
 f = K.function([model.layers[0].input, K.learning_phase()],
-               [model.layers[-1].output])
+                      [model.layers[-1].output])
 
-def predict_with_uncertainty(f, x, no_classes, n_iter=10):
+def predict_with_uncertainty(f, x, no_classes, n_iter=100):
     """
     Dropout as a bayesian approximation
+    
+    :param x: x_test / x_validation to make predictions over
+    :param f: forward propagation function with dropout turned on
+    :param no_classes: number of classes
+    :param n_iter: number of montecarlo samples
+    
+    :output prediction: Montecarlo Dropout estimate of mean prediction
+    :output uncertainty: Montecarlo Dropout estimate of error bars (standard deviation)
     """
-    result = np.zeros((n_iter,) + (x.shape[0],1))
-    print(result.shape)
+    mu = np.zeros( (x.shape[0], no_classes) )
+    sq = np.zeros( (x.shape[0], no_classes) )
 
     for i in range(n_iter):
-        result[i,:,:] = f((x, 1))[0]
+        nn = f((x, 1))[0]
+        mu += nn
+        sq += nn**2
 
-    prediction = result.mean(axis=0)
-    uncertainty = result.std(axis=0)
-    return prediction, uncertainty
+    prediction = mu / n_iter
+    uncertainty =  np.sqrt(nn/n_iter -  prediction**2)
+    return prediction, uncertainty   
 
 pred, uncertainty = predict_with_uncertainty(f,x_test,500)
 test_acc = np.mean((pred > 0.5) == y_test.reshape(-1, 1))
