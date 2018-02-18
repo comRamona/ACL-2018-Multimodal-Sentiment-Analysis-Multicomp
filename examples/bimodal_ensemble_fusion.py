@@ -1,19 +1,17 @@
-import pdb
 import numpy as np
-import pandas as pd
-from collections import defaultdict
-from mmdata import MOSI
-import argparse
-from collections import defaultdict
-from mmdata.dataset import Dataset
-
 seed = 16122017
 np.random.seed(seed)
 import os
 os.environ['PYTHONHASHSEED'] = '0'
 import tensorflow as tf
 tf.set_random_seed(seed)
-
+import pdb
+import pandas as pd
+from collections import defaultdict
+from mmdata import MOSI
+import argparse
+from collections import defaultdict
+from mmdata.dataset import Dataset
 from utils.parser_utils import KerasParserClass
 from utils.storage import build_experiment_folder, save_statistics
 from keras.models import Sequential
@@ -47,22 +45,8 @@ os.environ['PYTHONHASHSEED'] = '0'
 import tensorflow as tf
 tf.set_random_seed(seed)
 
-class Args:
-    def __init__(self):
-        self.units = 100
-        self.l2 = 0.005
-        self.lr = 0.01
-        self.dropout = 0.3
-        self.loss = 'binary_crossentropy'
-        self.optimizer = 'adam'
-        self.momentum = 0.1
-
-args  = Args()
-a, b=4.0, 8.0
-train_patience = 10
 parser = argparse.ArgumentParser(description='Welcome to LSTM experiments script')  # generates an argument parser
 parser_extractor = KerasParserClass(parser=parser)  # creates a parser class to process the parsed input
-
 batch_size, seed, epochs, logs_path, continue_from_epoch, batch_norm, \
 experiment_prefix, dropout_rate, n_layers, max_len = parser_extractor.get_argument_variables()
 
@@ -70,99 +54,10 @@ experiment_prefix, dropout_rate, n_layers, max_len = parser_extractor.get_argume
 experiment_name = "experiment_{}_batch_size_{}_bn_{}_dr{}_nl_{}_ml_{}".format(experiment_prefix,
                                                                    batch_size, batch_norm,
                                                                    dropout_rate, n_layers, max_len)
-
-def pad(data, max_len):
-    """A funtion for padding/truncating sequence data to a given lenght"""
-    # recall that data at each time step is a tuple (start_time, end_time, feature_vector), we only take the vector
-    data = np.array([feature[2] for feature in data])
-    n_rows = data.shape[0]
-    dim = data.shape[1]
-    if max_len >= n_rows:
-        diff = max_len - n_rows
-        padding = np.zeros((diff, dim))
-        padded = np.concatenate((padding, data))
-        return padded
-    else:
-        return data[-max_len:]
-
-mosi = MOSI()
-embeddings = mosi.embeddings()
-facet = mosi.facet()
-covarep = mosi.covarep()
-sentiments = mosi.sentiments() # sentiment labels, real-valued. for this tutorial we'll binarize them
-train_ids = mosi.train()
-valid_ids = mosi.valid()
-test_ids = mosi.test()
-# sort through all the video ID, segment ID pairs
-train_set_ids = []
-for vid in train_ids:
-    for sid in embeddings['embeddings'][vid].keys():
-        if embeddings['embeddings'][vid][sid] and facet['facet'][vid][sid] and covarep['covarep'][vid][sid]:
-            train_set_ids.append((vid, sid))
-
-valid_set_ids = []
-for vid in valid_ids:
-    for sid in embeddings['embeddings'][vid].keys():
-        if embeddings['embeddings'][vid][sid] and facet['facet'][vid][sid] and covarep['covarep'][vid][sid]:
-            valid_set_ids.append((vid, sid))
-
-test_set_ids = []
-for vid in test_ids:
-    for sid in embeddings['embeddings'][vid].keys():
-        if embeddings['embeddings'][vid][sid] and facet['facet'][vid][sid] and covarep['covarep'][vid][sid]:
-            test_set_ids.append((vid, sid))
-
-# partition the training, valid and tesembeddingsall sequences will be padded/truncated to 15 steps
-# data will have shape (dataset_size, max_len, feature_dim)
-max_len = 20
-train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
-valid_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]], axis=0)
-test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
-
-max_len = 20
-train_set_visual = np.stack([pad(facet['facet'][vid][sid], max_len) for (vid, sid) in train_set_ids], axis=0)
-valid_set_visual = np.stack([pad(facet['facet'][vid][sid], max_len) for (vid, sid) in valid_set_ids], axis=0)
-test_set_visual = np.stack([pad(facet['facet'][vid][sid], max_len) for (vid, sid) in test_set_ids], axis=0)
-
-max_len = 15
-train_set_text = np.stack([pad(embeddings['embeddings'][vid][sid], max_len) for (vid, sid) in train_set_ids], axis=0)
-valid_set_text = np.stack([pad(embeddings['embeddings'][vid][sid], max_len) for (vid, sid) in valid_set_ids], axis=0)
-test_set_text = np.stack([pad(embeddings['embeddings'][vid][sid], max_len) for (vid, sid) in test_set_ids], axis=0)
-# binarize the sentiment scores for binary classification task
-y_train = np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]) > 0
-y_valid = np.array([sentiments[vid][sid] for (vid, sid) in valid_set_ids]) > 0
-y_test = np.array([sentiments[vid][sid] for (vid, sid) in test_set_ids]) > 0
-
-# train_set_audio = train_set_audio[:,:,1:35]
-# valid_set_audio = valid_set_audio[:,:,1:35]
-# test_set_audio = test_set_audio[:,:,1:35]
-
-visual_max = np.max(np.max(np.abs(train_set_visual), axis=0), axis=0)
-visual_max[visual_max==0] = 1 # if the maximum is 0 we don't normalize this dimension
-train_set_visual = train_set_visual / visual_max
-valid_set_visual = valid_set_visual / visual_max
-test_set_visual = test_set_visual / visual_max
-
-train_set_visual[train_set_visual != train_set_visual] = 0
-valid_set_visual[valid_set_visual != valid_set_visual] = 0
-test_set_visual[test_set_visual != test_set_visual] = 0
-
-audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
-audio_max[audio_max==0] = 1
-train_set_audio = train_set_audio / audio_max
-valid_set_audio = valid_set_audio / audio_max
-test_set_audio = test_set_audio / audio_max
-
-train_set_audio[train_set_audio != train_set_audio] = 0
-valid_set_audio[valid_set_audio != valid_set_audio] = 0
-test_set_audio[test_set_audio != test_set_audio] = 0
-
-seed = 16122017
-np.random.seed(seed)
-import os
-os.environ['PYTHONHASHSEED'] = '0'
-import tensorflow as tf
-tf.set_random_seed(seed)
+from multimodaldata import get_data
+train_set_audio, valid_set_audio, test_set_audio, train_set_text, valid_set_text, test_set_text, \
+train_set_visual, valid_set_visual, test_set_visual, \
+y_train, y_valid, y_test = get_data(max_len_audio=20, max_len_text=15, max_len_visual=20)
 
 # pdb.set_trace()
 k=3
@@ -182,7 +77,7 @@ save_best_only=True, verbose=2, mode="max")
 early_stopping1 = EarlyStopping(monitor="val_acc", patience=20, mode="max")
 model1.fit(train_set_audio, y=y_train, batch_size=50, epochs=100,
              verbose=1, validation_data=[valid_set_audio, y_valid], shuffle=True, callbacks=[early_stopping1, checkpoint1])
-model1.load_weights("weights1.h5")
+model1.load_weights("b_weights1.h5")
 score, acc = model1.evaluate(test_set_audio, y_test)
 print("Audio Test accuracy: ", acc)
 
@@ -199,15 +94,14 @@ model2_out = Dense(1, name='layer_2')(model2_d6)
 model2 = Model(model2_in, model2_out)
 model2.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model2.summary()
-checkpoint2 = ModelCheckpoint('weights2.h5', monitor='val_acc',
+checkpoint2 = ModelCheckpoint('b_weights2.h5', monitor='val_acc',
 save_best_only=True, verbose=2)
 early_stopping2 = EarlyStopping(monitor="val_acc", patience=20,mode="max")
 model2.fit(train_set_text, y=y_train, batch_size=50, epochs=100,
              verbose=1, validation_data=[valid_set_text, y_valid], shuffle=True, callbacks=[early_stopping2, checkpoint2])
-model2.load_weights("weights2.h5")
+model2.load_weights(b_"weights2.h5")
 score, acc = model2.evaluate(test_set_text, y_test)
 print("Text Test accuracy: ", acc)
-
 
 
 concatenated = concatenate([model1_out, model2_out])
@@ -216,28 +110,29 @@ out = Dense(1, activation='sigmoid', name='output_layer', kernel_constraint=non_
 merged_model = Model([model1_in, model2_in], out)
 merged_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 merged_model.summary()
-checkpoint = ModelCheckpoint('weights.h5', monitor='val_acc',
+checkpoint = ModelCheckpoint('b_weights.h5', monitor='val_acc',
 save_best_only=True, verbose=2,mode="max")
 early_stopping = EarlyStopping(monitor="val_acc", patience=20,mode="max")
 merged_model.fit([train_set_audio, train_set_text], y=y_train, batch_size=50, epochs=100,
              verbose=1, validation_data=[[valid_set_audio, valid_set_text],y_valid], shuffle=True, 
 callbacks=[early_stopping, checkpoint])
 
-merged_model.load_weights("weights.h5")
+merged_model.load_weights("b_weights.h5")
 score, acc = merged_model.evaluate([test_set_audio, test_set_text], y_test)
 print("Test accuracy: ", acc)
 
 model_json = merged_model.to_json()
-with open("merged_model.json", "w") as json_file:
+with open("bimodal_model.json", "w") as json_file:
     json_file.write(model_json)
-merged_model.save_weights("model.h5")
+merged_model.save_weights("bimodal_model.h5")
 print("Saved model to disk")
 
 from keras.models import model_from_json
-json_file = open('merged_model.json', 'r')
+json_file = open('bimodal_model.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
 # load weights into new model
-loaded_model.load_weights("model.h5")
+loaded_model.load_weights("bimodal_model.h5")
 print("Loaded model from disk")
+print(loaded_model.layers[-1].get_weights())
