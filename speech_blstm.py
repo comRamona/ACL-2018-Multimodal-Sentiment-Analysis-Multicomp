@@ -34,7 +34,7 @@ def norm(data, max_len):
     print("var: "+str(var.shape))
     res = np.concatenate((mean, std, var),axis=0)
     print("all: ",res.shape)
-    return mean
+    return res
 
 
 def pad(data, max_len):
@@ -57,8 +57,8 @@ if __name__ == "__main__":
     covarep = mosi.covarep()
     sentiments = mosi.sentiments() # sentiment labels, real-valued. for this tutorial we'll binarize them
     train_ids = mosi.train() # set of video ids in the training set
-    test_ids = mosi.valid() # set of video ids in the valid set
-#    test_ids = mosi.test() # set of video ids in the test set
+    valid_ids = mosi.valid() # set of video ids in the valid set
+    test_ids = mosi.test() # set of video ids in the test set
 
 
     # sort through all the video ID, segment ID pairs
@@ -66,6 +66,11 @@ if __name__ == "__main__":
     for vid in train_ids:
         for sid in covarep['covarep'][vid].keys():
             train_set_ids.append((vid, sid))
+
+    valid_set_ids = []
+    for vid in valid_ids:
+        for sid in covarep['covarep'][vid].keys():
+                valid_set_ids.append((vid, sid))
 
     test_set_ids = []
     for vid in test_ids:
@@ -78,14 +83,14 @@ if __name__ == "__main__":
     max_len = 15
 
 #use when norming via mean, var, std
-#    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]]) 
-#    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])      
-#    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]]) 
+    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]]) 
+    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])      
+    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]]) 
 
 #use when padding with max_len set
-    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
-    valid_set_audio = np.stack([pad(dataset['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if dataset['covarep'][vid][sid]], axis=0)
-    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
+#    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
+#    valid_set_audio = np.stack([pad(dataset['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if dataset['covarep'][vid][sid]], axis=0)
+#    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
 
     # binarize the sentiment scores for binary classification task
     y_train_bin = np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]) > 0
