@@ -80,7 +80,9 @@ def pad(data, max_len):
         padded = np.concatenate((padding, data))
         return padded
     else:
-        return np.concatenate(data[-max_len:])
+        res = np.concatenate(data[-max_len:])
+        print(res.shape)
+        return res
 
 def multiclass(data):
     new_data = []
@@ -128,11 +130,11 @@ if __name__ == "__main__":
 
     # partition the training, valid and test set. all sequences will be padded/truncated to 15 steps
     # data will have shape (dataset_size, max_len, feature_dim)
-    max_len = 100
+    max_len = 75
 
-#    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]])#, axis=0)
-#    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])#, axis=0)
-#    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]])#, axis=0)
+#    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]])
+#    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])
+#    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]])
 
     train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
     valid_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]], axis=0)
@@ -190,8 +192,8 @@ if __name__ == "__main__":
         EarlyStopping(monitor='val_loss', patience=train_patience, verbose=0),
     ]
     momentum = 0.9
-    lr = 0.01
-    train_epoch = 5
+    lr = 0.001
+    train_epoch = 10
     loss = "mae"
     opt = "adam"
     sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
