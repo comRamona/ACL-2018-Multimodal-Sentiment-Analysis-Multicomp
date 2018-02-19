@@ -7,10 +7,8 @@ import numpy as np
 from mmdata import Dataloader, Dataset
 import scipy.io as sio
 import sys
-from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
-from ggplot import aes,geom_point,ggtitle
-
+from sklearn.manifold import TSNE
 
 
 
@@ -36,6 +34,21 @@ def norm(feat, data):
     return res
 
 
+def multiclass(data):
+    new_data = []
+    for item in data:
+        if item <= -1.8:
+            new_data.append(0)
+        elif item <= -0.6:
+            new_data.append(1)
+        elif item <= 0.6:
+            new_data.append(2)
+        elif item <= 1.8:
+            new_data.append(3)
+        elif item <= 3.0:
+            new_data.append(4)
+    return new_data
+
 
 def load_data(f):
     input = open(labelsfile, "rb")
@@ -46,8 +59,6 @@ def load_data(f):
     covarep = mosi.covarep()
     sentiments = mosi.sentiments() # sentiment labels, real-valued. for this tutorial we'll binarize them
     train_ids = mosi.train() # set of video ids in the training set
-    valid_ids = mosi.valid() # set of video ids in the valid set
-    test_ids = mosi.test() # set of video ids in the test set
 
     # sort through all the video ID, segment ID pairs
     train_set_ids = []
@@ -56,8 +67,17 @@ def load_data(f):
             train_set_ids.append((vid, sid))
 
     train_set_audio = np.array([norm(f, covarep['covarep'][vid][sid]) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]])
-    data = pandas.DataFrame(data=train_set_audio)
-    return label_names, data
+    train_set_audio[train_set_audio != train_set_audio] = 0
+#    y_data = np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids])
+#    y_train_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]))
+    y_train_bin = np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]) > 0
+# normalize covarep and facet features, remove possible NaN values
+#    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
+#    train_set_audio = train_set_audio / audio_max
+    x_data = pandas.DataFrame(data=train_set_audio,columns=label_names)
+    return label_names, train_set_audio, x_data, y_train_bin
+
+
 
 def make_heat(feat, label_names, data):
     correlations = data.corr()
@@ -76,23 +96,52 @@ def make_heat(feat, label_names, data):
     plt.savefig("speech_heat_"+feat+".pdf")
 
 
-def tsne_vizualization(df, labels):
-    rndperm = np.random.permutation(df.shape[0])
+    
+def tsne_vizualization(data, targets, labels):
+#    target_names = ['strg_neg', 'weak_neg', 'neutral', 'weak_pos', 'strg_pos']
+#    names_dict = {0:'strg_neg', 1:'weak_neg', 2:'neutral', 3:'weak_pos', 4:'strg_pos'}
+    target_names = {False:'negative', True:'positive'}
+    rndperm = np.random.permutation(data.shape[0])
     n_sne = 7000
-    feat_cols = [ 'pixel'+str(i) for i in range(len(labels)) ]
-    tsne = TSNE(n_components=2, verbose=1, perplexity=40, n_iter=300)
-    tsne_results = tsne.fit_transform(df.loc[rndperm[:n_sne],feat_cols].values)
+    tsne = TSNE(n_components=2,random_state=0)
+    data = np.nan_to_num(data)
+    tsne_results = tsne.fit_transform(data)
+#    print(targets)
+    print(tsne_results)
     print("done fitting transform, plotting now")
-    df_tsne = df.loc[rndperm[:n_sne],:].copy()
-    df_tsne['x-tsne'] = tsne_results[:,0]
-    df_tsne['y-tsne'] = tsne_results[:,1]    
-    chart = ggplot( df_tsne, aes(x='x-tsne', y='y-tsne', color='label') ) \
-        + geom_point(size=70,alpha=0.1) \
-        + ggtitle("tSNE dimensions colored by digit")
-    ggsave(plot = chart, filename = "TSNE_1_2_speech")
+    target_ids = range(len(target_names))
+#    colors = ['r', 'g', 'b', 'c', 'm']
+    colors = ['r', 'c']
+    
+    plt.figure()
+    for i in range(len(tsne_results)):
+        x = tsne_results[i,0]
+        y = tsne_results[i,1]
+        target = targets[i]
+        color = colors[target]
+        name = target_names[target]
+        print(x,y,target,color,name)
+        plt.scatter(x,y,c=color, label=name)
+    plt.title("tSNE Dimensions and Sentiment Classes")        
+    plt.legend(colors, target_names.values())
+    plt.savefig("tSNE_speech.pdf")
+    
+#    plt.figure()
+#    for i, c, label in zip(target_ids, colors, target_names):
+#        plt.scatter(tsne_results[targets == i, 0], tsne_results[targets == i, 1], c=c, label=label)
+
+#    x_tsne = tsne_results[:,0]
+#    y_tsne = tsne_results[:,1]
+#    heatmap, xedges, yedges = np.histogram2d(x_tsne, y_tsne, bins=50)
+#    extent = [xedges[0], xedges[-1], yedges[0], yedges[-1]]
+#    plt.clf()
+#    plt.title("t-SNE dimensions")
+#    plt.imshow(heatmap.T, extent=extent, origin='lower')
+    
+
     
 F = ["mean", "var", "std"]
 for f in F[:1]:
-    label_names, data = load_data(f)
+    label_names, data, df, y_data = load_data(f)
 #    make_heat(f, label_names, data)
-    tsne_vizualization(data,label_names)
+    tsne_vizualization(data,y_data,label_names)

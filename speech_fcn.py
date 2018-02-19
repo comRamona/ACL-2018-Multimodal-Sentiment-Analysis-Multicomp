@@ -9,6 +9,10 @@ from collections import defaultdict
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+np.random.seed(seed)
+import tensorflow as tf
+tf.set_random_seed(seed)
+
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -177,11 +181,11 @@ if __name__ == "__main__":
     Covarep_model = Sequential()
 #    Covarep_model.add(BatchNormalization(input_shape=(f_Covarep_num,)))
 #    Covarep_model.add(Dropout(0.2,input_shape=(f_Covarep_num,)))
-    Covarep_model.add(Dropout(0.2))
-    Covarep_model.add(Dense(32, input_shape=(f_Covarep_num,), activation='relu', trainable=end_to_end))
-    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
-    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
-    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
+#    Covarep_model.add(Dropout(0.2))
+    Covarep_model.add(Dense(32, kernel_regularizer=l1(0.0),input_shape=(f_Covarep_num,), activation='relu', trainable=end_to_end))
+    Covarep_model.add(Dense(32, kernel_regularizer=l1(0.0),activation='relu', trainable=end_to_end))
+    Covarep_model.add(Dense(32, kernel_regularizer=l1(0.0),activation='relu', trainable=end_to_end))
+    Covarep_model.add(Dense(32, kernel_regularizer=l1(0.0),activation='relu', trainable=end_to_end))
     Covarep_model.add(Dense(1, name = 'covarep_layer_5'))
 
 
@@ -198,7 +202,7 @@ if __name__ == "__main__":
     adam = optimizers.Adamax(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08) #decay=0.999)
     optimizer = {'sgd': sgd, 'adam':adam}
     Covarep_model.compile(loss=loss,optimizer=optimizer[opt])
-    Covarep_model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), epochs=train_epoch, batch_size=32, callbacks=callbacks)
+    Covarep_model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), epochs=train_epoch, batch_size=128, callbacks=callbacks)
     predictions = Covarep_model.predict(x_test, verbose=1)
 
     predictions = predictions.reshape((len(y_test_reg),))

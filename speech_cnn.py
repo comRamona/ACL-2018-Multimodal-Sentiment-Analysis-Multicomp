@@ -16,6 +16,18 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Embedding, LSTM, BatchNormalization,Bidirectional, Conv1D,MaxPooling1D, Flatten
 from mmdata import Dataloader, Dataset
 from keras.optimizers import SGD
+from keras.models import Model
+from keras.layers import Input
+from keras.layers import Reshape
+from keras.regularizers import l2
+from keras.regularizers import l1
+from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.constraints import nonneg
+from sklearn.metrics import mean_absolute_error
+from keras.layers.merge import concatenate
+from keras.models import Sequential
+from keras.optimizers import Adam
+
 
 target_names = ['strg_neg', 'weak_neg', 'neutral', 'weak_pos', 'strg_pos']
 f_limit = 36
@@ -50,7 +62,8 @@ def pad(data, max_len):
         padded = np.concatenate((padding, data))
         return padded
     else:
-        return np.concatenate(data[-max_len:])
+#        return np.concatenate(data[-max_len:])
+	return data[-max_len:]
 
 
 if __name__ == "__main__":
@@ -82,7 +95,7 @@ if __name__ == "__main__":
 
     # partition the training, valid and test set. all sequences will be padded/truncated to 15 steps
     # data will have shape (dataset_size, max_len, feature_dim)
-    max_len = 15
+    max_len = 20
 
 #use when norming via mean, var, std
 #    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]]) 
@@ -110,10 +123,10 @@ if __name__ == "__main__":
 #    y_test_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in test_set_ids]))
 
     # normalize covarep and facet features, remove possible NaN values
-#    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
-#    train_set_audio = train_set_audio / audio_max
-#    valid_set_audio = valid_set_audio / audio_max
-#    test_set_audio = test_set_audio / audio_max
+    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
+    train_set_audio = train_set_audio / audio_max
+    valid_set_audio = valid_set_audio / audio_max
+    test_set_audio = test_set_audio / audio_max
 
     train_set_audio[train_set_audio != train_set_audio] = 0
     valid_set_audio[valid_set_audio != valid_set_audio] = 0
@@ -123,10 +136,28 @@ if __name__ == "__main__":
     x_valid = valid_set_audio
     x_test = test_set_audio
 
-
-    #Lee and Tashev 2015 BLSTM (they ran on IEMOCAP dataset), TFN Paper (they ran on MOSI dataset)
-    #saw no major improvement using more hidden layers on IEMOCAP
-    # 64 forward and 64 backward BLSTM cells
+    k=3
+    m=2
+    # AUDIO
+    model1_in = Input(name="Audio_Covarep",shape=(train_set_audio.shape[1], train_set_audio.shape[2]))
+    model1_cnn = Conv1D(filters=64, kernel_size=k, activation='relu')(model1_in)
+    model1_mp = MaxPooling1D(m)(model1_cnn)
+    model1_fl = Flatten()(model1_mp)
+    model1_dense = Dense(128, activation="relu", W_regularizer=l2(0.0001))(model1_fl)
+    model1_out = Dense(1, name='Sigmoid_Audio')(model1_dense)
+    model1 = Model(model1_in, model1_out)
+    model1.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model1.summary()
+#    checkpoint1 = ModelCheckpoint(weights.format(filepath,1), monitor='val_acc',
+#    save_best_only=True, verbose=2, mode="max")
+    early_stopping1 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
+    model1.fit(train_set_audio, y=y_train_reg, batch_size=32, epochs=100,
+             verbose=1, validation_data=[valid_set_audio, y_valid_reg], shuffle=True, callbacks=[early_stopping1]) 
+#    model1.load_weights(weights.format(filepath,1))
+    preds = model1.predict(test_set_audio)
+    acc = np.mean((preds > 0.5) == y_test_reg.reshape(-1, 1))
+    print("Audio Test accuracy: ", acc)
+    sys.exit()
 
     lr = 0.01
     momentum = 0.9
@@ -136,16 +167,14 @@ if __name__ == "__main__":
     sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
     optimizer = {'sgd': sgd}
 
-#    x_train = np.reshape(x_train, (1, x_train.shape[0], x_train.shape[1]))
-    f_Covarep_num = x_train.shape[1]
-#    num = x_train.shape[2]
-    print(x_train.shape)
-    model = Sequential()
-    model.add(Conv1D(filters=128, kernel_size=3, input_shape = (max_len, f_Covarep_num), activation='relu'))
-    model.add(MaxPooling1D(2))
-    model.add(Flatten())
-    model.add(Dense(128, activation='relu'))
-    model.add(Dense(1, activation='sigmoid'))
+#    f_Covarep_num = x_train.shape[1]
+#    print(x_train.shape)
+#    model = Sequential()
+#    model.add(Conv1D(filters=128, kernel_size=3, input_shape = (max_len, f_Covarep_num), activation='relu'))
+#    model.add(MaxPooling1D(2))
+#    model.add(Flatten())
+#    model.add(Dense(128, activation='relu'))
+#    model.add(Dense(1, activation='sigmoid'))
 
     # you can try using different optimizers and different optimizer configs
     model.compile(optimizer=optimizer[opt], loss='mae')

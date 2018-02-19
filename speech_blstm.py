@@ -10,12 +10,28 @@ This script shows you how to:
 
 from __future__ import print_function
 import numpy as np
+#np.random.seed(seed)
+#import tensorflow as tf
+#tf.set_random_seed(seed)
 import pandas as pd
 from collections import defaultdict
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Embedding, LSTM, BatchNormalization,Bidirectional
 from mmdata import Dataloader, Dataset
 from keras.optimizers import SGD
+from keras.models import Model
+from keras.layers import Input
+from keras.layers import Reshape
+from keras import optimizers
+from keras.regularizers import l2
+from keras.regularizers import l1
+from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.constraints import nonneg
+from sklearn.metrics import mean_absolute_error
+from keras.layers.merge import concatenate
+from keras.models import Sequential
+from keras.optimizers import Adam
+
 
 target_names = ['strg_neg', 'weak_neg', 'neutral', 'weak_pos', 'strg_pos']
 f_limit = 36
@@ -85,14 +101,14 @@ if __name__ == "__main__":
     max_len = 15
 
 #use when norming via mean, var, std
-    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]]) 
-    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])      
-    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]]) 
+#    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]]) 
+#    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])      
+#    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]]) 
 
 #use when padding with max_len set
-#    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
-#    valid_set_audio = np.stack([pad(dataset['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if dataset['covarep'][vid][sid]], axis=0)
-#    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
+    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
+    valid_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]], axis=0)
+    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
 
     # binarize the sentiment scores for binary classification task
     y_train_bin = np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]) > 0
@@ -110,10 +126,10 @@ if __name__ == "__main__":
 #    y_test_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in test_set_ids]))
 
     # normalize covarep and facet features, remove possible NaN values
-#    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
-#    train_set_audio = train_set_audio / audio_max
-#    valid_set_audio = valid_set_audio / audio_max
-#    test_set_audio = test_set_audio / audio_max
+    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
+    train_set_audio = train_set_audio / audio_max
+    valid_set_audio = valid_set_audio / audio_max
+    test_set_audio = test_set_audio / audio_max
 
     train_set_audio[train_set_audio != train_set_audio] = 0
     valid_set_audio[valid_set_audio != valid_set_audio] = 0
@@ -137,7 +153,8 @@ if __name__ == "__main__":
 
     f_Covarep_num = x_train.shape[1]
     model = Sequential()
-    model.add(Bidirectional(LSTM(64, return_sequences=True),input_shape=(f_Covarep_num,)))
+    model.add(BatchNormalization(input_shape=(x_train.shape[0], x_train.shape[1])))
+    model.add(Bidirectional(LSTM(64, return_sequences=True)))
     model.add(Activation('sigmoid'))
 
     train_patience = 5
