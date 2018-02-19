@@ -129,10 +129,10 @@ if __name__ == "__main__":
 #    y_test_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in test_set_ids]))
 
     # normalize covarep and facet features, remove possible NaN values
-    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
-    train_set_audio = train_set_audio / audio_max
-    valid_set_audio = valid_set_audio / audio_max
-    test_set_audio = test_set_audio / audio_max
+#    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
+#    train_set_audio = train_set_audio / audio_max
+#    valid_set_audio = valid_set_audio / audio_max
+#    test_set_audio = test_set_audio / audio_max
 
     train_set_audio[train_set_audio != train_set_audio] = 0
     valid_set_audio[valid_set_audio != valid_set_audio] = 0
@@ -154,12 +154,12 @@ if __name__ == "__main__":
     model1 = Model(model1_in, model1_out)
     model1.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     model1.summary()
-    early_stopping1 = EarlyStopping(monitor="val_loss", patience=10, mode="max")
+    early_stopping1 = EarlyStopping(monitor="val_loss", patience=10, mode="min")
     model1.fit(train_set_audio, y=y_train_reg, batch_size=32, epochs=100,
-             verbose=1, validation_data=[valid_set_audio, y_valid_reg], shuffle=True, callbacks=[early_stopping1]) 
+             verbose=1, validation_data=[valid_set_audio, y_valid_bin], shuffle=True, callbacks=[early_stopping1]) 
     predictions = model1.predict(x_test, verbose=0)
-    predictions = predictions.reshape((len(y_test_reg),))
-    y_test = y_test_reg.reshape((len(y_test_reg),))
+    predictions = predictions.reshape((len(y_test_bin),))
+    y_test = y_test_bin.reshape((len(y_test_bin),))
     mae = np.mean(np.absolute(predictions-y_test))
     print("mae: "+str(mae))
     print("corr: "+str(round(np.corrcoef(predictions,y_test)[0][1],5)))
