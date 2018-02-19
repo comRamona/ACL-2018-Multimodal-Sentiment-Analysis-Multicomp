@@ -43,6 +43,25 @@ def pad(data, max_len):
         return padded
     else:
         return np.concatenate(data[-max_len:])
+f_limit = 36
+
+def norm(data, max_len):
+    # recall that data at each time step is a tuple (start_time, end_time, feature_vector), we only take the vector
+    data = np.array([feature[2] for feature in data])
+    data = data[:,:f_limit]
+    n_rows = data.shape[0]
+    dim = data.shape[1]
+#    print("dims: ",max_len,dim,n_rows)
+    mean = np.mean(data,axis=0)
+    std = np.std(data,axis=0)
+    var = np.var(data,axis=0)
+#    print("mean: "+str(mean.shape))
+#    print("std: "+str(std.shape))
+#    print("var: "+str(var.shape))
+    res = np.concatenate((mean, std, var),axis=0)
+#    print("all: ",res.shape)
+    return res
+
 
 def multiclass(data):
     new_data = []
@@ -92,9 +111,15 @@ if __name__ == "__main__":
     # data will have shape (dataset_size, max_len, feature_dim)
     max_len = 15
 
-    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
-    valid_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]], axis=0)
-    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
+    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]])
+    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])
+    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]])
+
+
+
+#    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
+#    valid_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]], axis=0)
+#    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
 
     # binarize the sentiment scores for binary classification task
     y_train_bin = np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]) > 0
@@ -135,6 +160,27 @@ if __name__ == "__main__":
     print("Binary")
     print(classification_report(y_valid_bin, predictions, target_names=target_names))
     print("accuracy: "+str(acc))
+
+
+    clf = SVC(kernel="rbf")
+    trained_model = clf.fit(x_train, y_train_bin)
+    predictions = clf.predict(x_valid)
+    acc = accuracy_score(y_valid_bin, predictions)
+    print("Binary")
+    print(classification_report(y_valid_bin, predictions, target_names=target_names))
+    print("accuracy: "+str(acc))
+
+
+    clf = SVC(kernel="poly")
+    trained_model = clf.fit(x_train, y_train_bin)
+    predictions = clf.predict(x_valid)
+    acc = accuracy_score(y_valid_bin, predictions)
+    print("Binary")
+    print(classification_report(y_valid_bin, predictions, target_names=target_names))
+    print("accuracy: "+str(acc))
+
+    sys.exit()
+
 
     # create and train SVM for 5-class - Classification
     clf = OneVsRestClassifier(SVC(kernel="poly"))
