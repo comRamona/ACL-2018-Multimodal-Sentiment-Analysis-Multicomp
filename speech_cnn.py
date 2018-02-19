@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 from collections import defaultdict
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Embedding, LSTM, BatchNormalization,Bidirectional
+from keras.layers import Dense, Dropout, Embedding, LSTM, BatchNormalization,Bidirectional, Conv1D,MaxPooling1D, Flatten
 from mmdata import Dataloader, Dataset
 from keras.optimizers import SGD
 
@@ -85,14 +85,14 @@ if __name__ == "__main__":
     max_len = 15
 
 #use when norming via mean, var, std
-    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]]) 
-    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])      
-    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]]) 
+#    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]]) 
+#    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])      
+#    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]]) 
 
 #use when padding with max_len set
-#    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
-#    valid_set_audio = np.stack([pad(dataset['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if dataset['covarep'][vid][sid]], axis=0)
-#    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
+    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
+    valid_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]], axis=0)
+    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
 
     # binarize the sentiment scores for binary classification task
     y_train_bin = np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]) > 0
@@ -130,23 +130,26 @@ if __name__ == "__main__":
 
     lr = 0.01
     momentum = 0.9
-    batch_size = 32
+    batch_size = 128
     train_epoch = 5
+    opt = "sgd"
     sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
     optimizer = {'sgd': sgd}
 
+#    x_train = np.reshape(x_train, (1, x_train.shape[0], x_train.shape[1]))
     f_Covarep_num = x_train.shape[1]
+#    num = x_train.shape[2]
+    print(x_train.shape)
     model = Sequential()
-    model.add(Bidirectional(LSTM(64, return_sequences=True),input_shape=(f_Covarep_num,)))
-    model.add(Activation('sigmoid'))
+    model.add(Conv1D(filters=128, kernel_size=3, input_shape = (max_len, f_Covarep_num), activation='relu'))
+    model.add(MaxPooling1D(2))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
 
-    train_patience = 5
-    callbacks = [
-        EarlyStopping(monitor='val_loss', patience=train_patience, verbose=0),
-    ]
     # you can try using different optimizers and different optimizer configs
     model.compile(optimizer=optimizer[opt], loss='mae')
-    model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), epochs=train_epoch, batch_size=batch_size,callbacks=callbacks)
+    model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), epochs=train_epoch, batch_size=batch_size)
 
     predictions = model.predict(x_test, verbose=0)
     predictions = predictions.reshape((len(y_test_reg),))

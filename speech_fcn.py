@@ -52,14 +52,14 @@ f_limit = 36
 def norm(data, max_len):
     # recall that data at each time step is a tuple (start_time, end_time, feature_vector), we only take the vector
     data = np.array([feature[2] for feature in data])
-    data = data[:,:]
+    data = data[:,:f_limit]
     n_rows = data.shape[0]
     dim = data.shape[1]
     mean = np.mean(data,axis=0)
     std = np.std(data,axis=0)
     var = np.var(data,axis=0)
-    res = np.concatenate((mean, var),axis=0)
-    return res
+    res = np.concatenate((mean,var,std),axis=0)
+    return mean
 
 
 def pad(data, max_len):
@@ -159,9 +159,9 @@ if __name__ == "__main__":
 
     # normalize covarep and facet features, remove possible NaN values
     audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
-    train_set_audio = train_set_audio / audio_max
-    valid_set_audio = valid_set_audio / audio_max
-    test_set_audio = test_set_audio / audio_max
+#    train_set_audio = train_set_audio / audio_max
+#    valid_set_audio = valid_set_audio / audio_max
+#    test_set_audio = test_set_audio / audio_max
 
     train_set_audio[train_set_audio != train_set_audio] = 0
     valid_set_audio[valid_set_audio != valid_set_audio] = 0
@@ -175,12 +175,12 @@ if __name__ == "__main__":
     end_to_end = True
     f_Covarep_num = x_train.shape[1]
     Covarep_model = Sequential()
-    Covarep_model.add(BatchNormalization(input_shape=(f_Covarep_num,)))
+#    Covarep_model.add(BatchNormalization(input_shape=(f_Covarep_num,)))
 #    Covarep_model.add(Dropout(0.2,input_shape=(f_Covarep_num,)))
     Covarep_model.add(Dropout(0.2))
-#    Covarep_model.add(Dense(32, input_shape=(f_Covarep_num,), activation='relu', kernel_regularizer=l2(0.0), trainable=end_to_end))
-#    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
-#    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
+    Covarep_model.add(Dense(32, input_shape=(f_Covarep_num,), activation='relu', trainable=end_to_end))
+    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
+    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
     Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
     Covarep_model.add(Dense(1, name = 'covarep_layer_5'))
 
@@ -190,21 +190,22 @@ if __name__ == "__main__":
         EarlyStopping(monitor='val_loss', patience=train_patience, verbose=0),
     ]
     momentum = 0.9
-    lr = 0.001
-    train_epoch = 10
+    lr = 0.01
+    train_epoch = 100
     loss = "mae"
-    opt = "adam"
+    opt = "adam" 
     sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
     adam = optimizers.Adamax(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08) #decay=0.999)
     optimizer = {'sgd': sgd, 'adam':adam}
     Covarep_model.compile(loss=loss,optimizer=optimizer[opt])
-    Covarep_model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), epochs=train_epoch, batch_size=1, callbacks=callbacks)
-    predictions = Covarep_model.predict(x_test, verbose=0)
+    Covarep_model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), epochs=train_epoch, batch_size=32, callbacks=callbacks)
+    predictions = Covarep_model.predict(x_test, verbose=1)
+
     predictions = predictions.reshape((len(y_test_reg),))
     y_test = y_test_reg.reshape((len(y_test_reg),))
     mae = np.mean(np.absolute(predictions-y_test))
     print("mae: "+str(mae))
-    print("corr: "+str(round(np.corrcoef(predictions,y_test)[0][1],5)))
+#    print("corr: "+str(round(np.corrcoef(predictions,y_test)[0][1],5)))
     print("mult_acc: "+str(round(sum(np.round(predictions)==np.round(y_test))/float(len(y_test)),5)))
     true_label = (y_test >= 0)
     predicted_label = (predictions >= 0)
