@@ -31,7 +31,7 @@ from sklearn.metrics import mean_absolute_error
 from keras.layers.merge import concatenate
 from keras.models import Sequential
 from keras.optimizers import Adam
-
+import sys
 
 target_names = ['strg_neg', 'weak_neg', 'neutral', 'weak_pos', 'strg_pos']
 f_limit = 36
@@ -66,7 +66,7 @@ def pad(data, max_len):
         padded = np.concatenate((padding, data))
         return padded
     else:
-        return np.concatenate(data[-max_len:])
+        return data[-max_len:]
 
 
 if __name__ == "__main__":
@@ -98,7 +98,7 @@ if __name__ == "__main__":
 
     # partition the training, valid and test set. all sequences will be padded/truncated to 15 steps
     # data will have shape (dataset_size, max_len, feature_dim)
-    max_len = 15
+    max_len = 200
 
 #use when norming via mean, var, std
 #    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]]) 
@@ -139,7 +139,30 @@ if __name__ == "__main__":
     x_valid = valid_set_audio
     x_test = test_set_audio
 
+    dropout_rate = 0.2
+    model2_in = Input(name="Input2",shape=(train_set_audio.shape[1], train_set_audio.shape[2]))
+    model2_blstm = Bidirectional(LSTM(64))(model2_in)
+#    model2_d1 = Dropout(dropout_rate)(model2_blstm)
+#    model2_d2 = Dense(200, activation="relu", W_regularizer=l2(0.0001))(model2_d1)
+#    model2_d3 = Dropout(dropout_rate)(model2_d2)
+#    model2_d4 = Dense(200, activation="relu", W_regularizer=l2(0.0001))(model2_d3)
+#    model2_d5 = Dropout(dropout_rate)(model2_d4)
+#    model2_d6 = Dense(200, activation="relu", W_regularizer=l2(0.0001))(model2_d5)
+    model2_out = Dense(1, name='layer_2')(model2_blstm)
+    model2 = Model(model2_in, model2_out)
+    model2.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model2.summary()
+#    checkpoint2 = ModelCheckpoint('b_weights2.h5', monitor='val_acc',
+#    save_best_only=True, verbose=2)
+    early_stopping2 = EarlyStopping(monitor="val_acc", patience=20,mode="max")
+    model2.fit(train_set_audio, y=y_train_bin, batch_size=50, epochs=100,
+             verbose=1, validation_data=[valid_set_audio, y_valid_bin], shuffle=True, callbacks=[early_stopping2])
+#    model2.load_weights("b_weights2.h5")
+    preds = model2.predict(test_set_audio)
+    acc = np.mean((preds > 0.5) == y_test_bin.reshape(-1, 1))
+    print("Text Test accuracy: ", acc)
 
+    sys.exit()
     #Lee and Tashev 2015 BLSTM (they ran on IEMOCAP dataset), TFN Paper (they ran on MOSI dataset)
     #saw no major improvement using more hidden layers on IEMOCAP
     # 64 forward and 64 backward BLSTM cells

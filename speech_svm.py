@@ -60,7 +60,7 @@ def norm(data, max_len):
 #    print("var: "+str(var.shape))
     res = np.concatenate((mean, std, var),axis=0)
 #    print("all: ",res.shape)
-    return res
+    return mean
 
 
 def multiclass(data):
@@ -138,10 +138,10 @@ if __name__ == "__main__":
 
 
     # normalize covarep and facet features, remove possible NaN values
-#    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
-#    train_set_audio = train_set_audio / audio_max
-#    valid_set_audio = valid_set_audio / audio_max
-#    test_set_audio = test_set_audio / audio_max
+    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
+    train_set_audio = train_set_audio / audio_max
+    valid_set_audio = valid_set_audio / audio_max
+    test_set_audio = test_set_audio / audio_max
 
     train_set_audio[train_set_audio != train_set_audio] = 0
     valid_set_audio[valid_set_audio != valid_set_audio] = 0
@@ -151,32 +151,35 @@ if __name__ == "__main__":
     x_valid = valid_set_audio
     x_test = test_set_audio
 
+    x_train = np.nan_to_num(x_train)
+    x_test = np.nan_to_num(x_test)
+
 
     # create and train SVM for binary - Classification
     clf = SVC(kernel="linear")
     trained_model = clf.fit(x_train, y_train_bin)
-    predictions = clf.predict(x_valid)
-    acc = accuracy_score(y_valid_bin, predictions)
+    predictions = clf.predict(x_test)
+    acc = accuracy_score(y_test_bin, predictions)
     print("Binary")
-    print(classification_report(y_valid_bin, predictions, target_names=target_names))
+    print(classification_report(y_test_bin, predictions))
     print("accuracy: "+str(acc))
 
 
-    clf = SVC(kernel="rbf")
-    trained_model = clf.fit(x_train, y_train_bin)
-    predictions = clf.predict(x_valid)
-    acc = accuracy_score(y_valid_bin, predictions)
+    clf2 = SVC(kernel="rbf")
+    trained_model = clf2.fit(x_train, y_train_bin)
+    predictions = clf2.predict(x_test)
+    acc = accuracy_score(y_test_bin, predictions)
     print("Binary")
-    print(classification_report(y_valid_bin, predictions, target_names=target_names))
+    print(classification_report(y_test_bin, predictions))
     print("accuracy: "+str(acc))
 
 
-    clf = SVC(kernel="poly")
-    trained_model = clf.fit(x_train, y_train_bin)
-    predictions = clf.predict(x_valid)
-    acc = accuracy_score(y_valid_bin, predictions)
+    clf3 = SVC(kernel="poly")
+    trained_model = clf3.fit(x_train, y_train_bin)
+    predictions = clf3.predict(x_test)
+    acc = accuracy_score(y_test_bin, predictions)
     print("Binary")
-    print(classification_report(y_valid_bin, predictions, target_names=target_names))
+    print(classification_report(y_test_bin, predictions))
     print("accuracy: "+str(acc))
 
     sys.exit()
