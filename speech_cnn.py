@@ -10,6 +10,7 @@ This script shows you how to:
 
 from __future__ import print_function
 import numpy as np
+import sys
 import pandas as pd
 from collections import defaultdict
 from keras.models import Sequential
@@ -27,7 +28,12 @@ from sklearn.metrics import mean_absolute_error
 from keras.layers.merge import concatenate
 from keras.models import Sequential
 from keras.optimizers import Adam
-
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import classification_report
+from sklearn.metrics import mean_absolute_error
 
 target_names = ['strg_neg', 'weak_neg', 'neutral', 'weak_pos', 'strg_pos']
 f_limit = 36
@@ -148,15 +154,23 @@ if __name__ == "__main__":
     model1 = Model(model1_in, model1_out)
     model1.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     model1.summary()
-#    checkpoint1 = ModelCheckpoint(weights.format(filepath,1), monitor='val_acc',
-#    save_best_only=True, verbose=2, mode="max")
-    early_stopping1 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
+    early_stopping1 = EarlyStopping(monitor="val_loss", patience=10, mode="max")
     model1.fit(train_set_audio, y=y_train_reg, batch_size=32, epochs=100,
              verbose=1, validation_data=[valid_set_audio, y_valid_reg], shuffle=True, callbacks=[early_stopping1]) 
-#    model1.load_weights(weights.format(filepath,1))
-    preds = model1.predict(test_set_audio)
-    acc = np.mean((preds > 0.5) == y_test_reg.reshape(-1, 1))
-    print("Audio Test accuracy: ", acc)
+    predictions = model1.predict(x_test, verbose=0)
+    predictions = predictions.reshape((len(y_test_reg),))
+    y_test = y_test_reg.reshape((len(y_test_reg),))
+    mae = np.mean(np.absolute(predictions-y_test))
+    print("mae: "+str(mae))
+    print("corr: "+str(round(np.corrcoef(predictions,y_test)[0][1],5)))
+    print("mult_acc: "+str(round(sum(np.round(predictions)==np.round(y_test))/float(len(y_test)),5)))
+    true_label = (y_test >= 0)
+    predicted_label = (predictions >= 0)
+    print("Confusion Matrix :")
+    print(confusion_matrix(true_label, predicted_label))
+    print("Classification Report :")
+    print(classification_report(true_label, predicted_label, digits=5))
+    print("Accuracy ", accuracy_score(true_label, predicted_label))
     sys.exit()
 
     lr = 0.01

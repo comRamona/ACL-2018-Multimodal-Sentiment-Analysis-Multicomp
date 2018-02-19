@@ -150,12 +150,13 @@ if __name__ == "__main__":
     train_epoch = 5
     sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
     optimizer = {'sgd': sgd}
+    opt = "sgd"
 
     f_Covarep_num = x_train.shape[1]
     model = Sequential()
     model.add(BatchNormalization(input_shape=(x_train.shape[0], x_train.shape[1])))
     model.add(Bidirectional(LSTM(64, return_sequences=True)))
-    model.add(Activation('sigmoid'))
+    model.add(Dense(1,activation='relu'))
 
     train_patience = 5
     callbacks = [
