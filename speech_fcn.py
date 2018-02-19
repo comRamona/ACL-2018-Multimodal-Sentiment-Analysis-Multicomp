@@ -52,19 +52,14 @@ f_limit = 36
 def norm(data, max_len):
     # recall that data at each time step is a tuple (start_time, end_time, feature_vector), we only take the vector
     data = np.array([feature[2] for feature in data])
-    data = data[:,:f_limit]
+    data = data[:,:]
     n_rows = data.shape[0]
     dim = data.shape[1]
-    print("dims: ",max_len,dim,n_rows)
     mean = np.mean(data,axis=0)
     std = np.std(data,axis=0)
     var = np.var(data,axis=0)
-    print("mean: "+str(mean.shape))
-    print("std: "+str(std.shape))
-    print("var: "+str(var.shape))
-    res = np.concatenate((mean, std, var),axis=0)
-    print("all: ",res.shape)
-    return mean
+    res = np.concatenate((mean, var),axis=0)
+    return res
 
 
 def pad(data, max_len):
@@ -132,15 +127,16 @@ if __name__ == "__main__":
     # data will have shape (dataset_size, max_len, feature_dim)
     max_len = 75
 
-#    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]])
-#    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])
-#    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]])
+    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]])
+    valid_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]])
+    test_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]])
 
-    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
-    valid_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]], axis=0)
-    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
+#    train_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]], axis=0)
+#    valid_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if covarep['covarep'][vid][sid]], axis=0)
+#    test_set_audio = np.stack([pad(covarep['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if covarep['covarep'][vid][sid]], axis=0)
 
 #    for item in train_set_audio:
+#        print(item)
 #        print(item.shape)
 #    sys.exit()
 
@@ -162,10 +158,10 @@ if __name__ == "__main__":
 
 
     # normalize covarep and facet features, remove possible NaN values
-#    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
-#    train_set_audio = train_set_audio / audio_max
-#    valid_set_audio = valid_set_audio / audio_max
-#    test_set_audio = test_set_audio / audio_max
+    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
+    train_set_audio = train_set_audio / audio_max
+    valid_set_audio = valid_set_audio / audio_max
+    test_set_audio = test_set_audio / audio_max
 
     train_set_audio[train_set_audio != train_set_audio] = 0
     valid_set_audio[valid_set_audio != valid_set_audio] = 0
@@ -179,11 +175,13 @@ if __name__ == "__main__":
     end_to_end = True
     f_Covarep_num = x_train.shape[1]
     Covarep_model = Sequential()
-    Covarep_model.add(BatchNormalization(input_shape=(f_Covarep_num,), name = 'covarep_layer_0'))
-    Covarep_model.add(Dropout(0.2, name = 'covarep_layer_1'))
-    Covarep_model.add(Dense(32, activation='relu', kernel_regularizer=l2(0.0), name = 'covarep_layer_2', trainable=end_to_end))
-    Covarep_model.add(Dense(32, activation='relu', kernel_regularizer=l2(0.0), name = 'covarep_layer_3', trainable=end_to_end))
-    Covarep_model.add(Dense(32, activation='relu', kernel_regularizer=l2(0.0), name = 'covarep_layer_4', trainable=end_to_end))
+    Covarep_model.add(BatchNormalization(input_shape=(f_Covarep_num,)))
+#    Covarep_model.add(Dropout(0.2,input_shape=(f_Covarep_num,)))
+    Covarep_model.add(Dropout(0.2))
+#    Covarep_model.add(Dense(32, input_shape=(f_Covarep_num,), activation='relu', kernel_regularizer=l2(0.0), trainable=end_to_end))
+#    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
+#    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
+    Covarep_model.add(Dense(32, activation='relu', trainable=end_to_end))
     Covarep_model.add(Dense(1, name = 'covarep_layer_5'))
 
 
@@ -199,8 +197,8 @@ if __name__ == "__main__":
     sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
     adam = optimizers.Adamax(lr=lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08) #decay=0.999)
     optimizer = {'sgd': sgd, 'adam':adam}
-    Covarep_model.compile(loss=loss, optimizer=optimizer[opt])
-    Covarep_model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), epochs=train_epoch, batch_size=128, callbacks=callbacks)
+    Covarep_model.compile(loss=loss,optimizer=optimizer[opt])
+    Covarep_model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), epochs=train_epoch, batch_size=1, callbacks=callbacks)
     predictions = Covarep_model.predict(x_test, verbose=0)
     predictions = predictions.reshape((len(y_test_reg),))
     y_test = y_test_reg.reshape((len(y_test_reg),))

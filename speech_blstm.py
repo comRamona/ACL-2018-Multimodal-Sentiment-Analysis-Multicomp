@@ -13,8 +13,9 @@ import numpy as np
 import pandas as pd
 from collections import defaultdict
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Embedding, LSTM, BatchNormalization
+from keras.layers import Dense, Dropout, Embedding, LSTM, BatchNormalization,Bidirectional
 from mmdata import Dataloader, Dataset
+from keras.optimizers import SGD
 
 target_names = ['strg_neg', 'weak_neg', 'neutral', 'weak_pos', 'strg_pos']
 f_limit = 36
@@ -25,15 +26,15 @@ def norm(data, max_len):
     data = data[:,:f_limit]
     n_rows = data.shape[0]
     dim = data.shape[1]
-    print("dims: ",max_len,dim,n_rows)
+#    print("dims: ",max_len,dim,n_rows)
     mean = np.mean(data,axis=0)
     std = np.std(data,axis=0)
     var = np.var(data,axis=0)
-    print("mean: "+str(mean.shape))
-    print("std: "+str(std.shape))
-    print("var: "+str(var.shape))
+#    print("mean: "+str(mean.shape))
+#    print("std: "+str(std.shape))
+#    print("var: "+str(var.shape))
     res = np.concatenate((mean, std, var),axis=0)
-    print("all: ",res.shape)
+#    print("all: ",res.shape)
     return res
 
 
@@ -51,9 +52,10 @@ def pad(data, max_len):
     else:
         return np.concatenate(data[-max_len:])
 
+
 if __name__ == "__main__":
     # Download the data if not present
-    mosi = Dataloader('http://sorena.multicomp.cs.cmu.edu/downloads/MOSEI')
+    mosi = Dataloader('http://sorena.multicomp.cs.cmu.edu/downloads/MOSI')
     covarep = mosi.covarep()
     sentiments = mosi.sentiments() # sentiment labels, real-valued. for this tutorial we'll binarize them
     train_ids = mosi.train() # set of video ids in the training set
@@ -103,9 +105,9 @@ if __name__ == "__main__":
     y_test_reg = np.array([sentiments[vid][sid] for (vid, sid) in test_set_ids])
 
     # for multiclass
-    y_train_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]))
-    y_valid_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in valid_set_ids]))
-    y_test_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in test_set_ids]))
+#    y_train_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]))
+#    y_valid_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in valid_set_ids]))
+#    y_test_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in test_set_ids]))
 
     # normalize covarep and facet features, remove possible NaN values
 #    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
@@ -124,24 +126,38 @@ if __name__ == "__main__":
 
     #Lee and Tashev 2015 BLSTM (they ran on IEMOCAP dataset), TFN Paper (they ran on MOSI dataset)
     #saw no major improvement using more hidden layers on IEMOCAP
+    # 64 forward and 64 backward BLSTM cells
+
+    lr = 0.01
+    momentum = 0.9
+    batch_size = 32
+    train_epoch = 5
+    sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
+    optimizer = {'sgd': sgd}
+
+    f_Covarep_num = x_train.shape[1]
     model = Sequential()
-    model.add(Embedding(max_features, 128, input_length=maxlen))
+    model.add(Bidirectional(LSTM(64),input_shape=(f_Covarep_num,), merge_mode="concat"))
     model.add(Bidirectional(LSTM(64)))
-    model.add(Bidirectional(LSTM(64)))
-    model.add(Dense(1, activation='sigmoid'))
+    model.add(Activation('sigmoid'))
 
     # you can try using different optimizers and different optimizer configs
-    model.compile('adam', 'binary_crossentropy', metrics=['binary_accuracy'])
-    batch_size = 32
+    model.compile(optimizer=optimizer[opt], loss='mae')
+    model.fit(x_train, y_train_reg, validation_data=(x_valid,y_valid_reg), epochs=train_epoch, batch_size=batch_size)
 
-    print('Train...')
-    model.fit(x_train, y_train,
-            batch_size=batch_size,
-            epochs=20,
-            validation_data=[x_valid, y_valid])
+    predictions = model.predict(x_test, verbose=0)
+    predictions = predictions.reshape((len(y_test_reg),))
+    y_test = y_test_reg.reshape((len(y_test_reg),))
+    mae = np.mean(np.absolute(predictions-y_test))
+    print("mae: "+str(mae))
+    print("corr: "+str(round(np.corrcoef(predictions,y_test)[0][1],5)))
+    print("mult_acc: "+str(round(sum(np.round(predictions)==np.round(y_test))/float(len(y_test)),5)))
+    true_label = (y_test >= 0)
+    predicted_label = (predictions >= 0)
+    print("Confusion Matrix :")
+    print(confusion_matrix(true_label, predicted_label))
+    print("Classification Report :")
+    print(classification_report(true_label, predicted_label, digits=5))
+    print("Accuracy ", accuracy_score(true_label, predicted_label))
 
-    # evaluate
-    y_preds = model.predict(x_test)
-    test_acc = np.mean((y_preds > 0.5) == y_test.reshape(-1, 1))
-    print("The accuracy on test set is: {}".format(test_acc))
 
