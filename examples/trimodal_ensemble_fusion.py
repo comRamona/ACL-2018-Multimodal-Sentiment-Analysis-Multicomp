@@ -47,7 +47,7 @@ from keras.layers.merge import concatenate
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, BatchNormalization
-from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
+from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard, CSVLogger
 
 
 parser = argparse.ArgumentParser(description='Welcome to LSTM experiments script')  # generates an argument parser
@@ -85,11 +85,12 @@ model1_out = Dense(1, name='Sigmoid_Audio')(model1_dense)
 model1 = Model(model1_in, model1_out)
 model1.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model1.summary()
-checkpoint1 = ModelCheckpoint(weights.format(filepath,1), monitor='val_acc',
-save_best_only=True, verbose=2, mode="max")
-early_stopping1 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
-model1.fit(train_set_audio, y=y_train, batch_size=32, epochs=100,
-             verbose=1, validation_data=[valid_set_audio, y_valid], shuffle=True, callbacks=[early_stopping1, checkpoint1])
+checkpoint1 = ModelCheckpoint(weights.format(filepath,1), monitor='val_loss',
+save_best_only=True, verbose=2, mode="min")
+#early_stopping1 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
+csv_logger = CSVLogger('audio_val.log')
+model1.fit(train_set_audio, y=y_train, batch_size=32, epochs=50,
+             verbose=1, validation_data=[valid_set_audio, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint1])
 model1.load_weights(weights.format(filepath,1))
 preds = model1.predict(test_set_audio)
 acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
@@ -108,11 +109,12 @@ model2_out = Dense(1, name='Sigmoid_Text')(model2_d6)
 model2 = Model(model2_in, model2_out)
 model2.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model2.summary()
-checkpoint2 = ModelCheckpoint(weights.format(filepath,2), monitor='val_acc',
-save_best_only=True, verbose=2,mode="max")
-early_stopping2 = EarlyStopping(monitor="val_acc", patience=10,mode="max")
-model2.fit(train_set_text, y=y_train, batch_size=32, epochs=100,
-             verbose=1, validation_data=[valid_set_text, y_valid], shuffle=True, callbacks=[early_stopping2, checkpoint2])
+checkpoint2 = ModelCheckpoint(weights.format(filepath,2), monitor='val_loss',
+save_best_only=True, verbose=2,mode="min")
+#early_stopping2 = EarlyStopping(monitor="val_acc", patience=10,mode="max")
+csv_logger = CSVLogger('text_val.log')
+model2.fit(train_set_text, y=y_train, batch_size=64, epochs=50,
+             verbose=1, validation_data=[valid_set_text, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint2])
 model2.load_weights(weights.format(filepath,2))
 preds = model2.predict(test_set_text)
 acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
@@ -128,11 +130,12 @@ model3_out = Dense(1, name='Sigmoid_Video')(model3_dense)
 model3 = Model(model3_in, model3_out)
 model3.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model3.summary()
-checkpoint3 = ModelCheckpoint(weights.format(filepath,3), monitor='val_acc',
-save_best_only=True, verbose=2, mode="max")
-early_stopping3 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
-model3.fit(train_set_visual, y=y_train, batch_size=32, epochs=100,
-             verbose=1, validation_data=[valid_set_visual, y_valid], shuffle=True, callbacks=[early_stopping3, checkpoint3])
+checkpoint3 = ModelCheckpoint(weights.format(filepath,3), monitor='val_loss',
+save_best_only=True, verbose=2, mode="min")
+#early_stopping3 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
+csv_logger = CSVLogger('visual_val.log')
+model3.fit(train_set_visual, y=y_train, batch_size=64, epochs=50,
+             verbose=1, validation_data=[valid_set_visual, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint3])
 model3.load_weights(weights.format(filepath,3))
 preds = model3.predict(test_set_visual)
 acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
@@ -144,18 +147,19 @@ out = Dense(1, activation='sigmoid', name='Sigmoid_Output')(concatenated)
 merged_model = Model([model1_in, model2_in, model3_in], out)
 merged_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 merged_model.summary()
-
+csv_logger = CSVLogger('trimodal_val.log')
 tensor_board = TensorBoard(log_dir=logs_filepath, histogram_freq=0, batch_size=batch_size, write_graph=True, 
     write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)
 checkpoint = ModelCheckpoint(weights.format(filepath, "merged"), monitor='val_acc',
 save_best_only=True, verbose=2, mode="max")
-early_stopping = EarlyStopping(monitor="val_acc", patience=15, mode="max")
-merged_model.fit([train_set_audio, train_set_text, train_set_visual], y=y_train, batch_size=32, epochs=100,
+#early_stopping = EarlyStopping(monitor="val_acc", patience=15, mode="max")
+merged_model.fit([train_set_audio, train_set_text, train_set_visual], y=y_train, batch_size=64, epochs=50,
              verbose=1, validation_data=[[valid_set_audio, valid_set_text, valid_set_visual],y_valid], shuffle=True, 
-callbacks=[early_stopping, checkpoint, tensor_board])
+callbacks=[csv_logger, checkpoint, tensor_board])
 merged_model.load_weights(weights.format(filepath, "merged"))
 
-score, acc = merged_model.evaluate([test_set_audio, test_set_text, test_set_visual], y_test)
+preds = merged_model.predict([test_set_audio, test_set_text, test_set_visual])
+acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
 print("Test accuracy: ", acc)
 print("TensorBoard: ", logs_filepath)
 
@@ -180,3 +184,5 @@ plot_model(merged_model, to_file='merged_model.png')
 plot_model(model1, to_file='model1.png')
 plot_model(model2, to_file='model2.png')
 plot_model(model3, to_file='model3.png')
+plot_model(merged_model, to_file='merged_modelr.png',show_shapes=True)
+plot_model(merged_model, to_file='merged_modelrr.png',show_shapes=True, show_layer_names=False)

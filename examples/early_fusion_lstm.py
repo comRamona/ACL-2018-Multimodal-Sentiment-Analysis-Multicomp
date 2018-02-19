@@ -43,7 +43,7 @@ tf.set_random_seed(seed)
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, BatchNormalization
-from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
+from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard, CSVLogger
 
 
 def pad(data, max_len):
@@ -62,7 +62,7 @@ def pad(data, max_len):
 
 if __name__ == "__main__":
     # Download the data if not present
-    max_len = 20
+    max_len = 15
     mosi = MOSI()
     embeddings = mosi.embeddings()
     facet = mosi.facet()
@@ -70,6 +70,7 @@ if __name__ == "__main__":
     sentiments = mosi.sentiments() # sentiment labels, real-valued. for this tutorial we'll binarize them
     train_ids = mosi.train()
     valid_ids = mosi.valid()
+    test_ids = mosi.test()
 
     # Merge different features and do word level feature alignment (align according to timestamps of embeddings)
     bimodal = Dataset.merge(embeddings, facet)
@@ -89,53 +90,62 @@ if __name__ == "__main__":
             if dataset['embeddings'][vid][sid] and dataset['facet'][vid][sid] and dataset['covarep'][vid][sid]:
                 valid_set_ids.append((vid, sid))
 
+    test_set_ids = []
+    for vid in test_ids:
+        for sid in dataset['embeddings'][vid].keys():
+            if dataset['embeddings'][vid][sid] and dataset['facet'][vid][sid] and dataset['covarep'][vid][sid]:
+                test_set_ids.append((vid, sid))
+
 
     # partition the training, valid and test set. all sequences will be padded/truncated to 15 steps
     # data will have shape (dataset_size, max_len, feature_dim)
 
     train_set_audio = np.stack([pad(dataset['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if dataset['covarep'][vid][sid]], axis=0)
     valid_set_audio = np.stack([pad(dataset['covarep'][vid][sid], max_len) for (vid, sid) in valid_set_ids if dataset['covarep'][vid][sid]], axis=0)
-    
+    test_set_audio = np.stack([pad(dataset['covarep'][vid][sid], max_len) for (vid, sid) in test_set_ids if dataset['covarep'][vid][sid]], axis=0)
+
     train_set_visual = np.stack([pad(dataset['facet'][vid][sid], max_len) for (vid, sid) in train_set_ids], axis=0)
     valid_set_visual = np.stack([pad(dataset['facet'][vid][sid], max_len) for (vid, sid) in valid_set_ids], axis=0)
+    test_set_visual = np.stack([pad(dataset['facet'][vid][sid], max_len) for (vid, sid) in test_set_ids], axis=0)
 
     train_set_text = np.stack([pad(dataset['embeddings'][vid][sid], max_len) for (vid, sid) in train_set_ids], axis=0)
     valid_set_text = np.stack([pad(dataset['embeddings'][vid][sid], max_len) for (vid, sid) in valid_set_ids], axis=0)
-
+    test_set_text = np.stack([pad(dataset['embeddings'][vid][sid], max_len) for (vid, sid) in test_set_ids], axis=0)
 
     # binarize the sentiment scores for binary classification task
     y_train = np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]) > 0
     y_valid = np.array([sentiments[vid][sid] for (vid, sid) in valid_set_ids]) > 0
-  
+    y_test = np.array([sentiments[vid][sid] for (vid, sid) in test_set_ids]) > 0
 
     # normalize covarep and facet features, remove possible NaN values
     visual_max = np.max(np.max(np.abs(train_set_visual), axis=0), axis=0)
     visual_max[visual_max==0] = 1 # if the maximum is 0 we don't normalize this dimension
     train_set_visual = train_set_visual / visual_max
     valid_set_visual = valid_set_visual / visual_max
- 
+    test_set_visual = test_set_visual / visual_max
 
     train_set_visual[train_set_visual != train_set_visual] = 0
     valid_set_visual[valid_set_visual != valid_set_visual] = 0
-
+    test_set_visual[test_set_visual != test_set_visual] = 0
 
     audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
     train_set_audio = train_set_audio / audio_max
     valid_set_audio = valid_set_audio / audio_max
- 
+    test_set_audio = test_set_audio / audio_max
 
     train_set_audio[train_set_audio != train_set_audio] = 0
     valid_set_audio[valid_set_audio != valid_set_audio] = 0
- 
+    test_set_audio[test_set_audio != test_set_audio] = 0
 
     # early fusion: input level concatenation of features
     x_train = np.concatenate((train_set_visual, train_set_audio, train_set_text), axis=2)
     x_valid = np.concatenate((valid_set_visual, valid_set_audio, valid_set_text), axis=2)
+    x_test = np.concatenate((test_set_visual, test_set_audio, test_set_text), axis=2)
 
     model = Sequential()
     model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
     model.add(LSTM(256))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.1))
     model.add(Dense(1, activation='sigmoid'))
 
 
@@ -145,17 +155,34 @@ if __name__ == "__main__":
 
     saved_models_filepath, logs_filepath = build_experiment_folder(experiment_name, logs_path)  # generate experiment dir
     filepath = "{}/best_validation_{}".format(saved_models_filepath, experiment_name) + ".ckpt"
-    checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-    early_stopping = EarlyStopping(monitor='val_acc',
-                                  min_delta=0,
-                                  patience=10,
-                                  verbose=1, mode='auto')
+    
+    # early_stopping = EarlyStopping(monitor='val_acc',
+    #                               min_delta=0,
+    #                               patience=10,
+    #                               verbose=1, mode='auto')
+    
     tensor_board = TensorBoard(log_dir=logs_filepath, histogram_freq=0, batch_size=batch_size, write_graph=True, 
         write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)
-    callbacks_list = [checkpoint, early_stopping, tensor_board]
-    print('Train...')
+    checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+    csv_logger = CSVLogger('early_val.log')
+    callbacks_list = [checkpoint, csv_logger, tensor_board]
     model.fit(x_train, y_train,
               batch_size=batch_size,
-              epochs=epochs,
+              epochs=50,
               validation_data=[x_valid, y_valid],
               callbacks=callbacks_list)
+    preds = model.predict(x_test)
+    acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
+    print(acc)
+    model.load_weights(filepath)
+    preds = model.predict(x_test)
+    acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
+    print(acc)
+    #predictions = fusion_model.predict([np.ones(valid_set_audio.shape[0]), valid_set_audio, valid_set_visual, valid_set_text], verbose=0)
+   
+
+
+
+
+
+   

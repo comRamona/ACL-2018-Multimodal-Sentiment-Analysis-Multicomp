@@ -45,7 +45,7 @@ from keras.layers.merge import concatenate
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, BatchNormalization
-from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
+from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard, CSVLogger
 from keras.constraints import non_neg
 
 parser = argparse.ArgumentParser(description='Welcome to LSTM experiments script')  # generates an argument parser
@@ -57,6 +57,7 @@ experiment_prefix, dropout_rate, n_layers, max_len = parser_extractor.get_argume
 experiment_name = "experiment_{}_batch_size_{}_bn_{}_dr{}_nl_{}_ml_{}".format(experiment_prefix,
                                                                    batch_size, batch_norm,
                                                                    dropout_rate, n_layers, max_len)
+saved_models_filepath, logs_filepath = build_experiment_folder(experiment_name, logs_path)
 from multimodaldata import get_data
 train_set_audio, valid_set_audio, test_set_audio, train_set_text, valid_set_text, test_set_text, \
 train_set_visual, valid_set_visual, test_set_visual, \
@@ -81,7 +82,8 @@ early_stopping1 = EarlyStopping(monitor="val_acc", patience=20, mode="max")
 model1.fit(train_set_audio, y=y_train, batch_size=50, epochs=100,
              verbose=1, validation_data=[valid_set_audio, y_valid], shuffle=True, callbacks=[early_stopping1, checkpoint1])
 model1.load_weights("b_weights1.h5")
-score, acc = model1.evaluate(test_set_audio, y_test)
+preds = model1.predict(test_set_audio)
+acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
 print("Audio Test accuracy: ", acc)
 
 # TEXT
@@ -103,7 +105,8 @@ early_stopping2 = EarlyStopping(monitor="val_acc", patience=20,mode="max")
 model2.fit(train_set_text, y=y_train, batch_size=50, epochs=100,
              verbose=1, validation_data=[valid_set_text, y_valid], shuffle=True, callbacks=[early_stopping2, checkpoint2])
 model2.load_weights("b_weights2.h5")
-score, acc = model2.evaluate(test_set_text, y_test)
+preds = model2.predict(test_set_text)
+acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
 print("Text Test accuracy: ", acc)
 
 
@@ -115,12 +118,17 @@ merged_model.summary()
 checkpoint = ModelCheckpoint('b_weights.h5', monitor='val_acc',
 save_best_only=True, verbose=2,mode="max")
 early_stopping = EarlyStopping(monitor="val_acc", patience=20,mode="max")
+tensor_board = TensorBoard(log_dir=logs_filepath, histogram_freq=0, batch_size=batch_size, write_graph=True, 
+    write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)
+csv_logger = CSVLogger('bimodal_val.log')
 merged_model.fit([train_set_audio, train_set_text], y=y_train, batch_size=50, epochs=100,
              verbose=1, validation_data=[[valid_set_audio, valid_set_text],y_valid], shuffle=True, 
-callbacks=[early_stopping, checkpoint])
+callbacks=[early_stopping, checkpoint, tensor_board, csv_logger])
 
 merged_model.load_weights("b_weights.h5")
-score, acc = merged_model.evaluate([test_set_audio, test_set_text], y_test)
+preds = merged_model.predict([test_set_audio, test_set_text])
+acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
+print("Test accuracy: ", acc)
 print("Test accuracy: ", acc)
 
 model_json = merged_model.to_json()
@@ -138,3 +146,4 @@ loaded_model = model_from_json(loaded_model_json)
 loaded_model.load_weights("bimodal_model.h5")
 print("Loaded model from disk")
 print(loaded_model.layers[-1].get_weights())
+print(logs_filepath)

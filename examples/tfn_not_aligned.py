@@ -22,7 +22,7 @@ from keras.layers import Merge
 from keras.layers import Dropout
 from keras.layers.embeddings import Embedding
 from keras.preprocessing import sequence
-from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.callbacks import EarlyStopping, ModelCheckpoint, CSVLogger
 from keras.models import Model
 from keras.layers import Input
 from keras.layers import Reshape
@@ -105,7 +105,7 @@ for vid in valid_ids:
             valid_set_ids.append((vid, sid))
 
 test_set_ids = []
-for vid in valid_ids:
+for vid in test_ids:
     for sid in embeddings['embeddings'][vid].keys():
         if embeddings['embeddings'][vid][sid] and facet['facet'][vid][sid] and covarep['covarep'][vid][sid]:
             test_set_ids.append((vid, sid))
@@ -145,7 +145,7 @@ test_set_visual = test_set_visual / visual_max
 
 train_set_visual[train_set_visual != train_set_visual] = 0
 valid_set_visual[valid_set_visual != valid_set_visual] = 0
-test_set_visual[valid_set_visual != test_set_visual] = 0
+test_set_visual[test_set_visual != test_set_visual] = 0
 
 audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
 audio_max[audio_max==0] = 1
@@ -155,7 +155,7 @@ test_set_audio = test_set_audio / audio_max
 
 train_set_audio[train_set_audio != train_set_audio] = 0
 valid_set_audio[valid_set_audio != valid_set_audio] = 0
-test_set_audio[valid_set_audio != test_set_audio] = 0
+test_set_audio[test_set_audio != test_set_audio] = 0
 
 train_set_audio = np.mean(train_set_audio, axis=1)
 valid_set_audio = np.mean(valid_set_audio, axis=1)
@@ -218,8 +218,8 @@ fusion_model.add(Dense(1, activation='sigmoid',W_regularizer=l2(args.l2), name =
 
 #fusion_model.load_weights(weights_folder_path + "fusion-pretrained-cv" + str(cv_id) + '.h5', by_name=True)
 callbacks = [
-    EarlyStopping(monitor='val_acc', patience=5, verbose=1),
     ModelCheckpoint("pig.hdfs5", monitor='val_loss', save_best_only=True, verbose=1),
+    CSVLogger('tfn_val.log')
 ]
 sgd = SGD(lr=args.lr, decay=1e-6, momentum=args.momentum, nesterov=True)
 adam = optimizers.Adamax(lr=args.lr, beta_1=0.9, beta_2=0.999, epsilon=1e-08) #decay=0.999)
@@ -229,25 +229,11 @@ fusion_model.compile(loss=args.loss, optimizer=optimizer[args.optimizer], metric
 
 fusion_model.fit([np.ones(train_set_audio.shape[0]), train_set_audio, train_set_visual, train_set_text], y_train, 
                  validation_data=[[np.ones(valid_set_audio.shape[0]), valid_set_audio, valid_set_visual, valid_set_text], y_valid],
-                 nb_epoch=100, batch_size=50,
+                 nb_epoch=50, batch_size=50,
                  callbacks=callbacks
 )
 
 #predictions = fusion_model.predict([np.ones(valid_set_audio.shape[0]), valid_set_audio, valid_set_visual, valid_set_text], verbose=0)
-score, acc = fusion_model.evaluate([np.ones(test_set_audio.shape[0]), test_set_audio, test_set_visual, test_set_text], y_test)
+preds = fusion_model.predict([np.ones(test_set_audio.shape[0]), test_set_audio, test_set_visual, test_set_text])
+acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
 print(acc)
-
-# predictions = predictions.reshape((len(y_test),))
-# y_test = y_test.reshape((len(y_test),))
-# mae = np.mean(np.absolute(predictions-y_test))
-# print("mae: ", mae)
-# print("corr: ", round(np.corrcoef(predictions,y_test)[0][1],5))
-# print('mult_acc: ', round(sum(np.round(predictions)==np.round(y_test))/float(len(y_test)),5))
-# true_label = (y_test >= 0)
-# predicted_label = (predictions >= 0)
-# print("Confusion Matrix :")
-# print(confusion_matrix(true_label, predicted_label))
-# print("Classification Report :")
-# print(classification_report(true_label, predicted_label, digits=5))
-# print("Accuracy ", accuracy_score(true_label, predicted_label))
-# pdb.set_trace()
