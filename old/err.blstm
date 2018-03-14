@@ -1,0 +1,197 @@
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 106, in <module>
+    y_train_mc = multiclass(np.array([sentiments[vid][sid] for (vid, sid) in train_set_ids]))
+NameError: name 'multiclass' is not defined
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 132, in <module>
+    model.add(Bidirectional(LSTM(64)))
+NameError: name 'Bidirectional' is not defined
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 132, in <module>
+    model.add(Bidirectional(LSTM(64)))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 454, in add
+    raise ValueError('The first layer in a '
+ValueError: The first layer in a Sequential model must get an `input_shape` or `batch_input_shape` argument.
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 132, in <module>
+    model.add(Bidirectional(LSTM(64,input_shape=(f_Covarep_num,))))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 454, in add
+    raise ValueError('The first layer in a '
+ValueError: The first layer in a Sequential model must get an `input_shape` or `batch_input_shape` argument.
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 132, in <module>
+    model.add(Bidirectional(LSTM(64),input_shape=(f_Covarep_num,)))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 467, in add
+    layer(x)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 590, in __call__
+    self.build(input_shapes[0])
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/wrappers.py", line 357, in build
+    self.forward_layer.build(input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 450, in build
+    self.cell.build(step_input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 1723, in build
+    constraint=self.kernel_constraint)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/legacy/interfaces.py", line 91, in wrapper
+    return func(*args, **kwargs)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 411, in add_weight
+    weight = K.variable(initializer(shape),
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/initializers.py", line 209, in __call__
+    scale /= max(1., float(fan_in + fan_out) / 2)
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+  File "speech_blstm.py", line 140
+    model.compile(optimizer=optimizer[opt], loss='mae')
+        ^
+SyntaxError: invalid syntax
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 130, in <module>
+    sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
+NameError: name 'SGD' is not defined
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 131, in <module>
+    sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
+NameError: name 'lr' is not defined
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 132, in <module>
+    sgd = SGD(lr=lr, decay=1e-6, momentum=momentum, nesterov=True)
+NameError: name 'momentum' is not defined
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 136, in <module>
+    optimizer = {'sgd': sgd, 'adam':adam}
+NameError: name 'adam' is not defined
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 140, in <module>
+    model.add(Bidirectional(LSTM(64,input_shape=(f_Covarep_num,)), merge_mode="concat", weights=None))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 454, in add
+    raise ValueError('The first layer in a '
+ValueError: The first layer in a Sequential model must get an `input_shape` or `batch_input_shape` argument.
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 140, in <module>
+    model.add(Bidirectional(LSTM(64),input_shape=(f_Covarep_num,), merge_mode="concat", weights=None))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 467, in add
+    layer(x)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 590, in __call__
+    self.build(input_shapes[0])
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/wrappers.py", line 357, in build
+    self.forward_layer.build(input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 450, in build
+    self.cell.build(step_input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 1723, in build
+    constraint=self.kernel_constraint)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/legacy/interfaces.py", line 91, in wrapper
+    return func(*args, **kwargs)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 411, in add_weight
+    weight = K.variable(initializer(shape),
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/initializers.py", line 209, in __call__
+    scale /= max(1., float(fan_in + fan_out) / 2)
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 140, in <module>
+    model.add(Bidirectional(LSTM(64),input_shape=(f_Covarep_num,), merge_mode="concat"))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 467, in add
+    layer(x)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 590, in __call__
+    self.build(input_shapes[0])
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/wrappers.py", line 357, in build
+    self.forward_layer.build(input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 450, in build
+    self.cell.build(step_input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 1723, in build
+    constraint=self.kernel_constraint)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/legacy/interfaces.py", line 91, in wrapper
+    return func(*args, **kwargs)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 411, in add_weight
+    weight = K.variable(initializer(shape),
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/initializers.py", line 209, in __call__
+    scale /= max(1., float(fan_in + fan_out) / 2)
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 140, in <module>
+    model.add(Bidirectional(LSTM(64, return_sequences=True),input_shape=(f_Covarep_num,)))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 467, in add
+    layer(x)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 590, in __call__
+    self.build(input_shapes[0])
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/wrappers.py", line 357, in build
+    self.forward_layer.build(input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 450, in build
+    self.cell.build(step_input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 1723, in build
+    constraint=self.kernel_constraint)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/legacy/interfaces.py", line 91, in wrapper
+    return func(*args, **kwargs)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 411, in add_weight
+    weight = K.variable(initializer(shape),
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/initializers.py", line 209, in __call__
+    scale /= max(1., float(fan_in + fan_out) / 2)
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 140, in <module>
+    model.add(Bidirectional(LSTM(64, return_sequences=True,input_shape=(f_Covarep_num,))))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 454, in add
+    raise ValueError('The first layer in a '
+ValueError: The first layer in a Sequential model must get an `input_shape` or `batch_input_shape` argument.
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_blstm.py", line 140, in <module>
+    model.add(Bidirectional(LSTM(64, return_sequences=True),input_shape=(f_Covarep_num,)))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 467, in add
+    layer(x)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 590, in __call__
+    self.build(input_shapes[0])
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/wrappers.py", line 357, in build
+    self.forward_layer.build(input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 450, in build
+    self.cell.build(step_input_shape)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/recurrent.py", line 1723, in build
+    constraint=self.kernel_constraint)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/legacy/interfaces.py", line 91, in wrapper
+    return func(*args, **kwargs)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 411, in add_weight
+    weight = K.variable(initializer(shape),
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/initializers.py", line 209, in __call__
+    scale /= max(1., float(fan_in + fan_out) / 2)
+TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'

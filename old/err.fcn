@@ -1,0 +1,168 @@
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+Traceback (most recent call last):
+  File "speech_fcn.py", line 203, in <module>
+    Covarep_model.compile(loss=loss)
+TypeError: compile() takes at least 3 arguments (2 given)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+Traceback (most recent call last):
+  File "speech_fcn.py", line 200, in <module>
+    Covarep_model.compile(loss=loss,optimizer=optimizer[opt])
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 819, in compile
+    self.build()
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 557, in build
+    name=self.name + '_model')
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/legacy/interfaces.py", line 91, in wrapper
+    return func(*args, **kwargs)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 1827, in __init__
+    'Layer names: ', all_names)
+RuntimeError: ('The name "covarep_layer_1" is used 2 times in the model. All layer names should be unique. Layer names: ', ['covarep_layer_1_input', 'covarep_layer_1', 'covarep_layer_1', 'covarep_layer_2', 'covarep_layer_3', 'covarep_layer_4', 'covarep_layer_5'])
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+Traceback (most recent call last):
+  File "speech_fcn.py", line 200, in <module>
+    Covarep_model.compile(loss=loss,optimizer=optimizer[opt])
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 819, in compile
+    self.build()
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 557, in build
+    name=self.name + '_model')
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/legacy/interfaces.py", line 91, in wrapper
+    return func(*args, **kwargs)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 1827, in __init__
+    'Layer names: ', all_names)
+RuntimeError: ('The name "covarep_layer_2" is used 2 times in the model. All layer names should be unique. Layer names: ', ['covarep_layer_2_input', 'covarep_layer_2', 'covarep_layer_2', 'covarep_layer_3', 'covarep_layer_4', 'covarep_layer_5'])
+Using TensorFlow backend.
+Traceback (most recent call last):
+  File "speech_fcn.py", line 200, in <module>
+    Covarep_model.compile(loss=loss,optimizer=optimizer[opt])
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 819, in compile
+    self.build()
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 557, in build
+    name=self.name + '_model')
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/legacy/interfaces.py", line 91, in wrapper
+    return func(*args, **kwargs)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 1827, in __init__
+    'Layer names: ', all_names)
+RuntimeError: ('The name "covarep_layer_2" is used 2 times in the model. All layer names should be unique. Layer names: ', ['covarep_layer_2_input', 'covarep_layer_2', 'covarep_layer_2', 'covarep_layer_3', 'covarep_layer_4', 'covarep_layer_5'])
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)
+Using TensorFlow backend.
+Traceback (most recent call last):
+  File "speech_fcn.py", line 130, in <module>
+    train_set_audio = np.array([norm(covarep['covarep'][vid][sid], max_len) for (vid, sid) in train_set_ids if covarep['covarep'][vid][sid]])
+  File "speech_fcn.py", line 61, in norm
+    res = np.concatenate((mean),axis=0)
+ValueError: zero-dimensional arrays cannot be concatenated
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+  'precision', 'predicted', average, warn_for)

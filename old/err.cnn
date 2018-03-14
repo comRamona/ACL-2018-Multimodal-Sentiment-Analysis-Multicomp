@@ -1,0 +1,54 @@
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_cnn.py", line 140, in <module>
+    model.add(Conv1D(filters=128, kernel_size=3, input_shape = (f_Covarep_num,), activation='relu'))
+NameError: name 'Conv1D' is not defined
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_cnn.py", line 140, in <module>
+    model.add(Conv1D(filters=128, kernel_size=3, input_shape = (f_Covarep_num,), activation='relu'))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 467, in add
+    layer(x)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 573, in __call__
+    self.assert_input_compatibility(inputs)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 472, in assert_input_compatibility
+    str(K.ndim(x)))
+ValueError: Input 0 is incompatible with layer conv1d_1: expected ndim=3, found ndim=2
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_cnn.py", line 140, in <module>
+    model.add(Conv1D(filters=128, kernel_size=3, input_shape = (f_Covarep_num,None), activation='relu'))
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 467, in add
+    layer(x)
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 590, in __call__
+    self.build(input_shapes[0])
+  File "/home/s1738075/.local/lib/python2.7/site-packages/keras/layers/convolutional.py", line 129, in build
+    raise ValueError('The channel dimension of the inputs '
+ValueError: The channel dimension of the inputs should be defined. Found `None`.
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_cnn.py", line 141, in <module>
+    model.add(MaxPooling1D(2))
+NameError: name 'MaxPooling1D' is not defined
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_cnn.py", line 142, in <module>
+    model.add(Flatten())
+NameError: name 'Flatten' is not defined
+Using TensorFlow backend.
+/home/s1738075/.local/lib/python2.7/site-packages/numpy/core/_methods.py:112: RuntimeWarning: invalid value encountered in subtract
+  x = asanyarray(arr - arrmean)
+Traceback (most recent call last):
+  File "speech_cnn.py", line 147, in <module>
+    model.compile(optimizer=optimizer[opt], loss='mae')
+NameError: name 'opt' is not defined
