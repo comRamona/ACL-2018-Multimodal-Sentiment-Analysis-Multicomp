@@ -4,6 +4,7 @@ class ParserClass(object):
         Parses arguments and saves them in the Parser Class
         :param parser: A parser to get input from
         """
+        parser.add_argument('--mode', nargs="?", type=str, default="all", help='feature mode')
         parser.add_argument('--batch_size', nargs="?", type=int, default=64, help='batch_size for experiment')
         parser.add_argument('--epochs', type=int, nargs="?", default=100, help='Number of epochs to train for')
         parser.add_argument('--logs_path', type=str, nargs="?", default="classification_logs/",
@@ -39,8 +40,9 @@ class ParserClass(object):
         continue_from_epoch = self.args.continue_epoch  # use -1 to start from scratch
         epochs = self.args.epochs
         logs_path = self.args.logs_path
+        mode = self.args.mode
 
-        return batch_size, seed, epochs, logs_path, continue_from_epoch, tensorboard_enable, batch_norm, \
+        return batch_size, seed, epochs, logs_path, mode, continue_from_epoch, tensorboard_enable, batch_norm, \
                strided_dim_reduction, experiment_prefix, dropout_rate
 
 class KerasParserClass(object):
@@ -49,6 +51,7 @@ class KerasParserClass(object):
         Parses arguments and saves them in the Parser Class
         :param parser: A parser to get input from
         """
+        parser.add_argument('--mode', nargs="?", type=str, default="all", help='feature mode')
         parser.add_argument('--batch_size', nargs="?", type=int, default=64, help='batch_size for experiment')
         parser.add_argument('--epochs', type=int, nargs="?", default=100, help='Number of epochs to train for')
         parser.add_argument('--logs_path', type=str, nargs="?", default="classification_logs/",
@@ -80,6 +83,7 @@ class KerasParserClass(object):
         max_len = self.args.max_len
         n_layers = self.args.n_layers
         logs_path = self.args.logs_path
+        mode = self.args.mode
 
-        return batch_size, seed, epochs, logs_path, continue_from_epoch, batch_norm, \
+        return batch_size, seed, epochs, logs_path, mode, continue_from_epoch, batch_norm, \
                experiment_prefix, dropout_rate, n_layers, max_len
