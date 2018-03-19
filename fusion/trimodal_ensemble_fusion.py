@@ -152,10 +152,10 @@ tensor_board = TensorBoard(log_dir=logs_filepath, histogram_freq=0, batch_size=b
     write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)
 checkpoint = ModelCheckpoint(weights.format(filepath, "merged"), monitor='val_acc',
 save_best_only=True, verbose=2, mode="max")
-early_stopping = EarlyStopping(monitor="val_acc", patience=15, mode="max")
+early_stopping = EarlyStopping(monitor="val_acc", patience=10, mode="max")
 merged_model.fit([train_set_audio, train_set_text, train_set_visual], y=y_train, batch_size=64, epochs=50,
              verbose=1, validation_data=[[valid_set_audio, valid_set_text, valid_set_visual],y_valid], shuffle=True, 
-callbacks=[csv_logger, checkpoint, tensor_board], early_stopping)
+callbacks=[csv_logger, checkpoint, tensor_board, early_stopping])
 merged_model.load_weights(weights.format(filepath, "merged"))
 
 preds = merged_model.predict([test_set_audio, test_set_text, test_set_visual])
