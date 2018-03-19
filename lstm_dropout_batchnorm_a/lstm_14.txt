@@ -1,0 +1,13 @@
+/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/pandas/core/nanops.py:39: UserWarning: The installed version of bottleneck 0.7.0 is not supported in pandas and will be not be used
+The minimum supported version is 1.0.0
+
+  ver=ver, min_ver=_MIN_BOTTLENECK_VERSION), UserWarning)
+usage: early_fusion_lstm.py [-h] [--mode [MODE]] [--batch_size [BATCH_SIZE]]
+                            [--epochs [EPOCHS]] [--logs_path [LOGS_PATH]]
+                            [--experiment_prefix [EXPERIMENT_PREFIX]]
+                            [--continue_epoch [CONTINUE_EPOCH]]
+                            [--dropout_rate [DROPOUT_RATE]]
+                            [--batch_norm_use [BATCH_NORM_USE]]
+                            [--n_layers [N_LAYERS]] [--max_len [MAX_LEN]]
+                            [--seed [SEED]]
+early_fusion_lstm.py: error: unrecognized arguments: 7
