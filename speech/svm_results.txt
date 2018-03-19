@@ -1,0 +1,24 @@
+Binary
+             precision    recall  f1-score   support
+
+   strg_neg       0.49      0.49      0.49       105
+   weak_neg       0.56      0.56      0.56       124
+
+avg / total       0.53      0.53      0.53       229
+
+accuracy: 0.5283842794759825
+5-class
+             precision    recall  f1-score   support
+
+   strg_neg    0.33333   0.21212   0.25926        33
+   weak_neg    0.18750   0.23077   0.20690        39
+    neutral    0.24615   0.30769   0.27350        52
+   weak_pos    0.31746   0.37736   0.34483        53
+   strg_pos    0.31250   0.19231   0.23810        52
+
+avg / total    0.28030   0.27074   0.26857       229
+
+accuracy: 0.27074235807860264
+Regression
+mae: 1.4345498588724326
+pr: (-0.015150263746412653, 0.8196279098621915)
