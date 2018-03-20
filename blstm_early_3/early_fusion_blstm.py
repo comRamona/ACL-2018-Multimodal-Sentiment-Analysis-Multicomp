@@ -29,11 +29,11 @@ parser_extractor = KerasParserClass(parser=parser)  # creates a parser class to 
 #n_layers = int(sys.argv[5]) # [1, 2, 3]
 #epochs = int(sys.argv[6]) # [50, 100]
 
-batch_size, seed, epochs, logs_path, mode,continue_from_epoch, batch_norm, \
+batch_size, seed, epochs, logs_path, mode, continue_from_epoch, batch_norm, \
 experiment_prefix, dropout_rate, n_layers, max_len = parser_extractor.get_argument_variables()
 
 
-experiment_name = "{}_m_{}_ep_{}_bs_{}_bn_{}_dr_{}_nl_{}_ml_{}".format(experiment_prefix, mode,epochs,
+experiment_name = "{}_m_{}_ep_{}_bs_{}_bn_{}_dr_{}_nl_{}_ml_{}".format(experiment_prefix, mode, epochs,
                                                                    batch_size, batch_norm,
                                                                    dropout_rate, n_layers, max_len)
 np.random.seed(seed)
@@ -144,6 +144,7 @@ if __name__ == "__main__":
     valid_set_audio[valid_set_audio != valid_set_audio] = 0
     test_set_audio[test_set_audio != test_set_audio] = 0
 
+    # early fusion: input level concatenation of features
     if mode == "all":
         x_train = np.concatenate((train_set_visual, train_set_audio, train_set_text), axis=2)
         x_valid = np.concatenate((valid_set_visual, valid_set_audio, valid_set_text), axis=2)
@@ -169,37 +170,36 @@ if __name__ == "__main__":
         x_valid = valid_set_audio
         x_test = test_set_audio
 
-    k = 3
-    m = 2
+
     model = Sequential()
 
     if n_layers == 1:
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Flatten())
-        model.add(Dense(128, activation='relu'))
-        model.add(Dense(1, activation='sigmoid'))
+        model.add(Bidirectional(LSTM(64)))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(100, activation="relu"))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 2:
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Flatten())
-        model.add(Dense(128, activation='relu'))
-        model.add(Dense(1, activation='sigmoid'))
+        model.add(Bidirectional(LSTM(64,return_sequences=True,input_shape=(max_len, x_train.shape[2]))))
+        model.add(Dropout(dropout_rate))
+        model.add(Bidirectional(LSTM(64)))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(100, activation="relu"))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 3:
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Flatten())
-        model.add(Dense(128, activation='relu'))
-        model.add(Dense(1, activation='sigmoid'))
+        model.add(Bidirectional(LSTM(64,return_sequences=True,input_shape=(max_len, x_train.shape[2]))))
+        model.add(Dropout(dropout_rate))
+        model.add(Bidirectional(LSTM(64,return_sequences=True,input_shape=(max_len, x_train.shape[2]))))
+        model.add(Dropout(dropout_rate))
+        model.add(Bidirectional(LSTM(64)))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(100, activation="relu"))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(1, activation='sigmoid'))        
     # you can try using different optimizers and different optimizer configs
     model.compile('adam', 'binary_crossentropy', metrics=['accuracy'])
 
@@ -228,9 +228,8 @@ if __name__ == "__main__":
     print("dropout_rate="+str(dropout_rate))
     print("n_layers="+str(n_layers))
     print("max_len="+str(max_len))
-    print("epochs="+str(epochs))
+#    print("epochs="+str(epochs))
     print("mode="+str(mode))
-
 
     print("accuracy="+str(acc))
     model.load_weights(filepath)

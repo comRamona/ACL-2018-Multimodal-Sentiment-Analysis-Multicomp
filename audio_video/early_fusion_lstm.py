@@ -169,37 +169,36 @@ if __name__ == "__main__":
         x_valid = valid_set_audio
         x_test = test_set_audio
 
-    k = 3
-    m = 2
+
     model = Sequential()
 
     if n_layers == 1:
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Flatten())
-        model.add(Dense(128, activation='relu'))
-        model.add(Dense(1, activation='sigmoid'))
+        model.add(LSTM(64,input_shape=(max_len, x_train.shape[2])))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(100, activation="relu"))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 2:
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Flatten())
-        model.add(Dense(128, activation='relu'))
-        model.add(Dense(1, activation='sigmoid'))
+        model.add(LSTM(64,return_sequences=True,input_shape=(max_len, x_train.shape[2])))
+        model.add(Dropout(dropout_rate))
+        model.add(LSTM(64,input_shape=(max_len, x_train.shape[2])))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(100, activation="relu"))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 3:
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
-        model.add(MaxPooling1D(m))
-        model.add(Flatten())
-        model.add(Dense(128, activation='relu'))
-        model.add(Dense(1, activation='sigmoid'))
+        model.add(LSTM(64,return_sequences=True,input_shape=(max_len, x_train.shape[2])))
+        model.add(Dropout(dropout_rate))
+        model.add(LSTM(64,return_sequences=True,input_shape=(max_len, x_train.shape[2])))
+        model.add(Dropout(dropout_rate))
+        model.add(LSTM(64,input_shape=(max_len, x_train.shape[2])))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(100, activation="relu"))
+        model.add(Dropout(dropout_rate))
+        model.add(Dense(1, activation='sigmoid'))        
     # you can try using different optimizers and different optimizer configs
     model.compile('adam', 'binary_crossentropy', metrics=['accuracy'])
 
@@ -228,7 +227,7 @@ if __name__ == "__main__":
     print("dropout_rate="+str(dropout_rate))
     print("n_layers="+str(n_layers))
     print("max_len="+str(max_len))
-    print("epochs="+str(epochs))
+#    print("epochs="+str(epochs))
     print("mode="+str(mode))
 
 
