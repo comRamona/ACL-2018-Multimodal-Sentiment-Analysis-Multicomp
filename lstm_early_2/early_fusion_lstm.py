@@ -160,14 +160,6 @@ if __name__ == "__main__":
         x_train = np.concatenate((train_set_visual, train_set_text), axis=2)
         x_valid = np.concatenate((valid_set_visual, valid_set_text), axis=2)
         x_test = np.concatenate((test_set_visual, test_set_text), axis=2)
-    if mode == "V":
-        x_train = train_set_visual
-        x_valid = valid_set_visual
-        x_test = test_set_visual
-    if mode == "A":
-        x_train = train_set_audio
-        x_valid = valid_set_audio
-        x_test = test_set_audio
 
 
     model = Sequential()
