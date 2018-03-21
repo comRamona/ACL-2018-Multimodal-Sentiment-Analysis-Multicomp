@@ -1,0 +1,45 @@
+/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/pandas/core/nanops.py:39: UserWarning: The installed version of bottleneck 0.7.0 is not supported in pandas and will be not be used
+The minimum supported version is 1.0.0
+
+  ver=ver, min_ver=_MIN_BOTTLENECK_VERSION), UserWarning)
+/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Using TensorFlow backend.
+early_fusion_cnn.py:139: RuntimeWarning: invalid value encountered in divide
+  train_set_audio = train_set_audio / audio_max
+early_fusion_cnn.py:141: RuntimeWarning: invalid value encountered in divide
+  test_set_audio = test_set_audio / audio_max
+This API will be deprecated in the future versions. Please check the Github page for the current API
+
+Modality facet for video 8qrpnFRGt2A segment 13 is (partially) missing and is thus being replaced by zeros!
+
+Traceback (most recent call last):
+  File "early_fusion_cnn.py", line 199, in <module>
+    model.add(MaxPooling1D(m))
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/keras/models.py", line 492, in add
+    output_tensor = layer(self.outputs[0])
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/keras/engine/topology.py", line 619, in __call__
+    output = self.call(inputs, **kwargs)
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/keras/layers/pooling.py", line 46, in call
+    data_format='channels_last')
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/keras/layers/pooling.py", line 83, in _pooling_function
+    padding, data_format, pool_mode='max')
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/keras/backend/tensorflow_backend.py", line 3657, in pool2d
+    data_format=tf_data_format)
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/tensorflow/python/ops/nn_ops.py", line 1958, in max_pool
+    name=name)
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/tensorflow/python/ops/gen_nn_ops.py", line 2806, in _max_pool
+    data_format=data_format, name=name)
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/tensorflow/python/framework/op_def_library.py", line 787, in _apply_op_helper
+    op_def=op_def)
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/tensorflow/python/framework/ops.py", line 2958, in create_op
+    set_shapes_for_outputs(ret)
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/tensorflow/python/framework/ops.py", line 2209, in set_shapes_for_outputs
+    shapes = shape_func(op)
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/tensorflow/python/framework/ops.py", line 2159, in call_with_requiring
+    return call_cpp_shape_fn(op, require_shape_fn=True)
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/tensorflow/python/framework/common_shapes.py", line 627, in call_cpp_shape_fn
+    require_shape_fn)
+  File "/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/tensorflow/python/framework/common_shapes.py", line 691, in _call_cpp_shape_fn_impl
+    raise ValueError(err.message)
+ValueError: Negative dimension size caused by subtracting 2 from 1 for 'max_pooling1d_3/MaxPool' (op: 'MaxPool') with input shapes: [?,1,1,128].
