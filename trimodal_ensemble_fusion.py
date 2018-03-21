@@ -92,7 +92,7 @@ model1.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'
 model1.summary()
 checkpoint1 = ModelCheckpoint(weights.format(filepath,1), monitor='val_acc',
 save_best_only=True, verbose=2, mode="max")
-early_stopping1 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
+early_stopping = EarlyStopping(monitor="val_acc", patience=10, mode="max")
 csv_logger = CSVLogger('audio_val.log')
 model1.fit(train_set_audio, y=y_train, batch_size=64, epochs=50,
              verbose=1, validation_data=[valid_set_audio, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint1, early_stopping])
@@ -118,10 +118,10 @@ model2.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'
 model2.summary()
 checkpoint2 = ModelCheckpoint(weights.format(filepath,2), monitor='val_loss',
 save_best_only=True, verbose=2,mode="min")
-#early_stopping2 = EarlyStopping(monitor="val_acc", patience=10,mode="max")
+early_stopping = EarlyStopping(monitor="val_acc", patience=10,mode="max")
 csv_logger = CSVLogger('text_val.log')
 model2.fit(train_set_text, y=y_train, batch_size=64, epochs=50,
-             verbose=1, validation_data=[valid_set_text, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint2])
+             verbose=1, validation_data=[valid_set_text, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint2, early_stopping])
 model2.load_weights(weights.format(filepath,2))
 preds = model2.predict(test_set_text)
 acc_T = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
@@ -142,7 +142,7 @@ model3.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'
 model3.summary()
 checkpoint3 = ModelCheckpoint(weights.format(filepath,3), monitor='val_acc',
 save_best_only=True, verbose=2, mode="max")
-early_stopping3 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
+early_stopping = EarlyStopping(monitor="val_acc", patience=10, mode="max")
 csv_logger = CSVLogger('visual_val.log')
 model3.fit(train_set_visual, y=y_train, batch_size=64, epochs=50,
              verbose=1, validation_data=[valid_set_visual, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint3, early_stopping])
