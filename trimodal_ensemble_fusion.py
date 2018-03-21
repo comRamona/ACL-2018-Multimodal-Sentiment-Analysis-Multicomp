@@ -3,7 +3,7 @@
 import numpy as np
 import tensorflow as tf
 import random as rn
-import os
+import os, sys
 os.environ['PYTHONHASHSEED'] = '0'
 seed = 16122017
 np.random.seed(seed)
@@ -75,26 +75,33 @@ weights = "{}_weights{}.h5"
 # pdb.set_trace()
 k=3
 m=2
+
+
 # AUDIO
 model1_in = Input(name="Audio_Covarep",shape=(train_set_audio.shape[1], train_set_audio.shape[2]))
-model1_cnn = Conv1D(filters=64, kernel_size=k, activation='relu')(model1_in)
-model1_mp = MaxPooling1D(m)(model1_cnn)
-model1_fl = Flatten()(model1_mp)
-model1_dense = Dense(128, activation="relu", W_regularizer=l2(0.0001))(model1_fl)
+model1_bn = BatchNormalization(input_shape=(train_set_audio.shape[1], train_set_audio.shape[2]))(model1_in)
+model1_cnn1 = Conv1D(filters=128, kernel_size=k, activation='relu')(model1_bn)
+model1_mp1 = MaxPooling1D(m)(model1_cnn1)
+model1_cnn2 = Conv1D(filters=128, kernel_size=k, activation='relu')(model1_mp1)
+model1_mp2 = MaxPooling1D(m)(model1_cnn2)
+model1_fl = Flatten()(model1_mp2)
+model1_dense = Dense(128, activation="relu")(model1_fl)
 model1_out = Dense(1, name='Sigmoid_Audio')(model1_dense)
 model1 = Model(model1_in, model1_out)
 model1.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model1.summary()
-checkpoint1 = ModelCheckpoint(weights.format(filepath,1), monitor='val_loss',
-save_best_only=True, verbose=2, mode="min")
-#early_stopping1 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
+checkpoint1 = ModelCheckpoint(weights.format(filepath,1), monitor='val_acc',
+save_best_only=True, verbose=2, mode="max")
+early_stopping1 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
 csv_logger = CSVLogger('audio_val.log')
-model1.fit(train_set_audio, y=y_train, batch_size=32, epochs=50,
-             verbose=1, validation_data=[valid_set_audio, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint1])
+model1.fit(train_set_audio, y=y_train, batch_size=64, epochs=50,
+             verbose=1, validation_data=[valid_set_audio, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint1, early_stopping])
 model1.load_weights(weights.format(filepath,1))
 preds = model1.predict(test_set_audio)
-acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
-print("Audio Test accuracy: ", acc)
+acc_A = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
+print("Audio Test accuracy: ", acc_A)
+
+
 
 # TEXT
 model2_in = Input(name="Text_GloVe",shape=(train_set_text.shape[1], train_set_text.shape[2]))
@@ -117,31 +124,35 @@ model2.fit(train_set_text, y=y_train, batch_size=64, epochs=50,
              verbose=1, validation_data=[valid_set_text, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint2])
 model2.load_weights(weights.format(filepath,2))
 preds = model2.predict(test_set_text)
-acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
-print("Text Test accuracy: ", acc)
+acc_T = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
+print("Text Test accuracy: ", acc_T)
+
+
 
 # VISUAL
 model3_in = Input(name="Video_Facet",shape=(train_set_visual.shape[1], train_set_visual.shape[2]))
-model3_cnn = Conv1D(filters=64, kernel_size=k, activation='relu')(model3_in)
+model3_bn = BatchNormalization(input_shape=(train_set_visual.shape[1], train_set_visual.shape[2]))(model3_in)
+model3_cnn = Conv1D(filters=128, kernel_size=k, activation='relu')(model3_bn)
 model3_mp = MaxPooling1D(m)(model3_cnn)
 model3_fl = Flatten()(model3_mp)
-model3_dense = Dense(128, activation="relu", W_regularizer=l2(0.001))(model3_fl)
+model3_dense = Dense(128, activation="relu")(model3_fl)
 model3_out = Dense(1, name='Sigmoid_Video')(model3_dense)
 model3 = Model(model3_in, model3_out)
 model3.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model3.summary()
-checkpoint3 = ModelCheckpoint(weights.format(filepath,3), monitor='val_loss',
-save_best_only=True, verbose=2, mode="min")
-#early_stopping3 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
+checkpoint3 = ModelCheckpoint(weights.format(filepath,3), monitor='val_acc',
+save_best_only=True, verbose=2, mode="max")
+early_stopping3 = EarlyStopping(monitor="val_acc", patience=10, mode="max")
 csv_logger = CSVLogger('visual_val.log')
 model3.fit(train_set_visual, y=y_train, batch_size=64, epochs=50,
-             verbose=1, validation_data=[valid_set_visual, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint3])
+             verbose=1, validation_data=[valid_set_visual, y_valid], shuffle=True, callbacks=[csv_logger, checkpoint3, early_stopping])
 model3.load_weights(weights.format(filepath,3))
 preds = model3.predict(test_set_visual)
-acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
-print("Video Test accuracy: ", acc)
+acc_V = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
+print("Video Test accuracy: ", acc_V)
 
 concatenated = concatenate([model1_out, model2_out, model3_out])
+#insert fancy additional DNN here.... else a final layer output :)
 out = Dense(1, activation='sigmoid', name='Sigmoid_Output')(concatenated)
 
 merged_model = Model([model1_in, model2_in, model3_in], out)
@@ -161,8 +172,17 @@ merged_model.load_weights(weights.format(filepath, "merged"))
 preds = merged_model.predict([test_set_audio, test_set_text, test_set_visual])
 acc = np.mean((preds > 0.5) == y_test.reshape(-1, 1))
 print("Test accuracy: ", acc)
-print("TensorBoard: ", logs_filepath)
+print("Video Test accuracy: ", acc_V)
+print("Text Test accuracy: ", acc_T)
+print("Audio Test accuracy: ", acc_A)
+sys.exit()
 
+
+
+
+
+# print additional model infographics
+print("TensorBoard: ", logs_filepath)
 model_json = merged_model.to_json()
 with open(filepath + "trimodal_model.json", "w") as json_file:
     json_file.write(model_json)
