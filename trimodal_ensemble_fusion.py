@@ -153,7 +153,10 @@ print("Video Test accuracy: ", acc_V)
 
 concatenated = concatenate([model1_out, model2_out, model3_out])
 #insert fancy additional DNN here.... else a final layer output :)
-out = Dense(1, activation='sigmoid', name='Sigmoid_Output')(concatenated)
+print(concatenated.shape)
+model4_lstm = LSTM(64, input_shape=concatenated.shape)(concatenated)
+model4_dense = Dense(200, activation="relu")(model4_lstm)
+out = Dense(1, activation='sigmoid', name='Sigmoid_Output')(model4_dense)
 
 merged_model = Model([model1_in, model2_in, model3_in], out)
 merged_model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
