@@ -65,7 +65,7 @@ class CenterL1L2(Regularizer):
         if self.l1:
             regularization += K.sum(self.l1 * K.abs(x - self.c))
         if self.l2:
-            regularization += K.sum(0.001 * K.square(x - self.c))
+            regularization += K.sum(self.l1 * K.square(x - self.c))
         return regularization
 
     def get_config(self):
@@ -74,7 +74,7 @@ class CenterL1L2(Regularizer):
 
 
 # Aliases.
-def centerl2(l, c):
+def centerl2(l = 0.001, c = 0.):
     return CenterL1L2(l2=l, c=c)
 
 
@@ -134,8 +134,8 @@ weights = "{}_visualp_weights{}.h5"
 checkpoint2 = ModelCheckpoint(weights.format(filepath,2), monitor='val_acc',
 save_best_only=True, verbose=1, mode="auto")
 model2 = Sequential()
-model2.add(LSTM(64, input_shape=(train_set_visual.shape[1], train_set_visual.shape[2]), W_regularizer = centerl2(0.01, layer1_weights)))  
-model2.add(Dense(100, activation="relu", W_regularizer = centerl2(0.01, model.layers[2].get_weights()[0])))
+model2.add(LSTM(64, input_shape=(train_set_visual.shape[1], train_set_visual.shape[2]), W_regularizer = centerl2(0.001, layer1_weights)))  
+model2.add(Dense(100, activation="relu", W_regularizer = centerl2(0.001, model.layers[2].get_weights()[0])))
 model2.add(Dense(1, activation='sigmoid'))
 
 model2.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
