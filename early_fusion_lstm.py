@@ -190,10 +190,10 @@ if __name__ == "__main__":
         x_train = train_set_audio
         x_valid = valid_set_audio
         x_test = test_set_audio
-
-    print x_train.shape
-    x_train = PCA(x_train)
-    print x_train.shape
+    if mode == "T":
+        x_train = train_set_text
+        x_valid = valid_set_text
+        x_test = test_set_text
 
 
     model = Sequential()
@@ -202,7 +202,7 @@ if __name__ == "__main__":
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
         model.add(LSTM(64,input_shape=(max_len, x_train.shape[2])))
         model.add(Dropout(dropout_rate))
-        model.add(Dense(100, activation="relu"))
+        model.add(Dense(128, activation="relu"))
         model.add(Dropout(dropout_rate))
         model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 2:
@@ -211,7 +211,7 @@ if __name__ == "__main__":
         model.add(Dropout(dropout_rate))
         model.add(LSTM(64,input_shape=(max_len, x_train.shape[2])))
         model.add(Dropout(dropout_rate))
-        model.add(Dense(100, activation="relu"))
+        model.add(Dense(128, activation="relu"))
         model.add(Dropout(dropout_rate))
         model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 3:
@@ -222,7 +222,7 @@ if __name__ == "__main__":
         model.add(Dropout(dropout_rate))
         model.add(LSTM(64,input_shape=(max_len, x_train.shape[2])))
         model.add(Dropout(dropout_rate))
-        model.add(Dense(100, activation="relu"))
+        model.add(Dense(128, activation="relu"))
         model.add(Dropout(dropout_rate))
         model.add(Dense(1, activation='sigmoid'))        
     # you can try using different optimizers and different optimizer configs

@@ -65,9 +65,9 @@ def pad(data, max_len):
             padded = np.concatenate((padding, data))
             return padded
     else:
-#        idx = np.random.choice(np.arange(n_rows), max_len, replace=False)
-#        return data[idx]
-        return data[-max_len:]
+        idx = np.random.choice(np.arange(n_rows), max_len, replace=False)
+        return data[idx]
+#        return data[-max_len:]
         
 
 if __name__ == "__main__":
@@ -171,6 +171,10 @@ if __name__ == "__main__":
         x_train = train_set_audio
         x_valid = valid_set_audio
         x_test = test_set_audio
+    if mode == "T":
+        x_train = train_set_text
+        x_valid = valid_set_text
+        x_test = test_set_text
 
 
     model = Sequential()
@@ -179,7 +183,7 @@ if __name__ == "__main__":
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
         model.add(Bidirectional(LSTM(64)))
         model.add(Dropout(dropout_rate))
-        model.add(Dense(100, activation="relu"))
+        model.add(Dense(128, activation="relu"))
         model.add(Dropout(dropout_rate))
         model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 2:
@@ -188,7 +192,7 @@ if __name__ == "__main__":
         model.add(Dropout(dropout_rate))
         model.add(Bidirectional(LSTM(64)))
         model.add(Dropout(dropout_rate))
-        model.add(Dense(100, activation="relu"))
+        model.add(Dense(128, activation="relu"))
         model.add(Dropout(dropout_rate))
         model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 3:
@@ -199,7 +203,7 @@ if __name__ == "__main__":
         model.add(Dropout(dropout_rate))
         model.add(Bidirectional(LSTM(64)))
         model.add(Dropout(dropout_rate))
-        model.add(Dense(100, activation="relu"))
+        model.add(Dense(128, activation="relu"))
         model.add(Dropout(dropout_rate))
         model.add(Dense(1, activation='sigmoid'))        
     # you can try using different optimizers and different optimizer configs
@@ -210,12 +214,12 @@ if __name__ == "__main__":
     
     tensor_board = TensorBoard(log_dir=logs_filepath, histogram_freq=0, batch_size=batch_size, write_graph=True, 
         write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)
-    checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+    checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
     csv_logger = CSVLogger('early_val.log')
-    early_stopping = EarlyStopping(monitor='val_acc',
+    early_stopping = EarlyStopping(monitor='val_loss',
                                    min_delta=0,
                                    patience=10,
-                                   verbose=1, mode='auto')
+                                   verbose=1, mode='min')
     callbacks_list = [checkpoint, csv_logger, tensor_board, early_stopping]
     model.fit(x_train, y_train,
               batch_size=batch_size,
