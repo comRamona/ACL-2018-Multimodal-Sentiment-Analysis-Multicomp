@@ -94,7 +94,7 @@ for max_len in [15, 20, 25, 30]:
           train_set_visual, valid_set_visual, test_set_visual, \
           y_train, y_valid, y_test = get_data(max_len_audio=max_len, max_len_text=max_len, max_len_visual=max_len)
 
-# AUDIO
+          # AUDIO
           model1_in = Input(name="Audio_Covarep",shape=(train_set_audio.shape[1], train_set_audio.shape[2]))
           model1_cnn = Conv1D(filters=64, kernel_size=k, activation='relu')(model1_in)
           model1_mp = MaxPooling1D(m)(model1_cnn)
