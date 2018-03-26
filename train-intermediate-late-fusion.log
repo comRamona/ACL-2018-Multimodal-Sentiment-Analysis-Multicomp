@@ -1,0 +1,216 @@
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 1, max_len: 15
+INFO:root:Validatin loss: 1.4740068037957603, acc: 0.69868995659216
+INFO:root:Test set:
+INFO:root:Test loss: 1.4120922912314056, acc: 0.6661807583650416
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 2, max_len: 15
+INFO:root:Validatin loss: 1.669963959002599, acc: 0.6899563321380116
+INFO:root:Test set:
+INFO:root:Test loss: 1.7835925209278962, acc: 0.6559766762110651
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 3, max_len: 15
+INFO:root:Validatin loss: 0.7185726860725203, acc: 0.711790393533665
+INFO:root:Test set:
+INFO:root:Test loss: 0.809032262240485, acc: 0.6166180759755238
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 1, max_len: 15
+INFO:root:Validatin loss: 0.734536284702834, acc: 0.6899563321380116
+INFO:root:Test set:
+INFO:root:Test loss: 0.7609033640202558, acc: 0.6501457726816394
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 2, max_len: 15
+INFO:root:Validatin loss: 0.6332105104059111, acc: 0.7248908302148878
+INFO:root:Test set:
+INFO:root:Test loss: 0.6413165779224985, acc: 0.7084548106694013
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 3, max_len: 15
+INFO:root:Validatin loss: 1.3410314649473631, acc: 0.7030567690795165
+INFO:root:Test set:
+INFO:root:Test loss: 1.4839351816705642, acc: 0.6661807583650416
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 1, max_len: 15
+INFO:root:Validatin loss: 0.792814195676662, acc: 0.6899563321380116
+INFO:root:Test set:
+INFO:root:Test loss: 0.8570037249573466, acc: 0.606413994429758
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 2, max_len: 15
+INFO:root:Validatin loss: 0.7201781949622141, acc: 0.69868995659216
+INFO:root:Test set:
+INFO:root:Test loss: 0.7325512247252395, acc: 0.6895043733516171
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 3, max_len: 15
+INFO:root:Validatin loss: 0.6688924280837113, acc: 0.7336244544087539
+INFO:root:Test set:
+INFO:root:Test loss: 0.686505654810469, acc: 0.7172011663545325
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 1, max_len: 20
+INFO:root:Validatin loss: 1.1620246796628795, acc: 0.6812227079441454
+INFO:root:Test set:
+INFO:root:Test loss: 1.2789122835887765, acc: 0.6443148691522137
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 2, max_len: 20
+INFO:root:Validatin loss: 2.0042096043257733, acc: 0.6986899568524423
+INFO:root:Test set:
+INFO:root:Test loss: 2.0318909125842435, acc: 0.667638484138789
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 3, max_len: 20
+INFO:root:Validatin loss: 1.2139586834928355, acc: 0.6593886468087742
+INFO:root:Test set:
+INFO:root:Test loss: 1.412247889591028, acc: 0.567055393672893
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 1, max_len: 20
+INFO:root:Validatin loss: 0.645577347955329, acc: 0.6768558954567888
+INFO:root:Test set:
+INFO:root:Test loss: 0.6681985622244743, acc: 0.6749271135288495
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 2, max_len: 20
+INFO:root:Validatin loss: 1.1237422956649914, acc: 0.6943231443650858
+INFO:root:Test set:
+INFO:root:Test loss: 1.19200245319233, acc: 0.6413994167358466
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 3, max_len: 20
+INFO:root:Validatin loss: 1.466632484869145, acc: 0.7161572057607393
+INFO:root:Test set:
+INFO:root:Test loss: 1.5632619472008753, acc: 0.6924198252466608
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 1, max_len: 20
+INFO:root:Validatin loss: 0.7422793650731249, acc: 0.6724890832297146
+INFO:root:Test set:
+INFO:root:Test loss: 0.8103177717753819, acc: 0.6355685131195336
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 2, max_len: 20
+INFO:root:Validatin loss: 0.6701914032994399, acc: 0.7117903932733828
+INFO:root:Test set:
+INFO:root:Test loss: 0.6736974048892541, acc: 0.7040816323055122
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 3, max_len: 20
+INFO:root:Validatin loss: 0.725211108355543, acc: 0.69868995659216
+INFO:root:Test set:
+INFO:root:Test loss: 0.7485511975455215, acc: 0.6865889214565734
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 1, max_len: 25
+INFO:root:Validatin loss: 0.6985048654298074, acc: 0.6637554590358484
+INFO:root:Test set:
+INFO:root:Test loss: 0.7322000126101881, acc: 0.6166180758886365
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 2, max_len: 25
+INFO:root:Validatin loss: 0.6361861080581965, acc: 0.7336244544087539
+INFO:root:Test set:
+INFO:root:Test loss: 0.6345468856850449, acc: 0.7317784258297512
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 3, max_len: 25
+INFO:root:Validatin loss: 0.7621263177113762, acc: 0.6768558954567888
+INFO:root:Test set:
+INFO:root:Test loss: 0.8106001730215445, acc: 0.6574344021585871
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 1, max_len: 25
+INFO:root:Validatin loss: 0.7670983279115768, acc: 0.6812227079441454
+INFO:root:Test set:
+INFO:root:Test loss: 0.8871417834529376, acc: 0.5845481050431555
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 2, max_len: 25
+INFO:root:Validatin loss: 0.692052679290938, acc: 0.6855895201712197
+INFO:root:Test set:
+INFO:root:Test loss: 0.6430984040390993, acc: 0.7317784260035256
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 3, max_len: 25
+INFO:root:Validatin loss: 0.6956491748838967, acc: 0.6943231443650858
+INFO:root:Test set:
+INFO:root:Test loss: 0.6885188588595599, acc: 0.6967930027416774
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 1, max_len: 25
+INFO:root:Validatin loss: 1.334476194527472, acc: 0.7117903931432416
+INFO:root:Test set:
+INFO:root:Test loss: 1.4842907975783501, acc: 0.6720116621551291
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 2, max_len: 25
+INFO:root:Validatin loss: 0.9396604851343746, acc: 0.6812227076838631
+INFO:root:Test set:
+INFO:root:Test loss: 0.9268846713419211, acc: 0.6588921286274323
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 3, max_len: 25
+INFO:root:Validatin loss: 0.7468069443015553, acc: 0.6812227079441454
+INFO:root:Test set:
+INFO:root:Test loss: 0.706563003382947, acc: 0.6997084542891722
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 1, max_len: 30
+INFO:root:Validatin loss: 0.6598574318740045, acc: 0.6855895199109373
+INFO:root:Test set:
+INFO:root:Test loss: 0.6499496159678645, acc: 0.689504373699166
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 2, max_len: 30
+INFO:root:Validatin loss: 1.2404017937756002, acc: 0.6724890832297146
+INFO:root:Test set:
+INFO:root:Test loss: 1.3714430686683765, acc: 0.64577259527351
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.0 n_layers: 3, max_len: 30
+INFO:root:Validatin loss: 2.131698882735973, acc: 0.6812227075537219
+INFO:root:Test set:
+INFO:root:Test loss: 1.7908588577463744, acc: 0.7099125366169232
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 1, max_len: 30
+INFO:root:Validatin loss: 1.9380959048541873, acc: 0.6899563321380116
+INFO:root:Test set:
+INFO:root:Test loss: 2.4469911913134963, acc: 0.6239067053655841
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 2, max_len: 30
+INFO:root:Validatin loss: 0.7263678333124219, acc: 0.655021834126206
+INFO:root:Test set:
+INFO:root:Test loss: 0.699098042600704, acc: 0.6807580176664858
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.1 n_layers: 3, max_len: 30
+INFO:root:Validatin loss: 0.7016887373278755, acc: 0.6724890834899969
+INFO:root:Test set:
+INFO:root:Test loss: 0.6780550306114441, acc: 0.7113702627382195
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 1, max_len: 30
+INFO:root:Validatin loss: 1.103453926644471, acc: 0.6986899564620189
+INFO:root:Test set:
+INFO:root:Test loss: 1.3587823185211716, acc: 0.6326530610507153
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 2, max_len: 30
+INFO:root:Validatin loss: 0.625883093307112, acc: 0.7423580788629024
+INFO:root:Test set:
+INFO:root:Test loss: 0.6597548884831087, acc: 0.6836734697353041
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Dropout rate: 0.2 n_layers: 3, max_len: 30
+INFO:root:Validatin loss: 1.4209057868307855, acc: 0.7248908299546054
+INFO:root:Test set:
+INFO:root:Test loss: 1.617739363940047, acc: 0.6865889216303478

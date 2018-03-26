@@ -1,0 +1,324 @@
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.5502183406113537
+INFO:root:Text valid accuracy: 0.6855895196506551
+INFO:root:Visual valid accuracy: 0.4192139737991266
+INFO:root:Dropout rate: 0.0 n_layers: 1, max_len: 15
+INFO:root:Validatin best loss: 1.6263985404801682, acc: 0.6768558957170712
+INFO:root:Test set:
+INFO:root:Test loss: 1.5751617705509198, acc: 0.7011661812793409
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.48034934497816595
+INFO:root:Text valid accuracy: 0.7161572052401747
+INFO:root:Visual valid accuracy: 0.5458515283842795
+INFO:root:Dropout rate: 0.0 n_layers: 2, max_len: 15
+INFO:root:Validatin best loss: 0.9755617335894222, acc: 0.6768558954567888
+INFO:root:Test set:
+INFO:root:Test loss: 1.1101276730309422, acc: 0.6457725950997355
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4104803493449782
+INFO:root:Text valid accuracy: 0.7248908296943232
+INFO:root:Visual valid accuracy: 0.5109170305676856
+INFO:root:Dropout rate: 0.0 n_layers: 3, max_len: 15
+INFO:root:Validatin best loss: 0.6479838167736104, acc: 0.7336244544087539
+INFO:root:Test set:
+INFO:root:Test loss: 0.7242704786295099, acc: 0.6574344026799105
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.45414847161572053
+INFO:root:Text valid accuracy: 0.6943231441048034
+INFO:root:Visual valid accuracy: 0.4497816593886463
+INFO:root:Dropout rate: 0.1 n_layers: 1, max_len: 15
+INFO:root:Validatin best loss: 0.6980610882871536, acc: 0.7117903932733828
+INFO:root:Test set:
+INFO:root:Test loss: 0.7488194389523987, acc: 0.6690962104338599
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.48034934497816595
+INFO:root:Text valid accuracy: 0.6855895196506551
+INFO:root:Visual valid accuracy: 0.5502183406113537
+INFO:root:Dropout rate: 0.1 n_layers: 2, max_len: 15
+INFO:root:Validatin best loss: 0.63031462342458, acc: 0.7292576421816797
+INFO:root:Test set:
+INFO:root:Test loss: 0.669152417961432, acc: 0.7011661804104685
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4410480349344978
+INFO:root:Text valid accuracy: 0.7117903930131004
+INFO:root:Visual valid accuracy: 0.462882096069869
+INFO:root:Dropout rate: 0.1 n_layers: 3, max_len: 15
+INFO:root:Validatin best loss: 1.450829457507904, acc: 0.6768558957170712
+INFO:root:Test set:
+INFO:root:Test loss: 1.606815964765521, acc: 0.6384839653621263
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.42358078602620086
+INFO:root:Text valid accuracy: 0.6943231441048034
+INFO:root:Visual valid accuracy: 0.4890829694323144
+INFO:root:Dropout rate: 0.2 n_layers: 1, max_len: 15
+INFO:root:Validatin best loss: 1.0583311022629385, acc: 0.6768558954567888
+INFO:root:Test set:
+INFO:root:Test loss: 1.0117032114340334, acc: 0.6720116623289036
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.47161572052401746
+INFO:root:Text valid accuracy: 0.7117903930131004
+INFO:root:Visual valid accuracy: 0.5065502183406113
+INFO:root:Dropout rate: 0.2 n_layers: 2, max_len: 15
+INFO:root:Validatin best loss: 0.9487046422396165, acc: 0.7510917033170509
+INFO:root:Test set:
+INFO:root:Test loss: 1.0705621232096725, acc: 0.6938775513679571
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4410480349344978
+INFO:root:Text valid accuracy: 0.7161572052401747
+INFO:root:Visual valid accuracy: 0.4847161572052402
+INFO:root:Dropout rate: 0.2 n_layers: 3, max_len: 15
+INFO:root:Validatin best loss: 0.7123989691900895, acc: 0.7205240177275312
+INFO:root:Test set:
+INFO:root:Test loss: 0.762826219765855, acc: 0.6720116616338057
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4410480349344978
+INFO:root:Text valid accuracy: 0.6855895196506551
+INFO:root:Visual valid accuracy: 0.4672489082969432
+INFO:root:Dropout rate: 0.0 n_layers: 1, max_len: 20
+INFO:root:Validatin best loss: 1.5004266438005271, acc: 0.69868995659216
+INFO:root:Test set:
+INFO:root:Test loss: 1.686224294473409, acc: 0.6749271140501728
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4759825327510917
+INFO:root:Text valid accuracy: 0.6724890829694323
+INFO:root:Visual valid accuracy: 0.5021834061135371
+INFO:root:Dropout rate: 0.0 n_layers: 2, max_len: 20
+INFO:root:Validatin best loss: 0.6633021404649493, acc: 0.7379912666358281
+INFO:root:Test set:
+INFO:root:Test loss: 0.6811856469329522, acc: 0.7099125367906977
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.5414847161572053
+INFO:root:Text valid accuracy: 0.6899563318777293
+INFO:root:Visual valid accuracy: 0.5152838427947598
+INFO:root:Dropout rate: 0.0 n_layers: 3, max_len: 20
+INFO:root:Validatin best loss: 0.794389793185688, acc: 0.6462882098672692
+INFO:root:Test set:
+INFO:root:Test loss: 0.8732047664875887, acc: 0.5568513124746762
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.39737991266375544
+INFO:root:Text valid accuracy: 0.6812227074235808
+INFO:root:Visual valid accuracy: 0.4585152838427948
+INFO:root:Dropout rate: 0.1 n_layers: 1, max_len: 20
+INFO:root:Validatin best loss: 0.622068495989887, acc: 0.6943231443650858
+INFO:root:Test set:
+INFO:root:Test loss: 0.595079287148078, acc: 0.7274052474658621
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.5152838427947598
+INFO:root:Text valid accuracy: 0.6812227074235808
+INFO:root:Visual valid accuracy: 0.537117903930131
+INFO:root:Dropout rate: 0.1 n_layers: 2, max_len: 20
+INFO:root:Validatin best loss: 0.8384326730232572, acc: 0.624454148731898
+INFO:root:Test set:
+INFO:root:Test loss: 0.8681513189226824, acc: 0.5699708454810496
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4847161572052402
+INFO:root:Text valid accuracy: 0.6768558951965066
+INFO:root:Visual valid accuracy: 0.5240174672489083
+INFO:root:Dropout rate: 0.1 n_layers: 3, max_len: 20
+INFO:root:Validatin best loss: 0.6434019861262958, acc: 0.7074235810463085
+INFO:root:Test set:
+INFO:root:Test loss: 0.6760775526828043, acc: 0.7084548110169503
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4104803493449782
+INFO:root:Text valid accuracy: 0.7030567685589519
+INFO:root:Visual valid accuracy: 0.48034934497816595
+INFO:root:Dropout rate: 0.2 n_layers: 1, max_len: 20
+INFO:root:Validatin best loss: 1.3630442827549565, acc: 0.6855895199109373
+INFO:root:Test set:
+INFO:root:Test loss: 1.4441380997788453, acc: 0.6690962097387619
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.5021834061135371
+INFO:root:Text valid accuracy: 0.6506550218340611
+INFO:root:Visual valid accuracy: 0.5327510917030568
+INFO:root:Dropout rate: 0.2 n_layers: 2, max_len: 20
+INFO:root:Validatin best loss: 0.668597575098146, acc: 0.6812227076838631
+INFO:root:Test set:
+INFO:root:Test loss: 0.656617591054377, acc: 0.7274052481609601
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4585152838427948
+INFO:root:Text valid accuracy: 0.6724890829694323
+INFO:root:Visual valid accuracy: 0.4585152838427948
+INFO:root:Dropout rate: 0.2 n_layers: 3, max_len: 20
+INFO:root:Validatin best loss: 0.6908670663833618, acc: 0.6855895199109373
+INFO:root:Test set:
+INFO:root:Test loss: 0.7480025505185475, acc: 0.6530612243160214
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4672489082969432
+INFO:root:Text valid accuracy: 0.6550218340611353
+INFO:root:Visual valid accuracy: 0.40611353711790393
+INFO:root:Dropout rate: 0.0 n_layers: 1, max_len: 25
+INFO:root:Validatin best loss: 0.9076856567349496, acc: 0.6899563321380116
+INFO:root:Test set:
+INFO:root:Test loss: 0.9483386264250507, acc: 0.6938775515417316
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4497816593886463
+INFO:root:Text valid accuracy: 0.6724890829694323
+INFO:root:Visual valid accuracy: 0.5109170305676856
+INFO:root:Dropout rate: 0.0 n_layers: 2, max_len: 25
+INFO:root:Validatin best loss: 0.6345259719019894, acc: 0.6899563321380116
+INFO:root:Test set:
+INFO:root:Test loss: 0.6796477395313474, acc: 0.6763848394763713
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.47161572052401746
+INFO:root:Text valid accuracy: 0.6331877729257642
+INFO:root:Visual valid accuracy: 0.5327510917030568
+INFO:root:Dropout rate: 0.0 n_layers: 3, max_len: 25
+INFO:root:Validatin best loss: 1.4714373813445911, acc: 0.6462882101275514
+INFO:root:Test set:
+INFO:root:Test loss: 1.4174331600394958, acc: 0.6311953356245169
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.5152838427947598
+INFO:root:Text valid accuracy: 0.6550218340611353
+INFO:root:Visual valid accuracy: 0.4585152838427948
+INFO:root:Dropout rate: 0.1 n_layers: 1, max_len: 25
+INFO:root:Validatin best loss: 0.6710288618329311, acc: 0.6855895201712197
+INFO:root:Test set:
+INFO:root:Test loss: 0.6760267836011881, acc: 0.6443148686308903
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.462882096069869
+INFO:root:Text valid accuracy: 0.6812227074235808
+INFO:root:Visual valid accuracy: 0.5065502183406113
+INFO:root:Dropout rate: 0.1 n_layers: 2, max_len: 25
+INFO:root:Validatin best loss: 2.26582738926317, acc: 0.5851528386882299
+INFO:root:Test set:
+INFO:root:Test loss: 1.9827866422191653, acc: 0.6399416906145502
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.5152838427947598
+INFO:root:Text valid accuracy: 0.6724890829694323
+INFO:root:Visual valid accuracy: 0.4585152838427948
+INFO:root:Dropout rate: 0.1 n_layers: 3, max_len: 25
+INFO:root:Validatin best loss: 0.6676394202823722, acc: 0.711790393533665
+INFO:root:Test set:
+INFO:root:Test loss: 0.6488073789691091, acc: 0.7069970848956539
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4890829694323144
+INFO:root:Text valid accuracy: 0.6812227074235808
+INFO:root:Visual valid accuracy: 0.45414847161572053
+INFO:root:Dropout rate: 0.2 n_layers: 1, max_len: 25
+INFO:root:Validatin best loss: 1.628525668877181, acc: 0.6855895201712197
+INFO:root:Test set:
+INFO:root:Test loss: 1.5465945509362846, acc: 0.6793002915451894
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4847161572052402
+INFO:root:Text valid accuracy: 0.6986899563318777
+INFO:root:Visual valid accuracy: 0.5414847161572053
+INFO:root:Dropout rate: 0.2 n_layers: 2, max_len: 25
+INFO:root:Validatin best loss: 0.6491016763787082, acc: 0.7030567688192343
+INFO:root:Test set:
+INFO:root:Test loss: 0.7344411986909872, acc: 0.6239067053655841
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4104803493449782
+INFO:root:Text valid accuracy: 0.6593886462882096
+INFO:root:Visual valid accuracy: 0.49344978165938863
+INFO:root:Dropout rate: 0.2 n_layers: 3, max_len: 25
+INFO:root:Validatin best loss: 1.4421748328937714, acc: 0.6724890834899969
+INFO:root:Test set:
+INFO:root:Test loss: 1.4151962387318513, acc: 0.6880466477516441
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4890829694323144
+INFO:root:Text valid accuracy: 0.6855895196506551
+INFO:root:Visual valid accuracy: 0.4585152838427948
+INFO:root:Dropout rate: 0.0 n_layers: 1, max_len: 30
+INFO:root:Validatin best loss: 1.2024404341476973, acc: 0.6943231443650858
+INFO:root:Test set:
+INFO:root:Test loss: 1.2823299975853968, acc: 0.6807580173189369
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.519650655021834
+INFO:root:Text valid accuracy: 0.6943231441048034
+INFO:root:Visual valid accuracy: 0.462882096069869
+INFO:root:Dropout rate: 0.0 n_layers: 2, max_len: 30
+INFO:root:Validatin best loss: 0.6164500700334274, acc: 0.69868995659216
+INFO:root:Test set:
+INFO:root:Test loss: 0.6542037515181495, acc: 0.6836734697353041
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4759825327510917
+INFO:root:Text valid accuracy: 0.6637554585152838
+INFO:root:Visual valid accuracy: 0.45414847161572053
+INFO:root:Dropout rate: 0.0 n_layers: 3, max_len: 30
+INFO:root:Validatin best loss: 0.7970496712813732, acc: 0.6681222712629227
+INFO:root:Test set:
+INFO:root:Test loss: 0.7624915654040634, acc: 0.6938775508466337
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.4410480349344978
+INFO:root:Text valid accuracy: 0.6855895196506551
+INFO:root:Visual valid accuracy: 0.4759825327510917
+INFO:root:Dropout rate: 0.1 n_layers: 1, max_len: 30
+INFO:root:Validatin best loss: 0.6034454008377275, acc: 0.7205240177275312
+INFO:root:Test set:
+INFO:root:Test loss: 0.6101216925824001, acc: 0.7026239063579904
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.5152838427947598
+INFO:root:Text valid accuracy: 0.6812227074235808
+INFO:root:Visual valid accuracy: 0.4279475982532751
+INFO:root:Dropout rate: 0.1 n_layers: 2, max_len: 30
+INFO:root:Validatin best loss: 0.6338196438472864, acc: 0.7379912666358281
+INFO:root:Test set:
+INFO:root:Test loss: 0.6906121571279475, acc: 0.6734693875813276
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.45414847161572053
+INFO:root:Text valid accuracy: 0.6855895196506551
+INFO:root:Visual valid accuracy: 0.4585152838427948
+INFO:root:Dropout rate: 0.1 n_layers: 3, max_len: 30
+INFO:root:Validatin best loss: 1.4247031766254308, acc: 0.7117903932733828
+INFO:root:Test set:
+INFO:root:Test loss: 1.936677337040359, acc: 0.6268221572606278
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.5021834061135371
+INFO:root:Text valid accuracy: 0.6855895196506551
+INFO:root:Visual valid accuracy: 0.5021834061135371
+INFO:root:Dropout rate: 0.2 n_layers: 1, max_len: 30
+INFO:root:Validatin best loss: 1.0179031389769508, acc: 0.6637554587755662
+INFO:root:Test set:
+INFO:root:Test loss: 0.9008366939972858, acc: 0.6997084546367212
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.462882096069869
+INFO:root:Text valid accuracy: 0.7161572052401747
+INFO:root:Visual valid accuracy: 0.5414847161572053
+INFO:root:Dropout rate: 0.2 n_layers: 2, max_len: 30
+INFO:root:Validatin best loss: 0.6678649718063887, acc: 0.694323144625368
+INFO:root:Test set:
+INFO:root:Test loss: 0.6392720803922537, acc: 0.7128279886857414
+INFO:root:New experiment
+INFO:root:******************************
+INFO:root:Audio valid accuracy: 0.48034934497816595
+INFO:root:Text valid accuracy: 0.4585152838427948
+INFO:root:Visual valid accuracy: 0.47161572052401746
+INFO:root:Dropout rate: 0.2 n_layers: 3, max_len: 30
+INFO:root:Validatin best loss: 0.7918176440172321, acc: 0.5327510922236214
+INFO:root:Test set:
+INFO:root:Test loss: 0.7799209759464765, acc: 0.5291545194717607
