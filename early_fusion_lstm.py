@@ -71,22 +71,28 @@ def pad(data, max_len):
 
 
 def PCA(X, varRetained = 0.95):
-    # Compute Covariance Matrix Sigma
-    (n, m) = X.shape
-    Sigma = 1.0 / m * X * np.transpose(X)
-    # Compute eigenvectors and eigenvalues of Sigma
-    U, s, V = np.linalg.svd(Sigma, full_matrices = True)
-    # compute the value k: number of minumum features that 
-    # retains the given variance
-    sTot = np.sum(s)
-    var_i = np.array([np.sum(s[: i + 1]) / sTot * 100.0 for i in range(n)])
-    k = len(var_i[var_i < (varRetained * 100)])
-    print '%.2f %% variance retained in %d dimensions' % (var_i[k], k)
-    # compute the reduced dimensional features by projction
+    '''Computing the d-dimensional mean vector'''
+    mean_vec = np.mean(X, axis=0)
+    cov_mat = (X-mean_vec).T.dot((X-mean_vec)) / (X.shape[0]-1)
+    eig_vals, eig_vecs = np.linalg.eig(cov_mat)
+    for ev in eig_vecs:
+        np.testing.assert_array_almost_equal(1.0, np.linalg.norm(ev))
+    # List of (eigenvalue, eigenvector) tuples
+    eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
+    # Sort the tuples from high to low
+    eig_pairs.sort()
+    eig_pairs.reverse()
+    U, s, V = np.linalg.svd(cov_mat, full_matrices = True)
+    tot = sum(eig_vals)
+    #var_exp = [(i / tot) * 100 for i in sorted(eig_vals, reverse=True)]
+    var_exp = np.array([np.sum(s[: i + 1]) / tot * 100.0 for i in range(X.shape[1])])
+    k = len(var_exp[var_exp < (varRetained * 100)])
+    cum_var_exp = np.cumsum(var_exp)
+    #matrix_w = np.hstack((eig_pairs[0][1].reshape(X.shape[1], 1),eig_pairs[1][1].reshape(X.shape[1], 1))) 
+    #Y = X.dot(matrix_w)
     U_reduced = U[:, : k]
-    Z = np.transpose(U_reduced) * X
-    return Z, U_reduced
-
+    Y = X.dot(U_reduced)
+    return Y
 
 
 
@@ -195,7 +201,9 @@ if __name__ == "__main__":
         x_valid = valid_set_text
         x_test = test_set_text
 
-
+    print x_train.shape
+    x_train = PCA(x_train)
+    print x_train.shape
     model = Sequential()
 
     if n_layers == 1:
