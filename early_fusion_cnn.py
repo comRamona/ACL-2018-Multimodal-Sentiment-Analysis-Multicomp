@@ -213,12 +213,12 @@ if __name__ == "__main__":
     
     tensor_board = TensorBoard(log_dir=logs_filepath, histogram_freq=0, batch_size=batch_size, write_graph=True, 
         write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)
-    checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+    checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
     csv_logger = CSVLogger('early_val.log')
-    early_stopping = EarlyStopping(monitor='val_loss',
+    early_stopping = EarlyStopping(monitor='val_acc',
                                    min_delta=0,
                                    patience=10,
-                                   verbose=1, mode='min')
+                                   verbose=1, mode='max')
     callbacks_list = [checkpoint, csv_logger, tensor_board, early_stopping]
     model.fit(x_train, y_train,
               batch_size=batch_size,
