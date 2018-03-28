@@ -45,7 +45,7 @@ class ParserClass(object):
         mode = self.args.mode
         vc = self.args.vc
         ac = self.args.ac
-        tc = self.args/tc
+        tc = self.args.tc
 
         return batch_size, seed, epochs, logs_path, mode, vc, ac, tc, continue_from_epoch, tensorboard_enable, batch_norm, strided_dim_reduction, experiment_prefix, dropout_rate
 
@@ -94,7 +94,7 @@ class KerasParserClass(object):
         mode = self.args.mode
         vc = self.args.vc
         ac = self.args.ac
-        tc = self.args/tc
+        tc = self.args.tc
 
 
         return batch_size, seed, epochs, logs_path, mode, vc, ac, tc, continue_from_epoch, batch_norm, experiment_prefix, dropout_rate, n_layers, max_len
