@@ -1,0 +1,82 @@
+Audio CNN - 57.2%
+PCA audio_components=20
+max_len=30
+dense nodes=100
+dropout_rate=0.2
+batch size for batch norm = 64
+layers = 2
+Epoch 00014: early stopping
+val_acc + max
+
+Visual CNN - 57.1%
+PCA visual_components=25
+max_len=20
+dense nodes=100
+dropout_rate=0.2
+batch size for batch norm = 64
+layers = 1
+Epoch 00012: early stopping
+val_acc	+ max
+
+
+Text LSTM - 71.7&
+PCA text_components=110
+max_len=30
+dense nodes=100
+dropout_rate=0.2
+batch size for batch norm = 64
+layers = 1
+Epoch 00016: early stopping
+val_acc + max
+
+
+PCA transform code to add in dataset processing, right after unimodal normalization:
+
+    from sklearn import decomposition
+
+    audio_components = 20 
+    visual_components = 25
+    text_components =
+
+    nsamples1, nx1, ny1 = train_set_visual.shape
+    train_set_visual = train_set_visual.reshape(nsamples1*nx1, ny1)
+    nsamples2, nx2, ny2 = valid_set_visual.shape
+    valid_set_visual = valid_set_visual.reshape(nsamples2*nx2, ny2)
+    nsamples3, nx3, ny3 = test_set_visual.shape
+    test_set_visual = test_set_visual.reshape(nsamples3*nx3, ny3)
+    pca = decomposition.PCA(n_components=visual_components)
+    train_set_visual_pca = pca.fit_transform(train_set_visual)
+    valid_set_visual_pca = pca.transform(valid_set_visual)
+    test_set_visual_pca = pca.transform(test_set_visual)
+    train_set_visual = train_set_visual_pca.reshape(nsamples1,nx1,visual_components)
+    valid_set_visual = valid_set_visual_pca.reshape(nsamples2,nx2,visual_components)
+    test_set_visual = test_set_visual_pca.reshape(nsamples3,nx3,visual_components)
+    
+    nsamples1, nx1, ny1 = train_set_audio.shape
+    train_set_audio = train_set_audio.reshape(nsamples1*nx1, ny1)
+    nsamples2, nx2, ny2 = valid_set_audio.shape
+    valid_set_audio = valid_set_audio.reshape(nsamples2*nx2, ny2)
+    nsamples3, nx3, ny3 = test_set_audio.shape
+    test_set_audio = test_set_audio.reshape(nsamples3*nx3, ny3)
+    pca = decomposition.PCA(n_components=audio_components)
+    train_set_audio_pca = pca.fit_transform(train_set_audio)
+    valid_set_audio_pca = pca.transform(valid_set_audio)
+    test_set_audio_pca = pca.transform(test_set_audio)
+    train_set_audio = train_set_audio_pca.reshape(nsamples1, nx1, audio_components)
+    valid_set_audio = valid_set_audio_pca.reshape(nsamples2, nx2, audio_components)
+    test_set_audio = test_set_audio_pca.reshape(nsamples3, nx3, audio_components)
+    
+    nsamples1, nx1, ny1 = train_set_text.shape
+    train_set_text = train_set_text.reshape(nsamples1*nx1, ny1)
+    nsamples2, nx2, ny2 = valid_set_text.shape
+    valid_set_text = valid_set_text.reshape(nsamples2*nx2, ny2)
+    nsamples3, nx3, ny3 = test_set_text.shape
+    test_set_text = test_set_text.reshape(nsamples3*nx3, ny3)
+    pca = decomposition.PCA(n_components=text_components)
+    train_set_text_pca = pca.fit_transform(train_set_text)
+    valid_set_text_pca = pca.transform(valid_set_text)
+    test_set_text_pca = pca.transform(test_set_text)
+    train_set_text = train_set_text_pca.reshape(nsamples1, nx1, text_components)
+    valid_set_text = valid_set_text_pca.reshape(nsamples2, nx2, text_components)
+    test_set_text = test_set_text_pca.reshape(nsamples3, nx3, text_components)
+
