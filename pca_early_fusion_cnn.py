@@ -289,8 +289,8 @@ if __name__ == "__main__":
     print("max_len="+str(max_len))
     print("nodes="+str(dense_nodes))
     print("mode="+str(mode))
-    print("PCA audio="+str(visual_components))
-    print("PCA visual="+str(audio_components))
+    print("PCA audio="+str(audio_components))
+    print("PCA visual="+str(visual_components))
     print("PCA text="+str(text_components))
 
 
