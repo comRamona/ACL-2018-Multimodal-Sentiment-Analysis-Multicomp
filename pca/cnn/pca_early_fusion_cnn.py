@@ -53,7 +53,6 @@ dense_nodes = 100
 
 # The below is necessary for starting core Python generated random numbers
 # in a well-defined state.
-
 from sklearn import decomposition
 from keras.models import Sequential
 from keras.optimizers import Adam
@@ -75,33 +74,6 @@ def pad(data, max_len):
         idx = np.random.choice(np.arange(n_rows), max_len, replace=False)
         return data[idx]
 #        return data[-max_len:]
-
-
-def PCA(X, varRetained = 0.95):
-    '''Computing the d-dimensional mean vector'''
-    mean_vec = np.mean(X, axis=0)
-    cov_mat = (X-mean_vec).T.dot((X-mean_vec)) / (X.shape[0]-1)
-    eig_vals, eig_vecs = np.linalg.eig(cov_mat)
-    for ev in eig_vecs:
-        np.testing.assert_array_almost_equal(1.0, np.linalg.norm(ev))
-    # List of (eigenvalue, eigenvector) tuples
-    eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
-    # Sort the tuples from high to low
-    eig_pairs.sort()
-    eig_pairs.reverse()
-    U, s, V = np.linalg.svd(cov_mat, full_matrices = True)
-    tot = sum(eig_vals)
-    #var_exp = [(i / tot) * 100 for i in sorted(eig_vals, reverse=True)]
-    var_exp = np.array([np.sum(s[: i + 1]) / tot * 100.0 for i in range(X.shape[1])])
-    k = len(var_exp[var_exp < (varRetained * 100)])
-    cum_var_exp = np.cumsum(var_exp)
-    #matrix_w = np.hstack((eig_pairs[0][1].reshape(X.shape[1], 1),eig_pairs[1][1].reshape(X.shape[1], 1))) 
-    #Y = X.dot(matrix_w)
-    U_reduced = U[:, : k]
-    Y = X.dot(U_reduced)
-    return Y
-
-
 
 if __name__ == "__main__":
     # Download the data if not present
@@ -165,11 +137,23 @@ if __name__ == "__main__":
     train_set_visual = train_set_visual / visual_max
     valid_set_visual = valid_set_visual / visual_max
     test_set_visual = test_set_visual / visual_max
+
     train_set_visual[train_set_visual != train_set_visual] = 0
     valid_set_visual[valid_set_visual != valid_set_visual] = 0
     test_set_visual[test_set_visual != test_set_visual] = 0
 
+    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
+    train_set_audio = train_set_audio / audio_max
+    valid_set_audio = valid_set_audio / audio_max
+    test_set_audio = test_set_audio / audio_max
+
+    train_set_audio[train_set_audio != train_set_audio] = 0
+    valid_set_audio[valid_set_audio != valid_set_audio] = 0
+    test_set_audio[test_set_audio != test_set_audio] = 0
+
+
     nsamples1, nx1, ny1 = train_set_visual.shape
+#    visual_components = k_PCA(train_set_visual.reshape(nsamples1, nx1*ny1))
     train_set_visual = train_set_visual.reshape(nsamples1*nx1, ny1)
     nsamples2, nx2, ny2 = valid_set_visual.shape
     valid_set_visual = valid_set_visual.reshape(nsamples2*nx2, ny2)
@@ -183,14 +167,9 @@ if __name__ == "__main__":
     valid_set_visual = valid_set_visual_pca.reshape(nsamples2,nx2,visual_components)
     test_set_visual = test_set_visual_pca.reshape(nsamples3,nx3,visual_components)
     
-    audio_max = np.max(np.max(np.abs(train_set_audio), axis=0), axis=0)
-    train_set_audio = train_set_audio / audio_max
-    valid_set_audio = valid_set_audio / audio_max
-    test_set_audio = test_set_audio / audio_max
-    train_set_audio[train_set_audio != train_set_audio] = 0
-    valid_set_audio[valid_set_audio != valid_set_audio] = 0
-    test_set_audio[test_set_audio != test_set_audio] = 0
+
     nsamples1, nx1, ny1 = train_set_audio.shape
+#    audio_components = k_PCA(train_set_audio.reshape(nsamples1,nx1*ny1))
     train_set_audio = train_set_audio.reshape(nsamples1*nx1, ny1)
     nsamples2, nx2, ny2 = valid_set_audio.shape
     valid_set_audio = valid_set_audio.reshape(nsamples2*nx2, ny2)
@@ -203,9 +182,9 @@ if __name__ == "__main__":
     train_set_audio = train_set_audio_pca.reshape(nsamples1, nx1, audio_components)
     valid_set_audio = valid_set_audio_pca.reshape(nsamples2, nx2, audio_components)
     test_set_audio = test_set_audio_pca.reshape(nsamples3, nx3, audio_components)
-
     
     nsamples1, nx1, ny1 = train_set_text.shape
+ #   text_components = k_PCA(train_set_text.reshape(nsamples1,nx1*ny1))
     train_set_text = train_set_text.reshape(nsamples1*nx1, ny1)
     nsamples2, nx2, ny2 = valid_set_text.shape
     valid_set_text = valid_set_text.reshape(nsamples2*nx2, ny2)
@@ -249,35 +228,37 @@ if __name__ == "__main__":
         x_valid = valid_set_text
         x_test = test_set_text
 
+    k = 3
+    m = 2
     model = Sequential()
 
     if n_layers == 1:
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
-        model.add(LSTM(64,input_shape=(max_len, x_train.shape[2])))
-        model.add(Dropout(dropout_rate))
-        model.add(Dense(dense_nodes, activation="relu"))
-        model.add(Dropout(dropout_rate))
-        model.add(Dense(1, activation='sigmoid'))        
+        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
+        model.add(MaxPooling1D(m))
+        model.add(Flatten())
+        model.add(Dense(dense_nodes, activation='relu'))
+        model.add(Dense(1, activation='sigmoid'))
     if n_layers == 2:
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
-        model.add(LSTM(64,return_sequences=True,input_shape=(max_len, x_train.shape[2])))
-        model.add(Dropout(dropout_rate))
-        model.add(LSTM(64,input_shape=(max_len, x_train.shape[2])))
-        model.add(Dropout(dropout_rate))
-        model.add(Dense(dense_nodes, activation="relu"))
-        model.add(Dropout(dropout_rate))
-        model.add(Dense(1, activation='sigmoid'))        
+        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
+        model.add(MaxPooling1D(m))
+        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
+        model.add(MaxPooling1D(m))
+        model.add(Flatten())
+        model.add(Dense(dense_nodes, activation='relu'))
+        model.add(Dense(1, activation='sigmoid'))
     if n_layers == 3:
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
-        model.add(LSTM(64,return_sequences=True,input_shape=(max_len, x_train.shape[2])))
-        model.add(Dropout(dropout_rate))
-        model.add(LSTM(64,return_sequences=True,input_shape=(max_len, x_train.shape[2])))
-        model.add(Dropout(dropout_rate))
-        model.add(LSTM(64,input_shape=(max_len, x_train.shape[2])))
-        model.add(Dropout(dropout_rate))
-        model.add(Dense(dense_nodes, activation="relu"))
-        model.add(Dropout(dropout_rate))
-        model.add(Dense(1, activation='sigmoid'))        
+        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
+        model.add(MaxPooling1D(m))
+        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
+        model.add(MaxPooling1D(m))
+        model.add(Conv1D(filters=128, kernel_size=k, input_shape = (max_len, x_train.shape[2]), activation='relu'))
+        model.add(MaxPooling1D(m))
+        model.add(Flatten())
+        model.add(Dense(dense_nodes, activation='relu'))
+        model.add(Dense(1, activation='sigmoid'))
     # you can try using different optimizers and different optimizer configs
     model.compile('adam', 'binary_crossentropy', metrics=['accuracy'])
 
@@ -306,12 +287,11 @@ if __name__ == "__main__":
     print("dropout_rate="+str(dropout_rate))
     print("n_layers="+str(n_layers))
     print("max_len="+str(max_len))
-#    print("epochs="+str(epochs))
+    print("nodes="+str(dense_nodes))
     print("mode="+str(mode))
     print("PCA audio="+str(visual_components))
     print("PCA visual="+str(audio_components))
     print("PCA text="+str(text_components))
-
 
 
     print("accuracy="+str(acc))

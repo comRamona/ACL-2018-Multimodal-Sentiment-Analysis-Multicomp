@@ -45,9 +45,15 @@ tf.set_random_seed(seed)
 # in a well-defined initial state.
 
 
+visual_components = 30
+audio_components = 10
+text_components = 100
+dense_nodes = 100
+
 # The below is necessary for starting core Python generated random numbers
 # in a well-defined state.
 
+from sklearn import decomposition
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, Conv1D, MaxPooling1D, Conv2D, Flatten,BatchNormalization
@@ -146,6 +152,54 @@ if __name__ == "__main__":
     valid_set_audio[valid_set_audio != valid_set_audio] = 0
     test_set_audio[test_set_audio != test_set_audio] = 0
 
+
+
+    nsamples1, nx1, ny1 = train_set_visual.shape
+#    visual_components = k_PCA(train_set_visual.reshape(nsamples1, nx1*ny1))
+    train_set_visual = train_set_visual.reshape(nsamples1*nx1, ny1)
+    nsamples2, nx2, ny2 = valid_set_visual.shape
+    valid_set_visual = valid_set_visual.reshape(nsamples2*nx2, ny2)
+    nsamples3, nx3, ny3 = test_set_visual.shape
+    test_set_visual = test_set_visual.reshape(nsamples3*nx3, ny3)
+    pca = decomposition.PCA(n_components=visual_components)
+    train_set_visual_pca = pca.fit_transform(train_set_visual)
+    valid_set_visual_pca = pca.transform(valid_set_visual)
+    test_set_visual_pca = pca.transform(test_set_visual)
+    train_set_visual = train_set_visual_pca.reshape(nsamples1,nx1,visual_components)
+    valid_set_visual = valid_set_visual_pca.reshape(nsamples2,nx2,visual_components)
+    test_set_visual = test_set_visual_pca.reshape(nsamples3,nx3,visual_components)
+    
+    nsamples1, nx1, ny1 = train_set_audio.shape
+#    audio_components = k_PCA(train_set_audio.reshape(nsamples1,nx1*ny1))
+    train_set_audio = train_set_audio.reshape(nsamples1*nx1, ny1)
+    nsamples2, nx2, ny2 = valid_set_audio.shape
+    valid_set_audio = valid_set_audio.reshape(nsamples2*nx2, ny2)
+    nsamples3, nx3, ny3 = test_set_audio.shape
+    test_set_audio = test_set_audio.reshape(nsamples3*nx3, ny3)
+    pca = decomposition.PCA(n_components=audio_components)
+    train_set_audio_pca = pca.fit_transform(train_set_audio)
+    valid_set_audio_pca = pca.transform(valid_set_audio)
+    test_set_audio_pca = pca.transform(test_set_audio)
+    train_set_audio = train_set_audio_pca.reshape(nsamples1, nx1, audio_components)
+    valid_set_audio = valid_set_audio_pca.reshape(nsamples2, nx2, audio_components)
+    test_set_audio = test_set_audio_pca.reshape(nsamples3, nx3, audio_components)
+    
+    nsamples1, nx1, ny1 = train_set_text.shape
+ #   text_components = k_PCA(train_set_text.reshape(nsamples1,nx1*ny1))
+    train_set_text = train_set_text.reshape(nsamples1*nx1, ny1)
+    nsamples2, nx2, ny2 = valid_set_text.shape
+    valid_set_text = valid_set_text.reshape(nsamples2*nx2, ny2)
+    nsamples3, nx3, ny3 = test_set_text.shape
+    test_set_text = test_set_text.reshape(nsamples3*nx3, ny3)
+    pca = decomposition.PCA(n_components=text_components)
+    train_set_text_pca = pca.fit_transform(train_set_text)
+    valid_set_text_pca = pca.transform(valid_set_text)
+    test_set_text_pca = pca.transform(test_set_text)
+    train_set_text = train_set_text_pca.reshape(nsamples1, nx1, text_components)
+    valid_set_text = valid_set_text_pca.reshape(nsamples2, nx2, text_components)
+    test_set_text = test_set_text_pca.reshape(nsamples3, nx3, text_components)
+
+    
     # early fusion: input level concatenation of features
     if mode == "all":
         x_train = np.concatenate((train_set_visual, train_set_audio, train_set_text), axis=2)
@@ -183,7 +237,7 @@ if __name__ == "__main__":
         model.add(BatchNormalization(input_shape=(max_len, x_train.shape[2])))
         model.add(Bidirectional(LSTM(64)))
         model.add(Dropout(dropout_rate))
-        model.add(Dense(128, activation="relu"))
+        model.add(Dense(dense_nodes, activation="relu"))
         model.add(Dropout(dropout_rate))
         model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 2:
@@ -192,7 +246,7 @@ if __name__ == "__main__":
         model.add(Dropout(dropout_rate))
         model.add(Bidirectional(LSTM(64)))
         model.add(Dropout(dropout_rate))
-        model.add(Dense(128, activation="relu"))
+        model.add(Dense(dense_nodes, activation="relu"))
         model.add(Dropout(dropout_rate))
         model.add(Dense(1, activation='sigmoid'))        
     if n_layers == 3:
@@ -203,7 +257,7 @@ if __name__ == "__main__":
         model.add(Dropout(dropout_rate))
         model.add(Bidirectional(LSTM(64)))
         model.add(Dropout(dropout_rate))
-        model.add(Dense(128, activation="relu"))
+        model.add(Dense(dense_nodes, activation="relu"))
         model.add(Dropout(dropout_rate))
         model.add(Dense(1, activation='sigmoid'))        
     # you can try using different optimizers and different optimizer configs
@@ -234,8 +288,12 @@ if __name__ == "__main__":
     print("dropout_rate="+str(dropout_rate))
     print("n_layers="+str(n_layers))
     print("max_len="+str(max_len))
-#    print("epochs="+str(epochs))
+    print("nodes="+str(dense_nodes))
     print("mode="+str(mode))
+    print("PCA audio="+str(visual_components))
+    print("PCA visual="+str(audio_components))
+    print("PCA text="+str(text_components))
+
 
     print("accuracy="+str(acc))
     model.load_weights(filepath)

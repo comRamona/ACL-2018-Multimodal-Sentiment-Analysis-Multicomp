@@ -53,6 +53,7 @@ dense_nodes = 100
 # The below is necessary for starting core Python generated random numbers
 # in a well-defined state.
 
+from sklearn import decomposition
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, Conv1D, MaxPooling1D, Conv2D, Flatten,BatchNormalization

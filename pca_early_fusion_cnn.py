@@ -53,7 +53,7 @@ dense_nodes = 100
 
 # The below is necessary for starting core Python generated random numbers
 # in a well-defined state.
-
+from sklearn import decomposition
 from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.layers import Dense, Dropout, Embedding, LSTM, Bidirectional, Conv1D, MaxPooling1D, Conv2D, Flatten,BatchNormalization
@@ -152,6 +152,25 @@ if __name__ == "__main__":
     test_set_audio[test_set_audio != test_set_audio] = 0
 
 
+    nsamples1, nx1, ny1 = train_set_visual.shape
+#    visual_components = k_PCA(train_set_visual.reshape(nsamples1, nx1*ny1))
+    train_set_visual = train_set_visual.reshape(nsamples1*nx1, ny1)
+    nsamples2, nx2, ny2 = valid_set_visual.shape
+    valid_set_visual = valid_set_visual.reshape(nsamples2*nx2, ny2)
+    nsamples3, nx3, ny3 = test_set_visual.shape
+    test_set_visual = test_set_visual.reshape(nsamples3*nx3, ny3)
+    pca = decomposition.PCA(n_components=visual_components)
+    train_set_visual_pca = pca.fit_transform(train_set_visual)
+    valid_set_visual_pca = pca.transform(valid_set_visual)
+    test_set_visual_pca = pca.transform(test_set_visual)
+    train_set_visual = train_set_visual_pca.reshape(nsamples1,nx1,visual_components)
+    valid_set_visual = valid_set_visual_pca.reshape(nsamples2,nx2,visual_components)
+    test_set_visual = test_set_visual_pca.reshape(nsamples3,nx3,visual_components)
+    
+
+    nsamples1, nx1, ny1 = train_set_audio.shape
+#    audio_components = k_PCA(train_set_audio.reshape(nsamples1,nx1*ny1))
+    train_set_audio = train_set_audio.reshape(nsamples1*nx1, ny1)
     nsamples2, nx2, ny2 = valid_set_audio.shape
     valid_set_audio = valid_set_audio.reshape(nsamples2*nx2, ny2)
     nsamples3, nx3, ny3 = test_set_audio.shape
