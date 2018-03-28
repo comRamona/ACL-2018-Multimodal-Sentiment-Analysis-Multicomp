@@ -29,7 +29,7 @@ parser_extractor = KerasParserClass(parser=parser)  # creates a parser class to 
 #n_layers = int(sys.argv[5]) # [1, 2, 3]
 #epochs = int(sys.argv[6]) # [50, 100]
 
-batch_size, seed, epochs, logs_path, mode,continue_from_epoch, batch_norm, \
+batch_size, seed, epochs, logs_path, mode,vc, ac, tc, continue_from_epoch, batch_norm, \
 experiment_prefix, dropout_rate, n_layers, max_len = parser_extractor.get_argument_variables()
 
 
@@ -45,9 +45,9 @@ tf.set_random_seed(seed)
 # in a well-defined initial state.
 
 
-visual_components = 30
-audio_components = 10
-text_components = 100
+visual_components = vc
+audio_components = ac
+text_components = tc
 dense_nodes = 100
 
 
@@ -309,7 +309,7 @@ if __name__ == "__main__":
     print("dropout_rate="+str(dropout_rate))
     print("n_layers="+str(n_layers))
     print("max_len="+str(max_len))
-#    print("epochs="+str(epochs))
+    print("nodes="+str(dense_nodes))
     print("mode="+str(mode))
     print("PCA audio="+str(visual_components))
     print("PCA visual="+str(audio_components))

@@ -29,7 +29,7 @@ parser_extractor = KerasParserClass(parser=parser)  # creates a parser class to 
 #n_layers = int(sys.argv[5]) # [1, 2, 3]
 #epochs = int(sys.argv[6]) # [50, 100]
 
-batch_size, seed, epochs, logs_path, mode,continue_from_epoch, batch_norm, \
+batch_size, seed, epochs, logs_path, mode,vc, ac, tc, continue_from_epoch, batch_norm, \
 experiment_prefix, dropout_rate, n_layers, max_len = parser_extractor.get_argument_variables()
 
 
@@ -45,9 +45,9 @@ tf.set_random_seed(seed)
 # in a well-defined initial state.
 
 
-visual_components = 30
-audio_components = 10
-text_components = 100
+visual_components = vc
+audio_components = ac
+text_components = tc
 dense_nodes = 100
 
 
@@ -267,12 +267,12 @@ if __name__ == "__main__":
     
     tensor_board = TensorBoard(log_dir=logs_filepath, histogram_freq=0, batch_size=batch_size, write_graph=True, 
         write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None)
-    checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+    checkpoint = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
     csv_logger = CSVLogger('early_val.log')
-    early_stopping = EarlyStopping(monitor='val_acc',
+    early_stopping = EarlyStopping(monitor='val_loss',
                                    min_delta=0,
                                    patience=10,
-                                   verbose=1, mode='max')
+                                   verbose=1, mode='min')
     callbacks_list = [checkpoint, csv_logger, tensor_board, early_stopping]
     model.fit(x_train, y_train,
               batch_size=batch_size,

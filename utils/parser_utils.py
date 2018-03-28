@@ -5,7 +5,9 @@ class ParserClass(object):
         :param parser: A parser to get input from
         """
         parser.add_argument('--mode', nargs="?", type=str, default="all", help='feature mode')
-        parser.add_argument('--batch_size', nargs="?", type=int, default=64, help='batch_size for experiment')
+        parser.add_argument('--vc', nargs="?", type=int, default=30, help='pca k visual')
+        parser.add_argument('--ac', nargs="?", type=int, default=10, help='pca k audio')
+        parser.add_argument('--tc', nargs="?", type=int, default=100, help='pca k text')
         parser.add_argument('--epochs', type=int, nargs="?", default=100, help='Number of epochs to train for')
         parser.add_argument('--logs_path', type=str, nargs="?", default="classification_logs/",
                             help='Experiment log path, '
@@ -41,9 +43,11 @@ class ParserClass(object):
         epochs = self.args.epochs
         logs_path = self.args.logs_path
         mode = self.args.mode
+        vc = self.args.vc
+        ac = self.args.ac
+        tc = self.args/tc
 
-        return batch_size, seed, epochs, logs_path, mode, continue_from_epoch, tensorboard_enable, batch_norm, \
-               strided_dim_reduction, experiment_prefix, dropout_rate
+        return batch_size, seed, epochs, logs_path, mode, vc, ac, tc, continue_from_epoch, tensorboard_enable, batch_norm, strided_dim_reduction, experiment_prefix, dropout_rate
 
 class KerasParserClass(object):
     def __init__(self, parser):
@@ -52,6 +56,10 @@ class KerasParserClass(object):
         :param parser: A parser to get input from
         """
         parser.add_argument('--mode', nargs="?", type=str, default="all", help='feature mode')
+        parser.add_argument('--vc', nargs="?", type=int, default=30, help='pca k visual')
+        parser.add_argument('--ac', nargs="?", type=int, default=10, help='pca k audio')
+        parser.add_argument('--tc', nargs="?", type=int, default=100, help='pca k text')
+
         parser.add_argument('--batch_size', nargs="?", type=int, default=64, help='batch_size for experiment')
         parser.add_argument('--epochs', type=int, nargs="?", default=100, help='Number of epochs to train for')
         parser.add_argument('--logs_path', type=str, nargs="?", default="classification_logs/",
@@ -84,6 +92,9 @@ class KerasParserClass(object):
         n_layers = self.args.n_layers
         logs_path = self.args.logs_path
         mode = self.args.mode
+        vc = self.args.vc
+        ac = self.args.ac
+        tc = self.args/tc
 
-        return batch_size, seed, epochs, logs_path, mode, continue_from_epoch, batch_norm, \
-               experiment_prefix, dropout_rate, n_layers, max_len
+
+        return batch_size, seed, epochs, logs_path, mode, vc, ac, tc, continue_from_epoch, batch_norm, experiment_prefix, dropout_rate, n_layers, max_len
