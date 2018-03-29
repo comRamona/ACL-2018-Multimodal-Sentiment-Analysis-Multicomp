@@ -1,0 +1,751 @@
+/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Using TensorFlow backend.
+pca_early_fusion_cnn.py:146: RuntimeWarning: invalid value encountered in divide
+  train_set_audio = train_set_audio / audio_max
+pca_early_fusion_cnn.py:148: RuntimeWarning: invalid value encountered in divide
+  test_set_audio = test_set_audio / audio_max
+2018-03-28 22:29:23.075684: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+This API will be deprecated in the future versions. Please check the Github page for the current API
+
+Modality facet for video 8qrpnFRGt2A segment 13 is (partially) missing and is thus being replaced by zeros!
+
+Train on 1283 samples, validate on 229 samples
+Epoch 1/100
+
+  64/1283 [>.............................] - ETA: 13s - loss: 0.6981 - acc: 0.4844
+ 256/1283 [====>.........................] - ETA: 3s - loss: 0.6971 - acc: 0.5430 
+ 448/1283 [=========>....................] - ETA: 1s - loss: 0.6900 - acc: 0.5446
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.6844 - acc: 0.5526
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6817 - acc: 0.5583
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6787 - acc: 0.5680
+1283/1283 [==============================] - 1s 920us/step - loss: 0.6787 - acc: 0.5682 - val_loss: 0.6959 - val_acc: 0.5284
+
+Epoch 00001: val_acc improved from -inf to 0.52838, saving model to classification_logs//cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15/saved_models/best_validation_cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15.ckpt
+Epoch 2/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6369 - acc: 0.6875
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6657 - acc: 0.5762
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6625 - acc: 0.5859
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6613 - acc: 0.5917
+1283/1283 [==============================] - 0s 186us/step - loss: 0.6611 - acc: 0.5916 - val_loss: 0.7157 - val_acc: 0.4891
+
+Epoch 00002: val_acc did not improve
+Epoch 3/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6599 - acc: 0.6250
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6630 - acc: 0.6113
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.6556 - acc: 0.6150
+1088/1283 [========================>.....] - ETA: 0s - loss: 0.6550 - acc: 0.6140
+1283/1283 [==============================] - 0s 199us/step - loss: 0.6511 - acc: 0.6173 - val_loss: 0.7124 - val_acc: 0.5066
+
+Epoch 00003: val_acc did not improve
+Epoch 4/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6206 - acc: 0.5938
+ 256/1283 [====>.........................] - ETA: 0s - loss: 0.6354 - acc: 0.6133
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6407 - acc: 0.6016
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.6379 - acc: 0.6202
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6407 - acc: 0.6146
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6436 - acc: 0.6188
+1283/1283 [==============================] - 0s 260us/step - loss: 0.6436 - acc: 0.6189 - val_loss: 0.7189 - val_acc: 0.4934
+
+Epoch 00004: val_acc did not improve
+Epoch 5/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6837 - acc: 0.6094
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.6311 - acc: 0.6615
+ 576/1283 [============>.................] - ETA: 0s - loss: 0.6243 - acc: 0.6597
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.6358 - acc: 0.6406
+1088/1283 [========================>.....] - ETA: 0s - loss: 0.6332 - acc: 0.6461
+1283/1283 [==============================] - 0s 239us/step - loss: 0.6352 - acc: 0.6376 - val_loss: 0.7397 - val_acc: 0.4891
+
+Epoch 00005: val_acc did not improve
+Epoch 6/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6233 - acc: 0.7031
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6140 - acc: 0.6836
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6228 - acc: 0.6594
+1283/1283 [==============================] - 0s 140us/step - loss: 0.6260 - acc: 0.6469 - val_loss: 0.7479 - val_acc: 0.4367
+
+Epoch 00006: val_acc did not improve
+Epoch 7/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6314 - acc: 0.6562
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.6096 - acc: 0.6531
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6211 - acc: 0.6471
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.6231 - acc: 0.6484
+1283/1283 [==============================] - 0s 227us/step - loss: 0.6229 - acc: 0.6454 - val_loss: 0.7437 - val_acc: 0.4934
+
+Epoch 00007: val_acc did not improve
+Epoch 8/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6186 - acc: 0.6250
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.6206 - acc: 0.6813
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.6169 - acc: 0.6577
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6083 - acc: 0.6687
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6093 - acc: 0.6664
+1283/1283 [==============================] - 0s 194us/step - loss: 0.6099 - acc: 0.6656 - val_loss: 0.7565 - val_acc: 0.4760
+
+Epoch 00008: val_acc did not improve
+Epoch 9/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5867 - acc: 0.6562
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6029 - acc: 0.6777
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6120 - acc: 0.6583
+1283/1283 [==============================] - 0s 136us/step - loss: 0.6105 - acc: 0.6578 - val_loss: 0.7741 - val_acc: 0.4760
+
+Epoch 00009: val_acc did not improve
+Epoch 10/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5603 - acc: 0.7188
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.5946 - acc: 0.6828
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6049 - acc: 0.6677
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6024 - acc: 0.6648
+1283/1283 [==============================] - 0s 169us/step - loss: 0.6024 - acc: 0.6648 - val_loss: 0.7745 - val_acc: 0.4629
+
+Epoch 00010: val_acc did not improve
+Epoch 11/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6086 - acc: 0.5781
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5776 - acc: 0.6953
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.5854 - acc: 0.6836
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5912 - acc: 0.6753
+1283/1283 [==============================] - 0s 184us/step - loss: 0.5918 - acc: 0.6711 - val_loss: 0.7529 - val_acc: 0.4629
+
+Epoch 00011: val_acc did not improve
+Epoch 00011: early stopping
+batch_size=64
+batch_norm=False
+dropout_rate=0.1
+n_layers=1
+max_len=15
+nodes=100
+mode=V
+PCA audio=10
+PCA visual=10
+PCA text=100
+accuracy=0.5145772594752187
+best_valid_accuracy=0.5043731778425656
+/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Using TensorFlow backend.
+pca_early_fusion_cnn.py:146: RuntimeWarning: invalid value encountered in divide
+  train_set_audio = train_set_audio / audio_max
+pca_early_fusion_cnn.py:148: RuntimeWarning: invalid value encountered in divide
+  test_set_audio = test_set_audio / audio_max
+2018-03-28 22:34:50.092810: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+This API will be deprecated in the future versions. Please check the Github page for the current API
+
+Modality facet for video 8qrpnFRGt2A segment 13 is (partially) missing and is thus being replaced by zeros!
+
+Train on 1283 samples, validate on 229 samples
+Epoch 1/100
+
+  64/1283 [>.............................] - ETA: 14s - loss: 0.7002 - acc: 0.5781
+ 384/1283 [=======>......................] - ETA: 1s - loss: 0.6974 - acc: 0.5208 
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.6901 - acc: 0.5300
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.6813 - acc: 0.5469
+1283/1283 [==============================] - 1s 782us/step - loss: 0.6827 - acc: 0.5456 - val_loss: 0.7033 - val_acc: 0.5459
+
+Epoch 00001: val_acc improved from -inf to 0.54585, saving model to classification_logs//cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15/saved_models/best_validation_cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15.ckpt
+Epoch 2/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6495 - acc: 0.6406
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.6588 - acc: 0.5938
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6609 - acc: 0.5833
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.6616 - acc: 0.5938
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6599 - acc: 0.5969
+1283/1283 [==============================] - 0s 213us/step - loss: 0.6598 - acc: 0.5970 - val_loss: 0.7104 - val_acc: 0.5066
+
+Epoch 00002: val_acc did not improve
+Epoch 3/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6792 - acc: 0.5781
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.6404 - acc: 0.6458
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.6431 - acc: 0.6469
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.6397 - acc: 0.6384
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.6381 - acc: 0.6439
+1283/1283 [==============================] - 0s 199us/step - loss: 0.6407 - acc: 0.6383 - val_loss: 0.7279 - val_acc: 0.4978
+
+Epoch 00003: val_acc did not improve
+Epoch 4/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6088 - acc: 0.7188
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.6415 - acc: 0.6183
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.6327 - acc: 0.6226
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.6302 - acc: 0.6276
+1283/1283 [==============================] - 0s 178us/step - loss: 0.6405 - acc: 0.6157 - val_loss: 0.7234 - val_acc: 0.5022
+
+Epoch 00004: val_acc did not improve
+Epoch 5/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6267 - acc: 0.5938
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.6031 - acc: 0.6786
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.6198 - acc: 0.6587
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6188 - acc: 0.6641
+1283/1283 [==============================] - 0s 150us/step - loss: 0.6186 - acc: 0.6641 - val_loss: 0.7229 - val_acc: 0.5328
+
+Epoch 00005: val_acc did not improve
+Epoch 6/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6744 - acc: 0.5938
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.6080 - acc: 0.6763
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.6101 - acc: 0.6648
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6115 - acc: 0.6677
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6072 - acc: 0.6750
+1283/1283 [==============================] - 0s 223us/step - loss: 0.6078 - acc: 0.6742 - val_loss: 0.7417 - val_acc: 0.4803
+
+Epoch 00006: val_acc did not improve
+Epoch 7/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5968 - acc: 0.6250
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5841 - acc: 0.6979
+ 576/1283 [============>.................] - ETA: 0s - loss: 0.5962 - acc: 0.6840
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.5992 - acc: 0.6740
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6032 - acc: 0.6727
+1283/1283 [==============================] - 0s 208us/step - loss: 0.6034 - acc: 0.6726 - val_loss: 0.7612 - val_acc: 0.4672
+
+Epoch 00007: val_acc did not improve
+Epoch 8/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5934 - acc: 0.6562
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5973 - acc: 0.6484
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6087 - acc: 0.6471
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.6074 - acc: 0.6538
+1283/1283 [==============================] - 0s 158us/step - loss: 0.6079 - acc: 0.6516 - val_loss: 0.7334 - val_acc: 0.4891
+
+Epoch 00008: val_acc did not improve
+Epoch 9/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5436 - acc: 0.7656
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.6026 - acc: 0.6745
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.5931 - acc: 0.6719
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.5909 - acc: 0.6741
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.5855 - acc: 0.6875
+1283/1283 [==============================] - 0s 219us/step - loss: 0.5855 - acc: 0.6898 - val_loss: 0.7598 - val_acc: 0.5066
+
+Epoch 00009: val_acc did not improve
+Epoch 10/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5766 - acc: 0.7031
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5660 - acc: 0.7031
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.5545 - acc: 0.7244
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.5607 - acc: 0.7109
+1283/1283 [==============================] - 0s 188us/step - loss: 0.5650 - acc: 0.7093 - val_loss: 0.7585 - val_acc: 0.4847
+
+Epoch 00010: val_acc did not improve
+Epoch 11/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5473 - acc: 0.7188
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5336 - acc: 0.7422
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.5508 - acc: 0.7188
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.5541 - acc: 0.7139
+1280/1283 [============================>.] - ETA: 0s - loss: 0.5533 - acc: 0.7109
+1283/1283 [==============================] - 0s 205us/step - loss: 0.5542 - acc: 0.7101 - val_loss: 0.8059 - val_acc: 0.4934
+
+Epoch 00011: val_acc did not improve
+Epoch 00011: early stopping
+batch_size=64
+batch_norm=False
+dropout_rate=0.1
+n_layers=1
+max_len=15
+nodes=100
+mode=V
+PCA audio=15
+PCA visual=10
+PCA text=100
+accuracy=0.5189504373177842
+best_valid_accuracy=0.4271137026239067
+/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Using TensorFlow backend.
+pca_early_fusion_cnn.py:146: RuntimeWarning: invalid value encountered in divide
+  train_set_audio = train_set_audio / audio_max
+pca_early_fusion_cnn.py:148: RuntimeWarning: invalid value encountered in divide
+  test_set_audio = test_set_audio / audio_max
+2018-03-28 22:54:42.748051: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+This API will be deprecated in the future versions. Please check the Github page for the current API
+
+Modality facet for video 8qrpnFRGt2A segment 13 is (partially) missing and is thus being replaced by zeros!
+
+Train on 1283 samples, validate on 229 samples
+Epoch 1/100
+
+  64/1283 [>.............................] - ETA: 9s - loss: 0.7092 - acc: 0.4062
+ 384/1283 [=======>......................] - ETA: 1s - loss: 0.6867 - acc: 0.5339
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.6844 - acc: 0.5469
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6855 - acc: 0.5417
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.6819 - acc: 0.5452
+1283/1283 [==============================] - 1s 646us/step - loss: 0.6806 - acc: 0.5472 - val_loss: 0.7039 - val_acc: 0.5022
+
+Epoch 00001: val_acc improved from -inf to 0.50218, saving model to classification_logs//cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15/saved_models/best_validation_cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15.ckpt
+Epoch 2/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6421 - acc: 0.7344
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.6541 - acc: 0.6224
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.6516 - acc: 0.6203
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6506 - acc: 0.6156
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.6508 - acc: 0.6127
+1283/1283 [==============================] - 0s 204us/step - loss: 0.6505 - acc: 0.6142 - val_loss: 0.7166 - val_acc: 0.5197
+
+Epoch 00002: val_acc improved from 0.50218 to 0.51965, saving model to classification_logs//cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15/saved_models/best_validation_cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15.ckpt
+Epoch 3/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6277 - acc: 0.6250
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6351 - acc: 0.6094
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.6349 - acc: 0.6179
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6285 - acc: 0.6323
+1283/1283 [==============================] - 0s 188us/step - loss: 0.6312 - acc: 0.6189 - val_loss: 0.7184 - val_acc: 0.5371
+
+Epoch 00003: val_acc improved from 0.51965 to 0.53712, saving model to classification_logs//cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15/saved_models/best_validation_cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15.ckpt
+Epoch 4/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6221 - acc: 0.6094
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.6095 - acc: 0.6674
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.6151 - acc: 0.6641
+1283/1283 [==============================] - 0s 144us/step - loss: 0.6181 - acc: 0.6547 - val_loss: 0.7251 - val_acc: 0.4978
+
+Epoch 00004: val_acc did not improve
+Epoch 5/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6235 - acc: 0.6562
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.6150 - acc: 0.6458
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.6050 - acc: 0.6733
+1088/1283 [========================>.....] - ETA: 0s - loss: 0.5995 - acc: 0.6884
+1283/1283 [==============================] - 0s 169us/step - loss: 0.6034 - acc: 0.6804 - val_loss: 0.7499 - val_acc: 0.4978
+
+Epoch 00005: val_acc did not improve
+Epoch 6/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5409 - acc: 0.7969
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.5516 - acc: 0.7219
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.5624 - acc: 0.7148
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.5815 - acc: 0.6897
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.5882 - acc: 0.6842
+1283/1283 [==============================] - 0s 213us/step - loss: 0.5874 - acc: 0.6851 - val_loss: 0.7343 - val_acc: 0.4672
+
+Epoch 00006: val_acc did not improve
+Epoch 7/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5532 - acc: 0.6875
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.5604 - acc: 0.7321
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.5572 - acc: 0.7236
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.5670 - acc: 0.7048
+1283/1283 [==============================] - 0s 206us/step - loss: 0.5723 - acc: 0.6999 - val_loss: 0.7756 - val_acc: 0.5197
+
+Epoch 00007: val_acc did not improve
+Epoch 8/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5117 - acc: 0.7812
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5660 - acc: 0.7214
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.5790 - acc: 0.6847
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.5782 - acc: 0.6875
+1280/1283 [============================>.] - ETA: 0s - loss: 0.5774 - acc: 0.6930
+1283/1283 [==============================] - 0s 197us/step - loss: 0.5773 - acc: 0.6937 - val_loss: 0.7463 - val_acc: 0.5022
+
+Epoch 00008: val_acc did not improve
+Epoch 9/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5765 - acc: 0.7500
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5677 - acc: 0.7109
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.5658 - acc: 0.6966
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5577 - acc: 0.7031
+1283/1283 [==============================] - 0s 165us/step - loss: 0.5579 - acc: 0.7038 - val_loss: 0.7716 - val_acc: 0.4760
+
+Epoch 00009: val_acc did not improve
+Epoch 10/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5233 - acc: 0.7188
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5216 - acc: 0.7630
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.5254 - acc: 0.7528
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.5367 - acc: 0.7275
+1283/1283 [==============================] - 0s 178us/step - loss: 0.5373 - acc: 0.7295 - val_loss: 0.7766 - val_acc: 0.5153
+
+Epoch 00010: val_acc did not improve
+Epoch 11/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.4998 - acc: 0.7812
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.5113 - acc: 0.7768
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.5198 - acc: 0.7578
+1088/1283 [========================>.....] - ETA: 0s - loss: 0.5144 - acc: 0.7555
+1283/1283 [==============================] - 0s 183us/step - loss: 0.5203 - acc: 0.7443 - val_loss: 0.7999 - val_acc: 0.4760
+
+Epoch 00011: val_acc did not improve
+Epoch 12/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5089 - acc: 0.7188
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.4965 - acc: 0.7448
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.4905 - acc: 0.7688
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.4894 - acc: 0.7686
+1280/1283 [============================>.] - ETA: 0s - loss: 0.4913 - acc: 0.7609
+1283/1283 [==============================] - 0s 203us/step - loss: 0.4916 - acc: 0.7615 - val_loss: 0.8263 - val_acc: 0.4803
+
+Epoch 00012: val_acc did not improve
+Epoch 13/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.4788 - acc: 0.8438
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.4735 - acc: 0.7812
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.4782 - acc: 0.7885
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.4737 - acc: 0.7878
+1283/1283 [==============================] - 0s 177us/step - loss: 0.4711 - acc: 0.7903 - val_loss: 0.8815 - val_acc: 0.4236
+
+Epoch 00013: val_acc did not improve
+Epoch 00013: early stopping
+batch_size=64
+batch_norm=False
+dropout_rate=0.1
+n_layers=1
+max_len=15
+nodes=100
+mode=V
+PCA audio=20
+PCA visual=10
+PCA text=100
+accuracy=0.5072886297376094
+best_valid_accuracy=0.4708454810495627
+/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Using TensorFlow backend.
+pca_early_fusion_cnn.py:146: RuntimeWarning: invalid value encountered in divide
+  train_set_audio = train_set_audio / audio_max
+pca_early_fusion_cnn.py:148: RuntimeWarning: invalid value encountered in divide
+  test_set_audio = test_set_audio / audio_max
+2018-03-28 22:59:31.627218: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+This API will be deprecated in the future versions. Please check the Github page for the current API
+
+Modality facet for video 8qrpnFRGt2A segment 13 is (partially) missing and is thus being replaced by zeros!
+
+Train on 1283 samples, validate on 229 samples
+Epoch 1/100
+
+  64/1283 [>.............................] - ETA: 22s - loss: 0.7022 - acc: 0.5781
+ 256/1283 [====>.........................] - ETA: 4s - loss: 0.6870 - acc: 0.5352 
+ 384/1283 [=======>......................] - ETA: 3s - loss: 0.6791 - acc: 0.5599
+ 640/1283 [=============>................] - ETA: 1s - loss: 0.6939 - acc: 0.5422
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.6839 - acc: 0.5553
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.6916 - acc: 0.5479
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.6866 - acc: 0.5535
+1283/1283 [==============================] - 2s 1ms/step - loss: 0.6865 - acc: 0.5581 - val_loss: 0.6951 - val_acc: 0.5764
+
+Epoch 00001: val_acc improved from -inf to 0.57642, saving model to classification_logs//cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15/saved_models/best_validation_cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15.ckpt
+Epoch 2/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6260 - acc: 0.6719
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.6381 - acc: 0.6500
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6464 - acc: 0.6270
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.6524 - acc: 0.6010
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.6536 - acc: 0.5962
+1283/1283 [==============================] - 0s 203us/step - loss: 0.6537 - acc: 0.5986 - val_loss: 0.6991 - val_acc: 0.5808
+
+Epoch 00002: val_acc improved from 0.57642 to 0.58079, saving model to classification_logs//cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15/saved_models/best_validation_cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15.ckpt
+Epoch 3/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6412 - acc: 0.5938
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.6309 - acc: 0.6344
+ 576/1283 [============>.................] - ETA: 0s - loss: 0.6142 - acc: 0.6510
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6221 - acc: 0.6354
+1088/1283 [========================>.....] - ETA: 0s - loss: 0.6276 - acc: 0.6314
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.6289 - acc: 0.6316
+1283/1283 [==============================] - 0s 284us/step - loss: 0.6287 - acc: 0.6290 - val_loss: 0.7198 - val_acc: 0.5371
+
+Epoch 00003: val_acc did not improve
+Epoch 4/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6472 - acc: 0.6250
+ 256/1283 [====>.........................] - ETA: 0s - loss: 0.6260 - acc: 0.6602
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6241 - acc: 0.6582
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.6190 - acc: 0.6671
+1088/1283 [========================>.....] - ETA: 0s - loss: 0.6165 - acc: 0.6636
+1283/1283 [==============================] - 0s 227us/step - loss: 0.6242 - acc: 0.6485 - val_loss: 0.7320 - val_acc: 0.5371
+
+Epoch 00004: val_acc did not improve
+Epoch 5/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5627 - acc: 0.6562
+ 256/1283 [====>.........................] - ETA: 0s - loss: 0.5812 - acc: 0.6953
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6064 - acc: 0.6328
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6034 - acc: 0.6445
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6005 - acc: 0.6490
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.5990 - acc: 0.6546
+1283/1283 [==============================] - 0s 277us/step - loss: 0.5984 - acc: 0.6547 - val_loss: 0.7459 - val_acc: 0.5109
+
+Epoch 00005: val_acc did not improve
+Epoch 6/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5711 - acc: 0.7188
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.5767 - acc: 0.6906
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.5801 - acc: 0.6750
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.5853 - acc: 0.6635
+1280/1283 [============================>.] - ETA: 0s - loss: 0.5871 - acc: 0.6719
+1283/1283 [==============================] - 0s 251us/step - loss: 0.5871 - acc: 0.6719 - val_loss: 0.7780 - val_acc: 0.5197
+
+Epoch 00006: val_acc did not improve
+Epoch 7/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6211 - acc: 0.6094
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5589 - acc: 0.7214
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.5710 - acc: 0.6844
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.5727 - acc: 0.6854
+1280/1283 [============================>.] - ETA: 0s - loss: 0.5736 - acc: 0.6867
+1283/1283 [==============================] - 0s 210us/step - loss: 0.5733 - acc: 0.6867 - val_loss: 0.7801 - val_acc: 0.5022
+
+Epoch 00007: val_acc did not improve
+Epoch 8/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5595 - acc: 0.7031
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5584 - acc: 0.7005
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.5516 - acc: 0.7161
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5532 - acc: 0.7188
+1283/1283 [==============================] - 0s 165us/step - loss: 0.5583 - acc: 0.7147 - val_loss: 0.7908 - val_acc: 0.4760
+
+Epoch 00008: val_acc did not improve
+Epoch 9/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.4886 - acc: 0.8125
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.5395 - acc: 0.7188
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.5405 - acc: 0.7227
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5483 - acc: 0.7231
+1283/1283 [==============================] - 0s 189us/step - loss: 0.5440 - acc: 0.7303 - val_loss: 0.7751 - val_acc: 0.4803
+
+Epoch 00009: val_acc did not improve
+Epoch 10/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5185 - acc: 0.7656
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5100 - acc: 0.7318
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.5217 - acc: 0.7318
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5187 - acc: 0.7309
+1283/1283 [==============================] - 0s 192us/step - loss: 0.5284 - acc: 0.7233 - val_loss: 0.7875 - val_acc: 0.5328
+
+Epoch 00010: val_acc did not improve
+Epoch 11/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.4576 - acc: 0.7344
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.5324 - acc: 0.6973
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.5431 - acc: 0.6964
+1283/1283 [==============================] - 0s 144us/step - loss: 0.5321 - acc: 0.7233 - val_loss: 0.7828 - val_acc: 0.4934
+
+Epoch 00011: val_acc did not improve
+Epoch 12/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.4630 - acc: 0.8281
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.4925 - acc: 0.7871
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.4878 - acc: 0.7812
+1283/1283 [==============================] - 0s 143us/step - loss: 0.4910 - acc: 0.7701 - val_loss: 0.8238 - val_acc: 0.4847
+
+Epoch 00012: val_acc did not improve
+Epoch 00012: early stopping
+batch_size=64
+batch_norm=False
+dropout_rate=0.1
+n_layers=1
+max_len=15
+nodes=100
+mode=V
+PCA audio=25
+PCA visual=10
+PCA text=100
+accuracy=0.5072886297376094
+best_valid_accuracy=0.5116618075801749
+/afs/inf.ed.ac.uk/user/s17/s1738075/.local/lib/python2.7/site-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Using TensorFlow backend.
+pca_early_fusion_cnn.py:146: RuntimeWarning: invalid value encountered in divide
+  train_set_audio = train_set_audio / audio_max
+pca_early_fusion_cnn.py:148: RuntimeWarning: invalid value encountered in divide
+  test_set_audio = test_set_audio / audio_max
+2018-03-28 23:12:52.268192: I tensorflow/core/platform/cpu_feature_guard.cc:137] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX
+This API will be deprecated in the future versions. Please check the Github page for the current API
+
+Modality facet for video 8qrpnFRGt2A segment 13 is (partially) missing and is thus being replaced by zeros!
+
+Train on 1283 samples, validate on 229 samples
+Epoch 1/100
+
+  64/1283 [>.............................] - ETA: 17s - loss: 0.7053 - acc: 0.4688
+ 192/1283 [===>..........................] - ETA: 6s - loss: 0.7007 - acc: 0.5521 
+ 320/1283 [======>.......................] - ETA: 3s - loss: 0.6897 - acc: 0.5500
+ 448/1283 [=========>....................] - ETA: 2s - loss: 0.6819 - acc: 0.5670
+ 512/1283 [==========>...................] - ETA: 1s - loss: 0.6803 - acc: 0.5684
+ 640/1283 [=============>................] - ETA: 1s - loss: 0.6755 - acc: 0.5734
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6724 - acc: 0.5794
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.6786 - acc: 0.5614
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.6794 - acc: 0.5573
+1088/1283 [========================>.....] - ETA: 0s - loss: 0.6797 - acc: 0.5551
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.6823 - acc: 0.5502
+1283/1283 [==============================] - 2s 2ms/step - loss: 0.6913 - acc: 0.5503 - val_loss: 0.6913 - val_acc: 0.5415
+
+Epoch 00001: val_acc improved from -inf to 0.54148, saving model to classification_logs//cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15/saved_models/best_validation_cnn_early_fusion_m_V_ep_100_bs_64_bn_False_dr_0.1_nl_1_ml_15.ckpt
+Epoch 2/100
+
+  64/1283 [>.............................] - ETA: 1s - loss: 0.6418 - acc: 0.6406
+ 192/1283 [===>..........................] - ETA: 0s - loss: 0.6366 - acc: 0.6198
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.6367 - acc: 0.6562
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.6351 - acc: 0.6693
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6355 - acc: 0.6543
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.6491 - acc: 0.6406
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6457 - acc: 0.6445
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.6433 - acc: 0.6454
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.6407 - acc: 0.6496
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.6456 - acc: 0.6328
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.6425 - acc: 0.6380
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6430 - acc: 0.6367
+1283/1283 [==============================] - 1s 751us/step - loss: 0.6427 - acc: 0.6376 - val_loss: 0.7084 - val_acc: 0.5415
+
+Epoch 00002: val_acc did not improve
+Epoch 3/100
+
+  64/1283 [>.............................] - ETA: 1s - loss: 0.5911 - acc: 0.7031
+ 128/1283 [=>............................] - ETA: 1s - loss: 0.5965 - acc: 0.7188
+ 256/1283 [====>.........................] - ETA: 0s - loss: 0.5977 - acc: 0.7109
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5935 - acc: 0.7031
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6142 - acc: 0.6660
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.6221 - acc: 0.6438
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.6206 - acc: 0.6477
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6181 - acc: 0.6419
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.6089 - acc: 0.6574
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.6094 - acc: 0.6592
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.6162 - acc: 0.6528
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6161 - acc: 0.6531
+1283/1283 [==============================] - 1s 768us/step - loss: 0.6160 - acc: 0.6532 - val_loss: 0.7481 - val_acc: 0.5240
+
+Epoch 00003: val_acc did not improve
+Epoch 4/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.6028 - acc: 0.6562
+ 256/1283 [====>.........................] - ETA: 0s - loss: 0.6005 - acc: 0.6797
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.6100 - acc: 0.6667
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.6201 - acc: 0.6465
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.6154 - acc: 0.6547
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.6142 - acc: 0.6510
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.6098 - acc: 0.6562
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.6067 - acc: 0.6602
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.6054 - acc: 0.6606
+1280/1283 [============================>.] - ETA: 0s - loss: 0.6016 - acc: 0.6672
+1283/1283 [==============================] - 1s 551us/step - loss: 0.6018 - acc: 0.6672 - val_loss: 0.7346 - val_acc: 0.5022
+
+Epoch 00004: val_acc did not improve
+Epoch 5/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5445 - acc: 0.7500
+ 192/1283 [===>..........................] - ETA: 0s - loss: 0.5803 - acc: 0.6823
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.5801 - acc: 0.6656
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5920 - acc: 0.6562
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.5903 - acc: 0.6660
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.5938 - acc: 0.6676
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.5932 - acc: 0.6719
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.5851 - acc: 0.6846
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5904 - acc: 0.6823
+1280/1283 [============================>.] - ETA: 0s - loss: 0.5844 - acc: 0.6883
+1283/1283 [==============================] - 1s 494us/step - loss: 0.5852 - acc: 0.6882 - val_loss: 0.7439 - val_acc: 0.5153
+
+Epoch 00005: val_acc did not improve
+Epoch 6/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5810 - acc: 0.6875
+ 256/1283 [====>.........................] - ETA: 0s - loss: 0.5588 - acc: 0.7188
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5616 - acc: 0.7057
+ 576/1283 [============>.................] - ETA: 0s - loss: 0.5533 - acc: 0.7170
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.5600 - acc: 0.7145
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.5661 - acc: 0.7076
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.5694 - acc: 0.7041
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5719 - acc: 0.6997
+1280/1283 [============================>.] - ETA: 0s - loss: 0.5688 - acc: 0.7055
+1283/1283 [==============================] - 1s 452us/step - loss: 0.5697 - acc: 0.7046 - val_loss: 0.7487 - val_acc: 0.5328
+
+Epoch 00006: val_acc did not improve
+Epoch 7/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.5818 - acc: 0.6562
+ 192/1283 [===>..........................] - ETA: 0s - loss: 0.5597 - acc: 0.7031
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.5352 - acc: 0.7469
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.5517 - acc: 0.7168
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.5446 - acc: 0.7250
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.5529 - acc: 0.7135
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.5503 - acc: 0.7199
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.5469 - acc: 0.7236
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5467 - acc: 0.7196
+1280/1283 [============================>.] - ETA: 0s - loss: 0.5459 - acc: 0.7219
+1283/1283 [==============================] - 1s 550us/step - loss: 0.5460 - acc: 0.7217 - val_loss: 0.7913 - val_acc: 0.5371
+
+Epoch 00007: val_acc did not improve
+Epoch 8/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.4642 - acc: 0.8594
+ 256/1283 [====>.........................] - ETA: 0s - loss: 0.5529 - acc: 0.7070
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.5544 - acc: 0.7057
+ 576/1283 [============>.................] - ETA: 0s - loss: 0.5425 - acc: 0.7240
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.5407 - acc: 0.7244
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.5403 - acc: 0.7175
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.5414 - acc: 0.7156
+1088/1283 [========================>.....] - ETA: 0s - loss: 0.5364 - acc: 0.7233
+1280/1283 [============================>.] - ETA: 0s - loss: 0.5375 - acc: 0.7219
+1283/1283 [==============================] - 1s 515us/step - loss: 0.5377 - acc: 0.7217 - val_loss: 0.7898 - val_acc: 0.5066
+
+Epoch 00008: val_acc did not improve
+Epoch 9/100
+
+  64/1283 [>.............................] - ETA: 1s - loss: 0.5279 - acc: 0.6875
+ 192/1283 [===>..........................] - ETA: 0s - loss: 0.5252 - acc: 0.7188
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.5447 - acc: 0.7000
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.5526 - acc: 0.7009
+ 576/1283 [============>.................] - ETA: 0s - loss: 0.5422 - acc: 0.7118
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.5377 - acc: 0.7159
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.5386 - acc: 0.7200
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.5306 - acc: 0.7260
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.5273 - acc: 0.7275
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5238 - acc: 0.7318
+1280/1283 [============================>.] - ETA: 0s - loss: 0.5190 - acc: 0.7398
+1283/1283 [==============================] - 1s 674us/step - loss: 0.5194 - acc: 0.7397 - val_loss: 0.8122 - val_acc: 0.5153
+
+Epoch 00009: val_acc did not improve
+Epoch 10/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.4866 - acc: 0.7969
+ 192/1283 [===>..........................] - ETA: 0s - loss: 0.5157 - acc: 0.7656
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.5164 - acc: 0.7594
+ 448/1283 [=========>....................] - ETA: 0s - loss: 0.5072 - acc: 0.7522
+ 576/1283 [============>.................] - ETA: 0s - loss: 0.5186 - acc: 0.7396
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.5240 - acc: 0.7273
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.5253 - acc: 0.7240
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.5246 - acc: 0.7248
+ 896/1283 [===================>..........] - ETA: 0s - loss: 0.5267 - acc: 0.7254
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.5229 - acc: 0.7393
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.5226 - acc: 0.7396
+1216/1283 [===========================>..] - ETA: 0s - loss: 0.5254 - acc: 0.7336
+1283/1283 [==============================] - 1s 774us/step - loss: 0.5230 - acc: 0.7350 - val_loss: 0.7951 - val_acc: 0.4934
+
+Epoch 00010: val_acc did not improve
+Epoch 11/100
+
+  64/1283 [>.............................] - ETA: 0s - loss: 0.4936 - acc: 0.7812
+ 192/1283 [===>..........................] - ETA: 0s - loss: 0.4845 - acc: 0.7812
+ 256/1283 [====>.........................] - ETA: 0s - loss: 0.4925 - acc: 0.7734
+ 320/1283 [======>.......................] - ETA: 0s - loss: 0.4867 - acc: 0.7844
+ 384/1283 [=======>......................] - ETA: 0s - loss: 0.4849 - acc: 0.7917
+ 512/1283 [==========>...................] - ETA: 0s - loss: 0.4929 - acc: 0.7754
+ 640/1283 [=============>................] - ETA: 0s - loss: 0.4964 - acc: 0.7719
+ 704/1283 [===============>..............] - ETA: 0s - loss: 0.4911 - acc: 0.7713
+ 768/1283 [================>.............] - ETA: 0s - loss: 0.4970 - acc: 0.7669
+ 832/1283 [==================>...........] - ETA: 0s - loss: 0.4943 - acc: 0.7680
+ 960/1283 [=====================>........] - ETA: 0s - loss: 0.4898 - acc: 0.7708
+1024/1283 [======================>.......] - ETA: 0s - loss: 0.4852 - acc: 0.7744
+1152/1283 [=========================>....] - ETA: 0s - loss: 0.4961 - acc: 0.7613
+1280/1283 [============================>.] - ETA: 0s - loss: 0.4911 - acc: 0.7664
+1283/1283 [==============================] - 1s 837us/step - loss: 0.4912 - acc: 0.7662 - val_loss: 0.8291 - val_acc: 0.5240
+
+Epoch 00011: val_acc did not improve
+Epoch 00011: early stopping
+batch_size=64
+batch_norm=False
+dropout_rate=0.1
+n_layers=1
+max_len=15
+nodes=100
+mode=V
+PCA audio=30
+PCA visual=10
+PCA text=100
+accuracy=0.4606413994169096
+best_valid_accuracy=0.48104956268221577
